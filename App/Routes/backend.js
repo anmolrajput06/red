@@ -194,5 +194,6 @@ router.get('/spin', Sys.App.Controllers.CashierController.spin);
 // router.post('/customer_list', cusromercontroller.get_customer_data);
 router.post('/customer_list', Sys.App.Controllers.CashierController.customer_list);
 router.post('/update_status', Sys.App.Controllers.CashierController.updatestatus)
+router.post("/update_dailywheeldata",Sys.App.Controllers.DailyController.updateDailyWheeldata)
 
 module.exports = router

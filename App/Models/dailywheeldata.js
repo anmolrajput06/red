@@ -4,10 +4,9 @@ const Schema = mongoose.Schema;
 const DailyWheelDataSchema = new Schema(
   {
     dailyWheelData: {
-      type: Map,
-      of: String,
-      required: true,
-    },
+      type: Schema.Types.Mixed, // Accepts any data type
+      required: true
+    }
   },
   {
     collection: 'dailyWheelData',

@@ -6,7 +6,7 @@ const DailyWheelDatamodel = mongoose.model("DailyWheelData");
 
 
 module.exports = {
-    createDailywheel: async function (data) {
+    createDailyWheel: async function (data) {
         console.log("createUser Data:", data);
         try {
             return await DailyWheelDatamodel.create(data);
@@ -15,5 +15,21 @@ module.exports = {
         }
     },
 
+    updateDailyWheel: async function (condition, data) {
+        try {
+            return await DailyWheelDatamodel.updateOne(data);
+        } catch (e) {
+            console.error("Mongoose Validation Error:", e.message, e.errors);
+        }
+    }
+,    
+
+    findDailyWheel: async function () {
+        try {
+            return await DailyWheelDatamodel.find();
+        } catch (e) {
+            console.log("Error", e);
+        }
+    }
 
 };
