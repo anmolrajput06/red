@@ -1,0 +1,120 @@
+{% extends "partition/layout.html" %} {% block body %}
+
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+            <h1 class="">{{gameName}}</h1>
+            <ol class="breadcrumb">
+                <li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                <!-- <li><a href="/gameMaster">Slot Game Master</a></li> -->
+                <li><a href="/games">Game Management</a></li>
+                <li class="active">{{gameName}}</li>
+            </ol>
+        </section>
+        &nbsp;
+        <!-- /Title -->
+         
+        <!-- Row -->
+        <section class="content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default card-view">
+                        {% if symbol < 11 %}
+                        <div class="panel-heading">
+                            <div class="pull-right">
+                                <a href="/symbol/addSymbol/{{gameId}}"><button type="button" class="btn btn-primary btn-md"><i class="fa fa-plus"></i> Add Symbol</button></a>
+                            </div>
+                            
+                            <div class="clearfix"></div>
+                        </div>
+                        {% endif %}
+                        <input type="hidden" value="{{themeId}}" id="themeId">
+                        <input type="hidden" value="{{gameId}}" id="gameId">
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="table-wrap">
+                                    <div class="table-responsive">
+                                        <table id="myTable" class="table table-hover display  pb-30">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sr. No.</th>
+                                                    <th>Symbol</th>
+                                                    <th>Symbol Type </th>
+                                                    <th>Image</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+{% endblock %} {% block Jscript %}
+<script>
+    $(document).ready(function() {
+        var host = window.location.origin;
+        var gameId = $("#gameId").val();
+        console.log("gameId",gameId);
+        $('#myTable').DataTable({
+            // "oLanguage": {
+            //         "sSearch": "Search Username"
+            //     },
+                // "scrollX": true,
+                "searching": false,
+                "processing": true,
+                "serverSide": true,
+                "ordering": false,
+                "autoWidth": false,
+                "bPaginate": false,
+    "bLengthChange": false,
+    "bFilter": true,
+    "bInfo": false,
+    "bAutoWidth": false,
+                "pageLength": 10,
+                "ajax": {
+                    url: host + "/symbol/getSymbol",
+                    data: function (data) {
+                        data.gameId = gameId;
+                    }
+                },
+            "columns": [
+                { "data": "_id",
+                    render:function(data,row,type,meta){
+                        return meta.row + 1
+                    }
+                },
+                {
+                    "data": "symbol"
+                }, {
+                    "data": "symbol_type"
+                },
+                {
+                    "data": "image",
+                    render: function(data, row, type) {
+                    return '<img src="'+ type.image + '"width="50px" height="50px">';
+                }
+                }, 
+                {
+                    "data": "action",
+                    render: function(data, type, row) {
+                        return '<div class="dropdown show"><a class="btn btn-warning btn-xs btn-rounded" href="/symbol/editSymbol/' + row.id + '"><i class="fa fa-edit" aria-hidden="true"></i></a></div>';
+                    }
+                }
+            ]
+        });
+    });
+</script>
+{% endblock %}

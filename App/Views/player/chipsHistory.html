@@ -1,0 +1,156 @@
+{% extends "partition/layout.html" %} {% block body %}
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+            <h1>Bet History Table </h1>
+            <ol class="breadcrumb">
+                {%if session.details.role == "admin" and session.details.role == "sub-admin"%}
+                <li><a href="/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                {%endif%}
+                <li><a href="/myPlayer"><i class="fa fa-user"></i>Player</a></li>
+                <li class="active">Bet History</li>
+            </ol>
+        </section>
+        <!-- /Title -->
+         
+        <section class="content">
+            <!-- Row -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row panel panel-default card-view">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <input required="required" class="form-control" placeholder="Date And Time" name="start" type="text" id="start" autocomplete="off" data-date-format="YYYY-MM-DD HH:mm" value="{{start}}">
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <input required="required" class="form-control" placeholder="Date And Time" name="end" type="text" id="end" autocomplete="off" data-date-format="YYYY-MM-DD HH:mm" value="{{end}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <label> &nbsp;</label><br>
+                            <button class="btn btn-primary" onclick="loadSlotOverAllCommission()"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <!-- <div class="panel panel-default card-view">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Player Table</h6>
+                </div>
+                <div class="pull-right">
+                </div>
+                <div class="clearfix"></div>
+            </div> -->
+                    <input type="hidden" id="playerId" value="{{playerId}}">
+                    <div class="row panel panel-default card-view">
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="table-wrap">
+                                    <div class="table-responsive">
+                                        <table id="myTable" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th width="66px">Date & Time</th>
+                                                    <th>Game Type</th>
+                                                    <th>Total Chips Betted</th>
+                                                    <th>Remaining</th>
+                                                    <th>Status</th>
+                                                    <th>TotalWinLoss</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+
+{% endblock %} {% block Jscript %}
+<script>
+    // $(document).ready(function() {
+    $('#start, #end').datetimepicker();
+
+    function loadSlotOverAllCommission() {
+        $('#myTable').dataTable().fnDestroy();
+        LoadData();
+    }
+    var withdraw
+    function LoadData() {
+        var startdate = $("#start").val();
+        var enddate = $("#end").val();
+        var host = window.location.origin;
+        var playerId = $('#playerId').val();
+        $('#myTable').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "bFilter": false,
+            "ordering": false,
+            "autoWidth": false,
+            "pageLength": 10,
+            "pagination": true,
+            "ajax": {
+                url: host + "/myPlayer/getBetHistory/" + playerId,
+                type: "POST",
+                data: function(data) {
+                    data.startdate = startdate;
+                    data.enddate = enddate;
+                },
+                dataSrc:function(res){
+                    console.log(res);
+                    withdraw = res.data.dataWithdraw
+                    return res.data.data
+                }
+            },
+            "columns": [{
+                "data": "id"
+            }, {
+                "data": "createdAt",
+                render: function(data, type, row) {
+                    return moment(row.createdAt).format('YYYY-MM-DD HH:mm:ss');
+                }
+            }, {
+                "data": "_id"
+            }, {
+                "data": "totalBetAmount",
+                render: function(data) {
+                    return parseFloat(data).toFixed(2)
+                }
+            }, {
+                "data": "remaining",
+                render: function(data){
+                    return data
+                }
+            }, {
+                "data": "status"
+            }, {
+                "data": "remaining",
+                render: function(data, row, type) {
+                        return '<a style="color: #008000;">' + parseFloat(type.totalWinAmount).toFixed(2) + '</a> / ' + '<a style="color: #FF0000;">-' + parseFloat(type.totalLossAmount).toFixed(2) + '</a>'
+                // }
+                }
+            }]
+        });
+    }
+    // });
+</script>
+{% endblock %}

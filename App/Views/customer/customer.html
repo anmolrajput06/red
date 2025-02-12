@@ -1,0 +1,1126 @@
+{% extends "partition/layout.html" %}
+{% block body %}
+<style>
+    .modal {
+        text-align: center;
+    }
+
+    .modal:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+        margin-right: -4px;
+        /* Adjusts for spacing */
+    }
+
+    .modal-dialog {
+        display: inline-block;
+        text-align: left;
+        vertical-align: middle;
+        max-width: 800px;
+        /* Adjust the maximum width as needed */
+        width: 80%;
+        /* You can also use a percentage value */
+    }
+
+    .labelClass {
+        margin-top: 6px;
+    }
+
+    .text {
+        margin-left: -31px;
+    }
+
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .printBill {
+        text-align: center;
+        /* Align all text content to the center */
+    }
+
+    hr.new3 {
+        border-top: 3px dashed;
+    }
+
+    .printDailog {
+        width: auto;
+    }
+
+    .revertPurchase {
+        margin-right: 10px;
+    }
+</style>
+
+<!-- Main Content -->
+<div class="page-wrapper">
+     
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+            <ol class="breadcrumb">
+                <li><a href="/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                <li class="active"> customer</li>
+            </ol>
+        </section>
+        <!-- /Title -->
+
+        <br>
+        <!-- <div class="col-sm-3">
+            <div class="input-group">
+                <div class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></div>
+                <select class="form-control" name="status" id="status">
+                    <option value="">All</option>
+                        <option value="active">Active</option>
+                        <option value="inactive" >Inactive</option>
+                    </select>
+            </div>
+        </div> -->
+        <br>
+        <!-- Row -->
+        <section class="content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default card-view">
+                        <div class="panel-heading">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label></label>
+                                    <select class="form-control custom-button" name="searchType" id="searchType">
+                                        <option value="name">Name</option>
+                                        <option value="customerId">customer ID</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label></label>
+                                    <input required="required" class="form-control" placeholder="Enter Name"
+                                        id="search">
+                                </div>
+                            </div>
+                            <div class="col-sm-2 btnStyle">
+                                <label> &nbsp;</label><br>
+                                <button class="btn btn-primary" id="dateSearch"><i class="fa fa-search"></i></button>
+                            </div>
+                            <!-- <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Users</h6>
+                            </div> -->
+                            <div class="pull-right">
+                                <div class="col-sm-2 btnStyle">
+                                    <label> &nbsp;</label><br>
+                                    <button type="button" class="btn btn-primary btn-md" id="addBtn" data-toggle="modal"
+                                        data-target="#addcustomerModal"><i class="fa fa-plus"></i> Add
+                                        customer</button>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body" id="view">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label labelClass">Pin ID:</label>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-2 control-label labelClass pinID" id="pinID"></label>
+                                    </div>
+                                    <label class="col-sm-2 control-label labelClass">Driver License:</label>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-2 control-label labelClass license" id="license"></label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label labelClass">First Name:</label>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-2 control-label labelClass firstName"
+                                            id="firstName"></label>
+                                    </div>
+                                    <label class="col-sm-2 control-label labelClass">Last Name:</label>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-2 control-label labelClass lastName" id="lastName"></label>
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label labelClass">Phone:</label>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-2 control-label labelClass mobile" id="mobile"></label>
+
+                                    </div>
+                                    <label class="col-sm-2 control-label labelClass">Mail:</label>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-2 control-label labelClass mail" id="mail"></label>
+                                    </div>
+
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label labelClass">Gender:</label>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-2 control-label labelClass gender" id="gender"></label>
+                                    </div>
+
+                                    <label class="col-sm-2 control-label labelClass">Withdrawable Chips:</label>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-2 control-label labelClass withdrawableChips"
+                                            id="withdrawableChips"></label>
+                                    </div>
+
+
+
+                                </div>
+                                <div class="form-group row">
+
+                                    <label class="col-sm-2 control-label labelClass">Non Withdrawable Chips:</label>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-2 control-label labelClass nonWithdrawableChips"
+                                            id="nonWithdrawableChips"></label>
+                                    </div>
+
+                                    <button type="button" class="btn btn-danger block" id="submitBtn"
+                                        disabled>Block</button>
+                                    <button type="button" class="btn btn-danger logout" id="submitBtn"
+                                        disabled>Logout</button>
+
+                                </div>
+
+                                <div class="form-group row pull-right">
+                                    <!-- <button type="button" class="btn btn-primary gameHistory" id="submitBtn"
+                                        disabled>Game
+                                        History</button>
+                                    <button type="button" class="btn btn-primary redeem" id="submitBtn"
+                                        disabled>Redeem</button> -->
+                                    <button type="button" class="btn btn-primary betReport" id="redeem"
+                                        disabled>Bet report</button>
+                                    <button type="button" class="btn btn-primary redeem" id="redeem"
+                                        disabled>Redeem</button>
+                                    <button type="button" class="btn btn-primary purchase" id="purchase"
+                                        disabled>Purchase</button>
+                                    <button type="button" class="btn btn-primary revertPurchase" disabled>Revert Last
+                                        Purchase</button>
+                                    <!-- <button type="button" class="btn btn-primary revertPurchase" id="submitBtn"
+                                        disabled>Revert
+                                        Purchase</button> -->
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content" id="userTable" hidden>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default card-view">
+
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="table-wrap">
+                                    <div class="table-responsive">
+                                        <table id="myTable" class="table table-hover display  pb-30">
+                                            <thead>
+                                                <tr>
+                                                    <th>Pin</th>
+                                                    <th>First Name</th>
+                                                    <th>Last Name</th>
+                                                    <th>Email</th>
+                                                    <th>Phone</th>
+                                                    <th>License</th>
+                                                    <th>Gender</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="modal" id="viewPurchase" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">View Purchase</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="form">
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label labelClass">customer ID :</label><label
+                                class="control-label labelClass" id="pinId">Pin ID</label>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label labelClass">Amount :</label><label
+                                class="control-label labelClass" id="amount">0</label>
+
+
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-10">
+                                <button type="button" class="btn btn-primary purchaseAmount" id="purchaseAmount"
+                                    value="1">{{1*chips}}</button>
+                                <button type="button" class="btn btn-primary purchaseAmount"
+                                    value="5">{{5*chips}}</button>
+                                <button type="button" class="btn btn-primary purchaseAmount"
+                                    value="10">{{10*chips}}</button>
+                                <button type="button" class="btn btn-primary purchaseAmount"
+                                    value="20">{{20*chips}}</button>
+                                <button type="button" class="btn btn-primary purchaseAmount"
+                                    value="50">{{50*chips}}</button>
+                                <button type="button" class="btn btn-primary purchaseAmount"
+                                    value="100">{{100*chips}}</button>
+                            </div>
+
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary viewPrint" id="viewPrint">Purchase</button>
+                </div>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="modal fade overlay" id="viewBill" tabindex="-1" role="dialog" aria-labelledby="basicModal"
+        aria-hidden="true">
+        <div class="modal-dialog printDailog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <!-- <h4 class="modal-title" id="myModalLabel">Add Customer</h4> -->
+                    <hr>
+                </div>
+                <div class="modal-body">
+                    <div class="printBill" id="printBill">
+                        <h2><span id="shopName"></span></h2>
+                        <p><strong>Cashier:</strong> <span id="cashierName"></span></p>
+                        <hr class="new3">
+                        <h3>Purchase</h3>
+                        <hr class="new3">
+                        <h4>Player PIN</h4>
+                        <p><span id="pin"></span></p>
+                        <p><strong>Date:</strong> <span id="date"></span></p>
+                        <p></p>
+                        <p><strong>Total:</strong> $<span id="totalAmount">25.50</span></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="printBtn">Print</button>
+                </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal fade overlay" id="viewPurchaseBill" tabindex="-1" role="dialog" aria-labelledby="basicModal"
+        aria-hidden="true">
+        <div class="modal-dialog printDailog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <!-- <h4 class="modal-title" id="myModalLabel">Add Customer</h4> -->
+                    <hr>
+                </div>
+                <div class="modal-body">
+                    <div class="printBill" id="printBill">
+                        <h2><span id="shopName"></span></h2>
+                        <p><strong>Cashier:</strong> <span id="cashierName"></span></p>
+                        <hr class="new3">
+                        <h3>Revert Purchase</h3>
+                        <hr class="new3">
+                        <h4>Player PIN</h4>
+                        <p><span id="pin"></span></p>
+                        <p><strong>Date:</strong> <span id="date"></span></p>
+                        <p><strong>Revert Amount:</strong> <span id="revertTotalAmount"></span></p>
+                        <p><strong>Revert Comps:</strong> <span id="revertTotalComps"></span></p>
+                        <p><strong>Revert Entries:</strong> <span id="revertTotalEntries"></span></p>
+                        <p></p>
+                        <p><strong>Total:</strong> $<span id="totalAmount">25.50</span></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="printBtn">Print</button>
+                </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal" id="revertPurchase" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Revert Purchase</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="form">
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label labelClass">customer ID :</label><label
+                                class="control-label labelClass" id="revertPinId">Pin ID</label>
+
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label labelClass">Name :</label><label
+                                class="control-label labelClass" id="customerName">Name</label>
+
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label labelClass">Last Purchase:</label><label
+                                class="control-label labelClass" id="revertLastPurchase">Pin ID</label>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label labelClass">Comps Amount :</label><label
+                                class="control-label labelClass" id="revertCompsAmount">0</label>
+
+
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label labelClass">Added Enteries :</label><label
+                                class="control-label labelClass" id="revertEntries">0</label>
+
+
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary revertPurchaseBtn" id="revertPurchaseBtn">Revert
+                        Purchase</button>
+                </div>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="modal fade" id="editcustomerModal" tabindex="-1" role="dialog" aria-labelledby="basicModal"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Edit Customer</h4>
+                    <hr>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label labelClass">Pin ID*</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text" name="userPin" id="userPin"
+                                    placeholder="Enter Pin" readonly>
+                            </div>
+                            <label class="col-sm-2 control-label labelClass">Driver License*</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text" name="userLicense" id="userLicense"
+                                    placeholder="Enter License" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label labelClass">First Name*</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text" name="userFirstName" id="userFirstName"
+                                    placeholder="Enter First Name" required>
+                            </div>
+                            <label class="col-sm-2 control-label labelClass">Last Name*</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text" name="userLastName" id="userLastName"
+                                    placeholder="Enter Last Name" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label labelClass">Phone*</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text" name="userPhone" id="userPhone"
+                                    placeholder="Enter Phone Number" required>
+                            </div>
+                            <label class="col-sm-2 control-label labelClass">Mail*</label>
+                            <div class="col-sm-4">
+                                <input type="email" class="form-control text" name="userMail" id="userMail"
+                                    placeholder="Enter Mail" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label labelClass">Gender*</label>
+                            <div class="col-sm-10">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="userGender" id="userMale"
+                                        value="male" checked>
+                                    <label class="form-check-label" for="male">Male</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="userGender" id="userFemale"
+                                        value="female">
+                                    <label class="form-check-label" for="female">Female</label>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="editSubmitBtn">Save changes</button>
+                </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal fade" id="addcustomerModal" tabindex="-1" role="dialog" aria-labelledby="basicModal"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Add Customer</h4>
+                    <hr>
+                </div>
+                <div class="modal-body">
+                    <form id="form">
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label labelClass">Pin ID*</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text pin" name="pin" id="pin"
+                                    placeholder="Enter Pin" readonly>
+                            </div>
+                            <label class="col-sm-2 control-label labelClass">Driver License*</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text" name="license" id="license"
+                                    placeholder="Enter License" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label labelClass">First Name*</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text" name="firstName" id="firstName"
+                                    placeholder="Enter First Name" required>
+                            </div>
+                            <label class="col-sm-2 control-label labelClass">Last Name*</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text" name="lastName" id="lastName"
+                                    placeholder="Enter Last Name" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label labelClass">Phone*</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text" name="phone" id="phone"
+                                    placeholder="Enter Phone Number" required>
+                            </div>
+                            <label class="col-sm-2 control-label labelClass">Mail*</label>
+                            <div class="col-sm-4">
+                                <input type="email" class="form-control text" name="mail" id="mail"
+                                    placeholder="Enter Mail" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label labelClass">Gender*</label>
+                            <div class="col-sm-10">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="male" value="male"
+                                        checked>
+                                    <label class="form-check-label" for="male">Male</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="female"
+                                        value="female">
+                                    <label class="form-check-label" for="female">Female</label>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="submitBtn">Save changes</button>
+                </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="viewcustomerModal" tabindex="-1" role="dialog" aria-labelledby="viewcustomerModal"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">View Customer</h4>
+                    <hr>
+                </div>
+                <div class="modal-body">
+                    <form id="form">
+
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="chips" value="{{chips}}">
+<section class="content">
+    <!-- Row -->
+    <div class="row">
+        <!-- /.modal -->
+        <div id="redeemModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- <form method="POST" name="withdrawAmount" action="/redeemAmount"> -->
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Redeem</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label labelClass">Amount*</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text amount" name="amount" id="amount"
+                                    placeholder="Enter Amount" required>
+                                <input type="hidden" name="uniqueId" id="uniqueId">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" name="chipsValue" class="btn btn-success redeemAmount" value="Submit">
+                    </div>
+                    <!-- </form> -->
+                </div>
+            </div>
+        </div>
+        <!-- Button trigger modal -->
+    </div>
+    <!-- /Row -->
+</section>
+<!-- <section class="content">
+    <div class="row">
+        <div id="redeemModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="/redeemAmount" method="POST" name="redeem">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">Add Customer</h4>
+                            <hr>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group row">
+                                <label class="col-sm-2 control-label labelClass">Amount*</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control text" name="amount" id="amount"
+                                        placeholder="Enter Amount" required>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="submitBtn">Withdraw</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+
+{% endblock %} {% block Jscript %}
+<script>
+    $(document).ready(function () {
+        let host = window.location.origin
+        let userId = ""
+        let uniqueId = ""
+        // $.formUtils.addValidator({
+        //     name: 'selectValidator',
+        //     validatorFunction: function (value, $el, config, language, $form) {
+        //         // Custom validation logic
+        //         console.log("vlaue",value);
+        //         return value !== '';
+        //     },
+        //     errorMessage: 'Please select an option',
+        //     errorMessageKey: 'badSelectValue'
+        // });
+        $("#addBtn").click(function () {
+            console.log("click");
+            let uniqueNumber = Math.floor(Math.random() * 90000) + 10000;
+            console.log("uniqueNumber", uniqueNumber);
+            $(".pin").val(uniqueNumber)
+        })
+
+        $('body').on('click', '.redeemAmount', function (e) {
+            let uniqueId = $('#uniqueId').val()
+            let amount = $('.amount').val()
+            console.log("amount", amount);
+            $.ajax({
+                type: 'POST',
+                url: host + "/redeemAmount",
+                data: { uniqueId: uniqueId, amount: amount },
+                success: function (resultData) {
+                    console.log("AJAX request successful:", resultData);
+                    if (resultData.status === 'success') {
+                        // Handle success
+                        $('#myTable').dataTable().fnDestroy();
+                        LoadData();
+                        $("#redeemModal").modal("hide");
+                        $('.withdrawableChips').text(resultData.withdrawedChips);
+                        Swal.fire({
+                            icon: "success",
+                            title: resultData.msg,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+
+                        
+                    } else if (resultData.status === 'error') {
+                        Swal.fire({
+                            icon: "error",
+                            title: resultData.msg,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                }
+            })
+        })
+        $('body').on('click', '.revertPurchaseBtn', function (e) {
+            $.ajax({
+                type: 'POST',
+                url: host + "/revertAmount",
+                data: { userPin: uniqueId },
+                success: function (resultData) {
+                    console.log("AJAX request successful:", resultData);
+                    if (resultData.status === 'success') {
+                        // Handle success
+                        // $('#myTable').dataTable().fnDestroy();
+                        // LoadData();
+                        // $("#redeemModal").modal("hide")
+                    } else if (resultData.status === 'error') {
+                        Swal.fire({
+                            icon: "error",
+                            title: resultData.message,
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                    }
+                }
+            })
+        })
+        $('body').on('click', '.viewBtn', function (e) {
+            console.log("viewBtn");
+            let userId = $(this).attr('id')
+            $.ajax({
+                type: 'POST',
+                url: host + "/viewcustomer",
+                data: { userId: userId },
+                success: function (resultData) {
+                    console.log("AJAX request successful:", resultData);
+                    if (resultData.status === 'success') {
+                        // Handle success
+                        let gender = resultData.gender
+                        console.log("resultData", resultData);
+                        $('.firstName').text(resultData.firstName)
+                        $('.gender').text(gender.charAt(0).toUpperCase() + gender.slice(1))
+                        $('.withdrawableChips').text(resultData.withdrawableChips);
+                        $('.nonWithdrawableChips').text(resultData.nonWithdrawableChips);
+                        $('.lastName').text(resultData.lastName)
+                        $('.license').text(resultData.license)
+                        $('.mail').text(resultData.mail)
+                        $('.mobile').text(resultData.mobile)
+                        $('.pinID').text(resultData.pinID)
+                        $('.block').removeAttr("disabled")
+                        $('.logout').removeAttr("disabled")
+                        $('.gameHistory').removeAttr("disabled")
+                        $('.redeem').removeAttr("disabled")
+                        $('.purchase').removeAttr("disabled")
+                        console.log("revertPurchase", resultData.chips);
+                        $("#uniqueId").val(resultData.pinID)
+                        if (Number(resultData.chips) > 0) {
+                            console.log("revertPurchase");
+                            $('.revertPurchase').removeAttr("disabled")
+                        } else {
+                            $('.revertPurchase').attr("disabled", "true")
+
+                        }
+                        $('#view').removeAttr('hidden');
+                        userId = userId
+                        uniqueId = resultData.pinID
+                    } else {
+                        // Handle failure
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX request failed:", status, error);
+                }
+            });
+        })
+        $('.redeem').click(function () {
+            console.log("redeem");
+            $('#redeemModal').modal('show')
+        })
+        $("body").on("click", "#printBtn", function () {
+            console.log("userId", userId);
+            let totalAmount = $('#totalAmount').text()
+            var printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Print</title> <style>body {text-align: center; width: auto;} hr.new3 {border-top: 3px dashed;}.printDailog{width: auto;}</style></head><body id="printBody">');
+            printWindow.document.write(document.getElementById('printBill').innerHTML);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+            console.log("print call");
+            $.ajax({
+                type: 'POST',
+                url: host + "/addChips",
+                data: { userPin: $('#pin').text(), totalAmount: totalAmount },
+                success: function (resultData) {
+
+                }
+            })
+        })
+        $('body').on('click', '.revertPurchase', function (e) {
+            console.log("revert purchase");
+            $.ajax({
+                type: 'POST',
+                url: host + "/revertPurchase",
+                data: { userPin: uniqueId },
+                success: function (resultData) {
+                    console.log("resultData", resultData);
+                    $('#revertPinId').text(resultData.user.pinId)
+                    $('#revertLastPurchase').text(resultData.user.purchaseDate)
+                    $('#revertEntries').text(resultData.user.entries)
+                    $('#customerName').text(resultData.user.customerName)
+                }
+            })
+            $("#revertPurchase").modal("show")
+        })
+       
+        
+        $('body').on('click', '.revertAmount', function (e) {
+            $.ajax({
+                type: 'POST',
+                url: host + "/viewSinglecustomer",
+                data: { uniqueId: uniqueId },
+                success: function (resultData) {
+                    console.log("AJAX request successful:", resultData);
+                    if (resultData.status === 'success') {
+                        console.log("resultData.cashierName", resultData.cashierName);
+                        console.log("resultData.shopName", resultData.shopName);
+                        $('#shopName').text(resultData.shopName)
+                        $('#cashierName').text(resultData.cashierName)
+                        // Handle success
+                        // $('#myTable').dataTable().fnDestroy();
+                        // LoadData();
+                    } else {
+                        // Handle failure
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX request failed:", status, error);
+                }
+            });
+            let dt = new Date()
+            const padL = (nr, len = 2, chr = `0`) => `${nr}`.padStart(2, chr);
+            $("#date").text(`${padL(dt.getDate())}/${padL(dt.getMonth() + 1)}/${dt.getFullYear()} ${padL(dt.getHours())}:${padL(dt.getMinutes())}:${padL(dt.getSeconds())}`)
+            $('#totalAmount').text(amount)
+            $('#pin').text(uniqueId)
+            $('#viewPurchase').modal('toggle');
+
+            $("#viewBill").modal("show")
+            // var printWindow = window.open('', '_blank');
+            // printWindow.document.write('<html><head><title>Print</title> <style>body {text-align: center; width: auto;} hr.new3 {border-top: 3px dashed;}.printDailog{width: auto;}</style></head><body id="printBody">');
+            // printWindow.document.write(document.getElementById('printBill').innerHTML);
+            // printWindow.document.write('</body></html>');
+            // printWindow.document.close();
+            // printWindow.print();
+            // console.log("print call");
+            // $.ajax({
+            //     type: 'POST',
+            //     url: host + "/revertAmount",
+            //     data: { userPin:$('#revertPinId').text()},
+            //     success: function (resultData) {
+            //         console.log("resultData",resultData);
+            //         $('#revertPinId').text(resultData.user.pinId)
+            //         $('#revertLastPurchase').text(resultData.user.purchaseDate)
+            //         $('#revertEntries').text(resultData.user.entries)
+            //     }
+            // })
+        })
+        $('body').on('click', '.purchase', function (e) {
+            console.log("purchase");
+            //  $.ajax({
+            //     type: 'POST',
+            //     url: host + "/getBalance",
+            //     data: { uniqueId:uniqueId},
+            //     success: function (resultData) {
+            //         if (resultData.status === 'success') {
+            $("#pinId").text(uniqueId)
+            $('#viewPurchase').modal("show")
+            //         }else{
+
+            //         }
+            //     }
+            // })
+
+
+        })
+        let amount = ""
+        $('body').on('click', '.purchaseAmount', function () {
+            console.log("amount");
+            let settingChips = $('#chips').val()
+            $("#amount").text($(this).val() * settingChips)
+            amount = $(this).val() * settingChips
+        })
+        // $('#purchase').click(function () {
+
+
+
+        // })
+        $('body').on('click', '.viewPrint', function (e) {
+            $.ajax({
+                type: 'POST',
+                url: host + "/viewSinglecustomer",
+                data: { uniqueId: uniqueId, amount: amount },
+                success: function (resultData) {
+                    console.log("AJAX request successful:", resultData);
+                    if (resultData.status === 'success') {
+                        console.log("resultData.cashierName", resultData.cashierName);
+                        console.log("resultData.shopName", resultData.shopName);
+                        $('#shopName').text(resultData.shopName)
+                        $('#cashierName').text(resultData.cashierName)
+                        let dt = new Date()
+                        const padL = (nr, len = 2, chr = `0`) => `${nr}`.padStart(2, chr);
+                        $("#date").text(`${padL(dt.getDate())}/${padL(dt.getMonth() + 1)}/${dt.getFullYear()} ${padL(dt.getHours())}:${padL(dt.getMinutes())}:${padL(dt.getSeconds())}`)
+                        $('#totalAmount').text(amount)
+                        $('#pin').text(uniqueId)
+                        $('#viewPurchase').modal('toggle');
+                        $("#viewBill").modal("show");
+                        // Handle success
+                        // $('#myTable').dataTable().fnDestroy();
+                        // LoadData();
+                    } else if (resultData.status === "error") {
+                        Swal.fire({
+                            // position: "top-end",
+                            icon: "error",
+                            title: "You don't have enough credit!",
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                        // Handle failure
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX request failed:", status, error);
+                }
+            });
+
+        })
+        $('body').on("click", "#submitBtn", function () {
+            console.log("submitbtn", $('input[name="license"]').val(), $('input[name="firstName"]').val());
+            if ($('input[name="license"]').val() != "" && $('input[name="firstName"]').val() != "" && $('input[name="lastName"]').val() != "" && $('input[name="phone"]').val() != "" && $('input[name="mail"]').val() != "") {
+                $.ajax({
+                    type: 'POST',
+                    url: host + "/addcustomer",
+                    data: { firstName: $('input[name="firstName"]').val(), lastName: $('input[name="lastName"]').val(), mail: $('input[name="mail"]').val(), phone: $('input[name="phone"]').val(), license: $('input[name="license"]').val(), pin: $('input[name="pin"]').val(), gender: $("input[name='gender']:checked").val() },
+                    success: function (resultData) {
+                        console.log("AJAX request successful:", resultData);
+                        if (resultData === 'success') {
+                            // Handle success
+                            // $('#myTable').dataTable().fnDestroy();
+                            // LoadData();
+                            $('#addcustomerModal').modal('toggle');
+                        } else {
+                            // Handle failure
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX request failed:", status, error);
+                    }
+                });
+            }
+        });
+
+        
+        $("#dateSearch").click(function () {
+
+            $("#userTable").show();
+            console.log("click");
+            $('#myTable').dataTable().fnDestroy();
+            LoadData();
+        })
+        function LoadData() {
+
+            var searchType = $("#searchType").val();
+            var search = $("#search").val();
+            console.log(window.location.url);
+            let dataTable = $('#myTable').DataTable({
+                // "oLanguage": {
+                //     "sSearch": "Search Username"
+                // },
+                // "scrollX": true,
+                "searching": false,
+                "processing": true,
+                "serverSide": true,
+                "ordering": false,
+                "autoWidth": false,
+                "pageLength": 10,
+                "ajax": {
+                    url: host + '/getcustomer',
+                    data: function (data) {
+                        data.type = searchType;
+                        data.search = search;
+                    }
+                },
+                "createdRow": function (row, data, dataIndex) {
+                    if (data.role === "shop") {
+                        $(row).css('background-color', '#C0C0C0');
+                    }
+                },
+                "columns": [
+                    // { "data": "_id" },
+                    {
+                        "data": "uniqueId"
+                    }, {
+                        "data": "firstName"
+                    }, {
+                        "data": "lastName"
+                    },
+                    {
+                        "data": "email"
+                    },
+                    {
+                        "data": "mobile"
+                    },
+                    {
+                        "data": "license"
+                    },
+                    {
+                        "data": "gender",
+                        render: function (data, typ, row) {
+                            return data.charAt(0).toUpperCase() + data.slice(1)
+                        }
+                    },
+
+                    {
+                        "data": "status",
+                        render: function (data, type, row) {
+                            console.log("row", row);
+                            if (data == "active") {
+                                return '<a class="changeStatus" style="color:green" id="' + row.id + '" >Active</a>'
+                            } else {
+                                return '<a class="changeStatus" style="color:red" id="' + row.id + '" >inActive</a>'
+                            }
+                        }
+                    }, {
+                        "data": "action",
+                        render: function (data, type, row) {
+                            console.log(row);
+                            console.log(row._id);
+                            return '<a class="" ><button type="button" id=' + row._id + ' class="btn btn-warning btn-xs btn-rounded editUser" name="edit" title="Edit Player"><i class="fa fa-edit" aria-hidden="true"></i></button></a> <button type="button" class="btn btn-primary btn-xs btn-rounded viewBtn" id=' + row._id + ' name="user" title="View User"><i class="fa fa-user" aria-hidden="true"></i></button> <a href="/customerBetReport/'+row._id+'"><button type="button" class="btn btn-warning btn-xs" name="BetReport"><i class="fa fa-file" aria-hidden="true"></i></button></a> '
+                            // return '<a href="/userEdit/'+row.id+'"><button type="button" class="btn btn-warning btn-xs" name="edit"><i class="fa fa-edit" aria-hidden="true"></i></button></a> <button type="button" name="delete" id="'+row.id+'" class="btn btn-danger btn-xs delete"><i class="fa fa-trash" aria-hidden="true"></i></button> '
+                            // <a href="/userEdit/' + row.id + '"><button type="button" class="btn btn-warning btn-xs btn-rounded" name="edit"><i class="fa fa-edit" aria-hidden="true"></i></button></a> <button type="button" name="delete" id="' + row.id + '" class="btn btn-danger btn-xs delete btn-rounded"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                        },
+                        "drawCallback": function () {
+                            $('.dropdown').on('shown.bs.dropdown', function () {
+                                var dropdownMenu = $(this).find('.dropdown-menu');
+                                var dropdownOffset = dropdownMenu.offset();
+                                var dropdownHeight = $(window).height() - dropdownOffset.top - 20; // Adjust this value as needed
+                                dropdownMenu.css('max-height', dropdownHeight + 'px');
+                            });
+                        }
+                    }
+                ]
+            });
+
+            $("body").on("click", ".editUser", function () {
+                let userID = $(this).attr("id")
+                $.ajax({
+                    type: 'POST',
+                    url: host + "/viewcustomer",
+                    data: { userId: userID },
+                    success: function (resultData) {
+                        console.log("AJAX request successful:", resultData);
+                        if (resultData.status === 'success') {
+                            // Handle success
+                            let gender = resultData.gender
+                            console.log("resultData", 'input[id=user' + gender.charAt(0).toUpperCase() + gender.slice(1) + ']');
+                            $('#userFirstName').val(resultData.firstName)
+                            $('#userLastName').val(resultData.lastName)
+                            $('#userLicense').val(resultData.license)
+                            $('#userMail').val(resultData.mail)
+                            $('#userPhone').val(resultData.mobile)
+                            $('#userPin').val(resultData.pinID)
+                            // if(resultData.gender == "male"){
+                            $('input[id=user' + gender.charAt(0).toUpperCase() + gender.slice(1) + ']').attr('checked', true)
+                            // }
+                            $('#editcustomerModal').modal('show')
+                            userId = userId
+                            uniqueId = resultData.pinID
+                        } else {
+                            // Handle failure
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX request failed:", status, error);
+                    }
+                });
+                $('body').on("click", "#editSubmitBtn", function () {
+                    console.log("clickEdit");
+                    console.log("editSubmitBtn", $('input[name="userLicense"]').val(), $('input[name="userFirstName"]').val());
+                    if ($('input[name="userLicense"]').val() != "" && $('input[name="userFirstName"]').val() != "" && $('input[name="userLastName"]').val() != "" && $('input[name="userPhone"]').val() != "" && $('input[name="userMail"]').val() != "") {
+                        $.ajax({
+                            type: 'POST',
+                            url: host + "/editcustomer",
+                            data: { firstName: $('input[name="userFirstName"]').val(), lastName: $('input[name="userLastName"]').val(), mail: $('input[name="userMail"]').val(), phone: $('input[name="userPhone"]').val(), license: $('input[name="userLicense"]').val(), gender: $("input[name='userGender']:checked").val(), userId: userID },
+                            success: function (resultData) {
+                                console.log("AJAX request successful:", resultData);
+                                if (resultData === 'success') {
+                                    // Handle success
+                                    // $('#myTable').dataTable().fnDestroy();
+                                    // LoadData();
+                                    window.location.reload()
+                                    // $('#editcustomerModal').modal('toggle');
+                                } else {
+                                    // Handle failure
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("AJAX request failed:", status, error);
+                            }
+                        });
+                    }
+                });
+            })
+        }
+
+    });
+
+</script>
+{% endblock %}

@@ -1,0 +1,152 @@
+{% extends "partition/layout.html" %}
+
+
+{% block body %}
+
+
+<!-- Main Content -->
+<div class="page-wrapper">
+	<div class="container-fluid">
+
+		<!-- Title -->
+		<section class="content-header">
+			<!-- {% if gameName %}
+		    <h1>{{symbol.theme.name}}</h1>
+			{% else %}
+		    <h1>{{theme.name}}</h1>
+			{% endif %} -->
+			<h1>{{gameName}}</h1>
+		    <ol class="breadcrumb">
+		        <li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+		        <!-- <li><a href="/gameMaster">Slot Game Master</a></li> -->
+		        <li><a href="/symbolManagement/{{gameId}}">{{gameName}}</a></li>
+		        {% if symbol %}
+		        <li class="active"><span>Edit  Symbol</span></li>
+		        {% else %}
+		        <li class="active"><span>Add  Symbol</span></li>
+		        {% endif %}
+		    </ol>
+		</section>
+		<!-- /Title -->
+		<!-- Row  -->
+		<section class="content">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-default card-view">
+						<!-- <div class="panel-heading"> -->
+							<!-- <div class="pull-left">
+								{% if symbol %}
+								<h6 class="panel-title txt-dark">Edit {{symbol.theme.name}}</h6>
+								{% else %}
+								<h6 class="panel-title txt-dark">Add {{theme.name}}</h6>
+								{% endif %}
+							</div> -->
+							<!-- <div class="clearfix"></div> -->
+						<!-- </div> -->
+						<div class="panel-wrapper collapse in">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-sm-12 col-xs-12">
+										<div class="form-wrap">
+											{% if symbol %}
+											<form method="POST" action="/symbol/editSymbol/{{symbol._id}}" name="adduser" class="form-horizontal" enctype="multipart/form-data">
+												{% else %}
+												<form method="POST" action="/symbol/addSymbol/{{gameId}}" name="adduser" class="form-horizontal" enctype="multipart/form-data">
+													{% endif %}
+													
+													<div class="form-group">
+														<label for="exampleInputpwd_4" class="col-sm-3 control-label">Symbol Type*</label>
+														<div class="col-sm-6">
+															<div class="input-group">
+																<div class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></div>
+																<select class="form-control"  name="symbolType" id="symbolType" required>
+																	<option value="symbol" {{ "selected" if symbol.symbol_type=='symbol' else "" }} >Symbol</option>
+																	<option value="wild" {{ "selected" if symbol.symbol_type=='wild' else "" }} >Wild</option>
+																	<option value="bonus" {{ "selected" if symbol.symbol_type=='bonus' else "" }} >Bonus</option>
+																</select>
+															</div>
+														</div>
+													</div>
+													<div class="form-group">
+														<label  for="exampleInputEmail_3" class="col-sm-3 control-label">Symbol*</label>
+														<div class="col-sm-6">
+															<div class="input-group">
+																<div class="input-group-addon"><i class="glyphicon glyphicon-star"></i></div>
+																<input type="text" class="form-control" required name="symbol" id="symbol" value="{{symbol.symbol}}" data-validation="length alphanumeric" data-validation-length="">
+															</div>
+														</div>
+													</div>
+													<div class="form-group">
+														<label for="exampleInputpwd_4" class="col-sm-3 control-label">Image*</label>
+														<div class="col-sm-6">
+															<div class="input-group">
+																<div class="input-group-addon"><i class="fa fa-file"></i></div>
+																{% if symbol %}
+																<input type="file" class="form-control" name="image" id="image" data-validation="mime size" 
+																 data-validation-allowing="jpg, png" 
+																 data-validation-max-size="" 
+																 data-validation-error-msg-required="No image selected" onchange="displayImage('image','imagePreview')" >
+																{%else%}
+																<input type="file" class="form-control" required name="image" id="image" data-validation="mime size required" 
+																 data-validation-allowing="jpg, png" 
+																 data-validation-max-size="" 
+																 data-validation-error-msg-required="No image selected" onchange="displayImage('image','imagePreview')" >
+																 {%endif%}
+															</div>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-sm-3 control-label"></label>
+														<div class="col-sm-6">
+
+															<img class="brand-img mr-10" src="/uploads/symbol/{{symbol.image}}" height="40px" id="imagePreview" />
+													</div>
+													</div>
+													<div class="form-group mb-0">
+														<div class="col-sm-offset-3 col-sm-9">
+															<input type="submit" class="btn btn-success btn-flat" value="submit">
+														
+														    <a href="/symbolManagement/{{gameId}}" class="btn btn-danger btn-flat">Cancel</a>
+														</div>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>	
+					</div>
+					<!-- Row -->
+					
+				<!-- /Row -->
+			</div>
+		</section>
+
+	</div>
+</div>		
+
+		{% endblock %}
+
+		{% block Jscript %}
+		<script>
+			function displayImage(inputId, previewId) {
+        var input = document.getElementById(inputId);
+        var preview = document.getElementById(previewId);
+        console.log("input",input,preview);
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                console.log("e",e);
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.src = "";
+        }
+    }
+			$(document).ready( function () {
+				var host = window.location.origin;
+			} );
+		</script>
+		{% endblock %}

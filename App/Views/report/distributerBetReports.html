@@ -1,0 +1,214 @@
+{% extends "partition/layout.html" %} {% block body %}
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+            <h1>Distributer Bet Reports</h1>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/dashboard">
+                        <i class="fa fa-dashboard"></i> Dashboard</a>
+                </li>
+                <li class="active">Break Down Commission</li>
+            </ol>
+        </section>
+        <!-- /Title -->
+         
+        <!-- Row -->
+        <section class="content">
+            <div class="row">
+                <div class="col-sm-12">
+                  <div class="row panel panel-default card-view">
+                  <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Self Reports History</h6>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <input required="required" class="form-control" placeholder="DD/MM/YYYY"
+                                    name="start" type="text" id="start" autocomplete="off"
+                                    data-date-format="YYYY-MM-DD HH:mm" value="{{start}}">
+
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <input required="required" class="form-control" placeholder="DD/MM/YYYY" name="end"
+                                    type="text" id="end" autocomplete="off" data-date-format="YYYY-MM-DD HH:mm"
+                                    value="{{end}}">
+                            </div>
+                        </div>
+                        <input type="hidden" name="id" id="id" value="{{id}}">
+                    <!-- <div class="col-md-2">
+                        <div class="form-group">
+                        <label>Slot Type</label>
+                            <input class="form-control" ng-model="search.slotType" type="text">
+                            <select class="form-control name="gameType" id="gameType">
+                             <option {{ "selected" if gameType == 'all' }} value="all">All</option>
+                                <option {{ "selected" if gameType == '5*3' }} value="5*3">5*3</option>
+                                <option {{ "selected" if gameType == '5*4' }} value="5*4">5*4</option>
+                                <option {{ "selected" if gameType == '4*3' }} value="4*3">4*3</option>
+                                <option {{ "selected" if gameType == '3*3' }} value="3*3">3*3</option>
+                            </select>
+                        </div>
+                    </div> -->
+                    <input type="hidden" name="gameType" id="gameType" value="all">
+                    <div class="col-sm-2">
+                        <label> &nbsp;</label><br>
+                        <button class="btn btn-primary" onclick="loadSlotOverAllCommission()"><i class="fa fa-search"></i></button>
+                    </div>
+                    <!-- <div class="col-md-4" id="balance_div"> 
+                        <label>Initial Amount: </label> <span id="opening_balance" style="margin-right: 5px;">0.00</span><br/>
+                        <label>Total Return: </label> <span id="closing_balance" style="margin-right: 10px;">0.00</span><br/>	
+                        <label>Total Credit: </label> <span id="total_balance" style="margin-right: 10px;">0.00</span>
+                    </div> -->
+                </div>
+                
+                </div>
+                <div class="col-sm-12">
+                    <div class="row panel panel-default card-view">
+                    <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="table-wrap">
+                                    <div class="table-responsive">
+                                        <table id="myTable" class="table table-hover display  pb-30" >
+                                            <thead>
+                                                <tr>
+                                                    <th>Distributer Name</th>
+                                                    <th>Total Bet Count</th>
+                                                    <th>Total Bet Amount</th>
+                                                    <th>Total win</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for chips in data %}
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    {% endblock %} {% block Jscript %}
+
+    <script>
+        // $(".form_datetime").datetimepicker({format: 'YYYY-MM-DD'});
+        $('#start, #end').datepicker({
+            format: "dd/mm/yyyy",
+            timepicker: false
+        });
+
+
+$(document).ready( function () {
+		$('#myTable').dataTable( {
+		"searching": false,
+		"ordering": false,
+		"autoWidth": false,
+		"oLanguage": {
+			"sEmptyTable":  "No data available"
+		}
+	} );
+} );
+ function loadSlotOverAllCommission(){
+	$('#myTable').dataTable().fnClearTable();
+    $('#myTable').dataTable().fnDestroy();
+ 	LoadData();
+}
+function LoadData() {
+    var host = window.location.origin;
+        var startdate = $("#start").val();
+        console.log("startdate",startdate);
+        var enddate = $("#end").val();
+        var id = $("#id").val();
+        console.log("id==============================>",id);
+        console.log("enddate",enddate);
+        $('#myTable').DataTable({
+            "oLanguage": {
+                "sSearch": "Search"
+            },
+            "processing": true,
+            "serverSide": true,
+            "searching": true,
+            "ordering": true,
+            "autoWidth": false,
+            "pageLength": 25,
+            /*"ajax": host + "/report/getChipsHistory/"+start+'/'+end,*/
+            ajax: {
+                url: "/adminBetReports/getData",
+                type: "GET",
+                data: function(data) {
+                    data.startdate = startdate;
+                    data.enddate = enddate;
+                    data.id=(id!=undefined && id!=null)?id:null;
+                },
+                "dataSrc": function ( json ) {
+                    console.log("json",json);
+										if(json.totalReturn){
+												$('#closing_balance').html(parseFloat(json.totalReturn).toFixed(2));
+										} else{
+											$('#closing_balance').html('0.00');
+										}
+
+										if(json.intialAmount){
+												$('#opening_balance').html(parseFloat(json.intialAmount).toFixed(2));
+										} else{
+											$('#opening_balance').html('0.00');
+										}
+										if(json.totalCredit){
+											$('#total_balance').html(parseFloat(json.totalCredit).toFixed(2));
+										} else{
+											$('#total_balance').html('0.00');
+										}
+										$('#balance_div').show();
+										//console.log("json.openingData: ", json.openingData);
+										//console.log("json.closingData: ", json.closingData);
+										return json.data;
+									}
+            },
+            "columns": [ {
+                "data": "name",
+                render: function (data, type, row) {
+                return '<a href="/distributorProfile/' + row._id + '" class="" >' + row.name + '</a> '
+                }
+            },
+                
+            {
+                "data": "spin",
+            },{
+                "data": "bet",
+            }, {
+                "data": "win",
+            }, 
+            {
+                "data": "action",
+                render: function (data, type, row) {
+                return '<a href="/distributorBetReport/' + row._id + '" class="" ><button type="button" class="btn btn-warning btn-xs btn-rounded" name="betReport" title="Bet Report"><i class="fa fa-user" aria-hidden="true"></i></button></a> '
+                }
+            }
+            ]
+        });
+}
+</script>
+{% endblock %}

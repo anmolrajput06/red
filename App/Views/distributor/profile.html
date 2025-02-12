@@ -1,0 +1,253 @@
+{% extends "partition/layout.html" %} {% block body %}
+
+<style>
+  .table,
+  .tableh,
+  .tabled {
+    border: 1px solid black;
+  }
+
+  .table {
+    padding: 1px;
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .tabled {
+    width: 33%;
+  }
+  .tableh {
+    background-color: #3c8dbc;
+    color: white;
+  }
+</style>
+
+<div class="page-wrapper">
+  <div class="container-fluid">
+    <section class="content-header">
+      <h1>Distributer Profile</h1>
+      <ol class="breadcrumb">
+        <li>
+          <a href="#"><i class="fa fa-dashboard"></i> Dashboard</a>
+        </li>
+        <li class="active" href="/player">Distributer</li>
+        <li class="active" href="/player">profile</li>
+      </ol>
+    </section>
+    <section class="content">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="box box-primary">
+            <div class="box-body box-profile">
+              <h3 class="profile-username text-center">Distributer details</h3>
+              <!-- <p class="text-muted text-center">{{player.email}}</p> -->
+
+              <ul class="list-group list-group-unbordered">
+                <li class="list-group-item">
+                  <b>Name</b>
+                  <div class="pull-right">{{ userData.name }}</div>
+                </li>
+                <li class="list-group-item">
+                  <b>User name</b>
+                  <div class="pull-right">{{ userData.userName}}</div>
+                </li>
+                <li class="list-group-item">
+                  <b>Email</b>
+                  <div class="pull-right">{{userData.email }}</div>
+                </li>
+                <li class="list-group-item">
+                  <b>Contact Number</b>
+                  <div class="pull-right">{{userData.mobile }}</div>
+                </li>
+                <li class="list-group-item">
+                  <b>City</b>
+                  <div class="pull-right">{{userData.city }}</div>
+                </li>
+                <li class="list-group-item">
+                  <b>Status</b>
+                  <div class="pull-right" style="text-transform: uppercase">
+                    {{userData.status }}
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <!-- /.box-body -->
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">RTP Settings</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              {% for i in range(0, gameList.length) %}
+              <strong
+                ><i class="fa fa-thumbs-gamepad margin-r-5"></i>
+                {{gameList[i].name}}</strong
+              >
+              <p class="text-muted">{{userData.rtpSettings[i].game}}</p>
+              <hr />
+              {% endfor %}
+            </div>
+            <!-- /.box-body -->
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Navigation Menu</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="width: 100%; display: table">
+              <table class="table">
+                <tr>
+                  <th class="tableh">Game Type</th>
+                  <th class="tableh">Bounce Back Limit</th>
+                  <th class="tableh">Range</th>
+                </tr>
+                <tr>
+                  <td class="tabled">{{userData.gameMode}}</td>
+                  <td class="tabled">{% if userData.bonceBackLimit !='false' %}{{userData.bonceBackLimit}} {% endif %}</td>
+                  <td class="tabled">
+                    {% for i in range(0,userData.bounceBack.length) %}
+                    <span
+                      ><b
+                        >{{userData.bounceBack[i].minDeposit}} - {% if
+                        userData.bounceBack[i].maxDeposit %}
+                        {{userData.bounceBack[i].maxDeposit}} {% else %} 999.99
+                        {% endif %} :
+                      </b>
+                      {{userData.bounceBack[i].bounceBackUsd}}</span
+                    ><br />
+                    {% endfor %}
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+    </section>
+  </div>
+</div>
+
+<!--Notification Modal -->
+<div id="myNotification" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title">Notification</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <input
+            type="text"
+            name="notification_desc"
+            class="form-control"
+            id="notification_desc"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <input type="submit" name="Send" class="btn btn-success" value="Send" />
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %} {% block Jscript %}
+<script>
+  $(document).ready(function () {
+    var host = window.location.origin;
+
+    var theMonths = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    var labels = [];
+    for (var i = 0; i <= 11; i++) {
+      labels.push(theMonths[i]);
+    }
+
+    var host = window.location.origin;
+
+    if ($("#gamePlayedByPlayer").length > 0) {
+      // Get context with jQuery - using jQuery's .get() method.
+      var gameChartCanvas = $("#gamePlayedByPlayer").get(0).getContext("2d");
+      // This will get the first returned node in the jQuery collection.
+
+      var playerId = $("#gamePlayedByPlayer").data("player");
+      console.log("=========>", playerId);
+      $.ajax({
+        type: "GET",
+        url:
+          host + "/playerChart/getMonthlyGamePlayedByPlayerChart/" + playerId,
+        success: function (res) {},
+        complete: function (data) {
+          console.log(data.responseJSON);
+
+          var gameConfig = {
+            type: "line",
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: "Game Played By Player",
+                  backgroundColor: "#3b8bba",
+                  borderColor: "rgba(60,141,188,0.8)",
+                  data: data.responseJSON.monthlyGamePlayed, // data.responseJSON
+                  fill: false,
+                },
+                /*{
+		      	  			label : 'Game Won',
+		      	  			backgroundColor: "#008000",
+		      	  			borderColor: "rgba(60,141,188,0.8)",
+		      	  			data: data.responseJSON.monthlyWonGame, // data.responseJSON
+		      	  			fill: false,
+		      	  		},
+		      	  		{
+		      	  			label : 'Game Lost',
+		      	  			backgroundColor: "#FF0000",
+		      	  			borderColor: "rgba(60,141,188,0.8)",
+		      	  			data: data.responseJSON.monthlyLostGame, // data.responseJSON
+		      	  			fill: false,
+		      	  		}*/
+              ],
+            },
+            options: {
+              display: false,
+              responsive: true,
+              legend: {
+                //position: 'top',
+                display: false,
+              },
+            },
+          };
+          var chart = new Chart(gameChartCanvas, gameConfig);
+        },
+      });
+    }
+  });
+</script>
+{% endblock %}

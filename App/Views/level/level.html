@@ -1,0 +1,100 @@
+{% extends "partition/layout.html" %}
+
+
+{% block body %}
+
+
+	<!-- Main Content -->
+	<div class="page-wrapper">
+		<div class="container-fluid">
+
+			<!-- Title -->
+			<section class="content-header">
+			    <h1>Level Master</h1>
+			    <ol class="breadcrumb">
+			        <li><a href="/">Dashboard</a></li>
+						<li><a href="#"><span>Level Master</span></a></li>
+			    </ol>
+			</section>
+			<!-- /Title -->
+			 
+			<!-- Row -->
+			<section class="content">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="panel panel-default card-view">
+							<div class="panel-heading">
+								<div class="pull-left">
+									<h6 class="panel-title txt-dark">Level Master</h6>
+								</div>
+								<div class="pull-right">
+								<a href="/addLevel"><button type="button" class="btn btn-primary btn-md"><i class="fa fa-plus"></i> Add Level</button></a>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="panel-wrapper collapse in">
+								<div class="panel-body">
+									<div class="table-wrap">
+										<div class="table-responsive">
+											<table id="myTable" class="table table-hover display  pb-30" >
+												<thead>
+													<tr>
+														<th>Id</th>
+														<th>Level</th>
+														<th>Bonus</th>
+														<th>Minimum (XP)</th>
+														<th>Maximum (XP)</th>
+														<th>Modify</th>
+													</tr>
+												</thead>
+												<tbody>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>	
+
+{% endblock %}
+
+{% block Jscript %}
+<script>
+$(document).ready( function () {
+	var host = window.location.origin;
+	$('#myTable').DataTable({
+		"oLanguage": {
+			"sSearch": "Search Username"
+		},
+		// "scrollX": true,
+		// "searching": false,
+		"searching": false,
+		"ordering": false,
+		"autoWidth": false,
+		"pageLength": 25,
+		"ajax": host + "/getLevel",
+		"columns": [
+			// { "data": "_id" },
+			{ "data": "id" },
+			{ "data": "level" },
+			{ "data": "bonus" },
+			{ "data": "minimum" },
+			{ "data": "maximum" },
+			{
+				"data": "action",
+				render : function(data, type, row){
+					return '<div class="dropdown show"><a class="btn btn-warning btn-xs btn-rounded" href="/editLevel/'+row.id+'"><i class="fa fa-edit" aria-hidden="true"></i></a></div>'
+				}
+			}
+		]
+	});
+} );
+
+
+</script>
+{% endblock %}

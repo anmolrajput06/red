@@ -1,0 +1,94 @@
+{% extends "partition/layout.html" %}
+
+
+{% block body %}
+
+
+<!-- Main Content -->
+<div class="page-wrapper">
+	<div class="container-fluid">
+
+		<!-- Title -->
+		<section class="content-header">
+		    <h1>Row table</h1>
+		    <ol class="breadcrumb">
+		       <li><a href="/">Dashboard</a></li>
+					<li><a href="/rowMaster/{{gameId}}"><span>Row Master</span></a></li>
+					{% if row %}
+					<li class="active"><span>Edit Row</span></li>
+					{% else %}
+					<li class="active"><span>Add Row</span></li>
+					{% endif %}
+
+		    </ol>
+		</section>
+		<!-- /Title -->
+		<!-- Row  -->
+		<section class="content">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-default card-view">
+						<div class="panel-heading">
+							<div class="pull-left">
+							{% if row %}
+							<h6 class="panel-title txt-dark">Edit Row</h6>
+							{% else %}
+							<h6 class="panel-title txt-dark">Add Row</h6>
+							{% endif %}
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="panel-wrapper collapse in">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-sm-12 col-xs-12">
+										<div class="form-wrap">
+									{% if row %}
+									<form method="POST" action="/postEditRow/{{row.id}}" name="" class="form-horizontal">
+										{% else %}
+										<form method="POST" action="/postAddRow" name="" class="form-horizontal">
+											{% endif %}
+													<div class="form-group">
+													<input type="hidden" name="gameId" value="{{gameId}}">
+														<label for="exampleInputuname_3" class="col-sm-3 control-label">Row Name*</label>
+														<div class="col-sm-6">
+															<div class="input-group">
+																<div class="input-group-addon"><i class="glyphicon glyphicon-user"></i></div>
+																<input type="text" class="form-control" id="name" placeholder="Enter name" required name="name" value="{{row.name}}" data-validation="length alphanumeric" data-validation-allowing="-_/*\ "
+																	data-validation-length="" 
+																	data-validation-error-msg="Name is required">
+															</div>
+														</div>
+													</div>
+													<div class="form-group mb-0">
+														<div class="col-sm-offset-3 col-sm-9">
+															<input type="submit" class="btn btn-success btn-flat" value="submit">
+															<a href="/rowMaster/{{gameId}}" class="btn btn-danger btn-flat">Cancel</a>
+														</div>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>	
+					</div>
+					<!-- Row -->
+					
+				<!-- /Row -->
+			</div>
+		</section>
+
+	</div>
+</div>		
+
+		{% endblock %}
+
+		{% block Jscript %}
+		<script>
+			$(document).ready( function () {
+				var host = window.location.origin;
+			} );
+		</script>
+		{% endblock %}

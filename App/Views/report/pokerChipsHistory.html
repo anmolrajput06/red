@@ -1,0 +1,194 @@
+{% extends "partition/layout.html" %}
+{% block body %}
+		<!-- Main Content -->
+<style>
+th,td{
+	text-align:center;
+}
+</style>
+		<div class="page-wrapper">
+			<div class="container-fluid">
+				<!-- Title -->
+				<section class="content-header">
+				    <h1>Reports Master</h1>
+				    <ol class="breadcrumb">
+				        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+				        <li class="active" href="#">Reports</li>
+				    </ol>
+				</section>
+				<!-- /Title -->
+				 
+				<!-- Row -->
+				<section class="content">
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="panel panel-default card-view">
+								<div class="panel-heading">
+									<div class="pull-left">
+										<h6 class="panel-title txt-dark"> Poker Over All Payout</h6>
+									</div>
+									
+									<div class="clearfix"></div>
+								</div>
+								
+								  <div class="row">
+									<div >
+									    <div class="col-sm-3">
+									    	<div class="form-group">
+                                            <label for="exampleInputstdate_3" class="col-xs-12 control-label">Start Date</label>
+						    	                <div class='input-group date' id='startDate'>
+                                                    
+						    	                    <input type='text' class="form-control" value="{{startdate}}" data-date-format="YYYY-MM-DD HH:mm" name="start_date" id="start_date"/>
+						    	                    
+						    	                </div>
+						    	            </div>
+									 
+									    </div>
+
+									</div>
+									<div >
+									    <div class="col-sm-3">
+									    	<div class="form-group">
+                                            <label for="exampleInputeddate_3" class="col-xs-12 control-label">End Date</label>
+						    	                <div class='input-group date' id='endDate'>
+						    	                    <input type='text' class="form-control" value="{{nowdate}}"  data-date-format="YYYY-MM-DD HH:mm" name="end_date" id="end_date" />
+						    	                   
+						    	                </div>
+						    	            </div>
+									      
+									    </div>
+
+									</div>
+								    <div class="col-sm-4">
+								       <button type="button" style="margin-top:25px;"  name="search" id="search" class="btn btn-primary btn-md" /><i class="fa fa-search"></i></button>
+								    </div>
+								</div>  
+								
+								<div class="panel-wrapper collapse in">
+									<div class="panel-body">
+										<div class="table-wrap">
+											<div class="table-responsive">
+												<table id="myTable" class="table table-bordered table-striped" >
+													<thead>
+														<tr>
+															<th>Id</th>
+															<th>Date Time</th>
+															<th>UID</th>
+															<th>Room ID</th>
+															<th>Type</th>
+															<th>Chips</th>
+															<th>Remaining Chips</th>
+														</tr>
+													</thead>
+													<tbody>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>	
+			</div>
+		</div>
+		
+
+
+{% endblock %}
+
+{% block Jscript %}
+<script>
+
+$(document).ready( function () {
+	var host = window.location.origin;
+	
+	
+	$('#startDate input,#endDate input').datetimepicker();
+	
+	fetch_data('no');
+	function fetch_data(is_date_search, start_date='', end_date=''){
+			$('#myTable').DataTable({
+				"oLanguage": {
+					"sSearch": "Search "
+				},
+				"sDom": "lfrti",
+				"processing": true,
+				"serverSide": true,
+				"ordering": false,
+				"autoWidth": false,
+				"pageLength": 10,
+				"ajax": {
+				        url: host + "/dataTableDummy",
+				        type: "GET",
+				        data:{
+				        	is_date_search:is_date_search, 
+				        	start_date:start_date, 
+				        	end_date:end_date
+				        }
+				},
+				"dom": 'Bfrtip',
+				"buttons":[
+					'csv', 'excel'
+				],
+				"columns": [
+					{ "data": "_id" },
+					{ "data": "datetime" },
+					{ "data": "uid" },
+					{ "data": "roomid" },
+					{ "data": "type" },
+					{ "data": "chips" },
+                    { "data": "remainChips"},
+					/*{ "data": "createdAt",
+						render: function(data,type,row){
+						  let dt = new Date(row.createdAt);
+					      let date = dt.getDate();
+					      let month = parseInt(dt.getMonth()+1);
+					      let year = dt.getFullYear();
+					      let hours = dt.getHours();
+					      let minutes = dt.getMinutes();
+					      let ampm = hours >= 12 ? 'pm' : 'am';
+					      hours = hours % 12;
+					      hours = hours ? hours : 12;
+					      minutes = minutes < 10 ? '0'+ minutes : minutes;
+					      let createdAt = year + '/' + month + '/' + date + ' ' + hours + ':' + minutes + ' ' + ampm;
+					      return createdAt;
+					 	}
+					}, {
+						"data": "action",
+						render : function(data, type, row){
+							return '<a href="/game/allGameHistory/'+row._id+'" class="btn btn-info btn-xs btn-rounded" title="Game History"><i class="fa fa-history" aria-hidden="true"></i></a>'
+						 
+						}
+					}*/
+				]
+			});
+	}
+
+	
+
+	$('#search').click(function(){
+	  var start_date = $('#start_date').val();
+	  var end_date = $('#end_date').val();
+	  if(start_date != '' && end_date !='')
+	  {
+	   $('#myTable').DataTable().destroy();
+	   fetch_data('yes', start_date, end_date);
+	  }
+	  else
+	  {
+	   alert("Both Date is Required");
+	  }
+	}); 
+	
+} );
+
+</script>
+
+  <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+
+{% endblock %}

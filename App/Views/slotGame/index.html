@@ -1,0 +1,126 @@
+{% extends "partition/layout.html" %} {% block body %}
+<style type="text/css">
+    .responsive {
+        width: 100%;
+        margin-bottom: 15px;
+        /*overflow-y: hidden;*/
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+        /*border: 1px solid #ddd;*/
+        min-height: .01%;
+        /*overflow-x: auto;*/
+    }
+    
+    @media (max-width: 767px) {
+        .responsive {
+            width: 100%;
+            margin-bottom: 15px;
+            overflow-y: hidden;
+            -ms-overflow-style: -ms-autohiding-scrollbar;
+            /*border: 1px solid #ddd;*/
+            min-height: .01%;
+            overflow-x: auto;
+        }
+    }
+</style>
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+            <h1>Slot Game Master</h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                <li class="active">Slot Game Master</li>
+            </ol>
+        </section>
+        <!-- /Title -->
+         
+        <!-- Row -->
+        <section class="content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default card-view">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Slot Game Master
+                                </h6>
+                            </div>
+                            {%if roleData[0] == "add" or role == "admin"%}
+                            <div class="pull-right">
+                                <a href="/addGame"><button type="button" class="btn btn-primary btn-md"><i class="fa fa-plus"></i> Slot Game Master</button></a>
+                            </div>
+                            {%endif%}
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="table-wrap">
+                                    <div class="responsive">
+                                        <table id="myTable" class="table table-hover display  pb-30">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Name</th>
+                                                    <th>Description</th>
+                                                    <th>No of Columns</th>
+                                                    <th>No of Row</th>
+                                                    <th>No of Symbol</th>
+                                                    <!-- <th>is Bot</th> -->
+                                                    <th>Modify</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+{% endblock %} {% block Jscript %}
+<script>
+    $(document).ready(function() {
+        var host = window.location.origin;
+        $('#myTable').DataTable({
+            "oLanguage": {
+                "sSearch": "Search Username"
+            },
+            // "scrollX": true,
+            // "searching": false,
+            "processing": true,
+            "serverSide": true,
+            "ordering": false,
+            "autoWidth": false,
+            "pageLength": 10,
+            "ajax": host + "/getGame",
+            "columns": [{
+                "data": "id"
+            }, {
+                "data": "name"
+            }, {
+                "data": "description"
+            }, {
+                "data": "column"
+            }, {
+                "data": "row"
+            }, {
+                "data": "symbol"
+            }, {
+                "data": "action",
+                render: function(data, type, row) {
+                    return '<div class="dropdown show"><div class="dropdown show"> <button type="button" class="btn btn-success" dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Action <span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button> <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="right:0; left:auto; overflow-y: scroll;">{%if roleManagement.permission["Theme Master"][3] == "view" or role =="admin"%}<li><a class="dropdown-item" href="/theme/' + row.id + '">Theme Master</a></li>{%endif%}{%if roleManagement.permission["Reel Master"][3] == "view" or role =="admin"%}<li><a class="dropdown-item" href="/reelMaster/' + row.id + '">Reel Master</a></li>{%endif%}{%if roleManagement.permission["Row Master"][3] == "view" or role =="admin"%}<li><a class="dropdown-item" href="/rowMaster/' + row.id + '">Row Master</a></li>{%endif%}{%if roleManagement.permission["Bet Master"][3] == "view" or role =="admin"%}<li><a class="dropdown-item" href="/betMaster/' + row.id + '">Bet Master</a></li>{%endif%}{%if roleManagement.permission["Payout Name Master"][3] == "view" or role =="admin"%}<li><a class="dropdown-item" href="/payoutMaster/' + row.id + '">Payout Name Master</a></li>{%endif%}{%if roleManagement.permission["Line Master"][3] == "view" or role =="admin"%}<li><a class="dropdown-item" href="/lineMaster/' + row.id + '">Line Master</a></li>{%endif%}{%if roleManagement.permission["Symbol Reel Payout"][3] == "view" or role =="admin"%}<li><a class="dropdown-item" href="/symbolReelData/' + row.id + '">Symbol Reel Payout Master </a></li>{%endif%}</div></div>'
+                }
+            }]
+        });
+    });
+</script>
+{% endblock %}
+<!--  -->

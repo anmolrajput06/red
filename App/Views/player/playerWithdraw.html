@@ -1,0 +1,514 @@
+{% extends "partition/layout.html" %} {% block body %}
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <!-- Title -->
+        <section class="content-header">
+            <h1>Withdraw Request Table</h1>
+            <ol class="breadcrumb">
+                <li><a href="/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                <li class="active" href="#">Withdraw Request</li>
+            </ol>
+        </section>
+        <!-- /Title -->
+         
+        <!-- Row -->
+        <br>
+        <!-- <div class="col-sm-3">
+            <div class="input-group">
+                <div class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></div>
+                <select class="form-control" name="status" id="status">
+                    <option value="">All</option>
+                        <option value="active">Active</option>
+                        <option value="inactive" >Inactive</option>
+                        <option value="playing">Playing</option>
+                        <option value="lobby">Lobby</option>
+                    </select>
+            </div>
+        </div> -->
+        <!-- <div class="col-sm-3">
+            <div class="input-group">
+                <div class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></div>
+                <select class="form-control" name="guest" id="guest">
+                    <option value="">All</option>
+                        <option value="true">Yes</option>
+                        <option value="false" >No</option>
+                    </select>
+            </div>
+        </div> -->
+        <br>
+        <section class="content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default card-view">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Withdarw Request</h6>
+                            </div>
+                            <!-- <div class="pull-right">
+                                <a href="/addPlayer"><button type="button" class="btn btn-primary btn-md"><i class="fa fa-plus"></i> Add Player</button></a>
+                            </div> -->
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="table-wrap">
+                                    <div class="table-responsive">
+                                        <table id="myTable" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sr No.</th>
+                                                    <th>User Name</th>
+                                                    <th>Email</th>
+                                                    <th>Requested Withdraw Amount</th>
+                                                    <th>Withdraw Request</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<section class="content">
+    <!-- Row -->
+    <div class="row">
+        <!-- /.modal -->
+        <div id="responsive-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="POST" name="addDeductChips" action="/addDeductPlayerChips">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h5 class="modal-title">Add/Deduct Coins</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div id="chipsAdd"> </div>
+                            <div class="form-group">
+                                <label for="chips" class="control-label mb-10">Chips:</label>
+                                <input type="text" name="chips" class="form-control" id="chips" required>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" name="chipsValue" class="btn btn-success" value="Add">
+                            <input type="submit" class="btn btn-danger" name="chipsValue" value="Deduct">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Button trigger modal -->
+    </div>
+    <!-- /Row -->
+</section>
+{% endblock %} {% block Jscript %}
+<script>
+    $(document).ready(function() {
+        var host = window.location.origin;
+        let ajaxUrl = host + "/player/getWithdarwMyPlayer";
+        let ajaxExportUrl = host + "/player/getPlayer?export=all";
+        let isAllPlayers = "{{allPlayers}}";
+        if (isAllPlayers == 'true') {
+            ajaxUrl = host + "/player/getAllMyPlayers";
+            ajaxExportUrl = host + "/player/getAllPlayers?export=all";
+        }
+        var dataTable = $('#myTable').DataTable({
+            "oLanguage": {
+                "sSearch": "Search Username"
+            },
+            "processing": true,
+            "serverSide": true,
+            "ordering": false,
+            "autoWidth": false,
+            "pageLength": 10,
+            "ajax": {
+                url: ajaxUrl,
+                data: function(data) {
+                    var status = $('#status').val();
+                    var guest = $('#guest').val();
+                    data.status = status
+                   data.guest = guest
+                }
+            },
+            "columns": [{
+                "data": "id",
+                render: function(data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            }, 
+            {
+                "data": "username"
+            }, {
+                "data": "email"
+            }, 
+            {
+                "data": "playerWithdrawData.amount",
+                render: function(data) {
+                    if (data) {
+                        return data
+                    } else {
+                        return "Not requested yet"
+                    }
+                }
+            },
+             {
+                "data": "playerWithdrawData.status",
+                render: function(data, row, type) {
+                    console.log(data);
+                    if (data == "pending") {
+                        if (type.playerWithdrawData != undefined) {
+                            return '{%if roleData[1] == "edit" or session.details.role == "admin"%}<center><a href="" class="withdraw" ><button type="button"  id="' + type.playerWithdrawData._id + '" class="btn btn-warning btn-xs btn-rounded withdraw" name="approved" value="approved" title="Approved Request">Approve</button></a>   <a href="#" class="" ><button type="button"   id="' + type.playerWithdrawData._id + '" class="btn btn-warning btn-xs btn-rounded withdraw" name="disapproved" value="disapproved" title="Disapproved Request">Reject</button></a></center>{%else%}<center><span><i style="color:red;" class="fa fa-ban"></i></span></center>{%endif%}'
+                        } else {
+                            return '{%if roleData[1] == "edit" or session.details.role == "admin"%}<center><a href="" class="withdraw"><button type="button" id="withdrawButton" class="btn btn-warning btn-xs btn-rounded withdraw" name="approved" value="approved" title="Approved Request">Approve</button></a>   <a href="#" class="" ><button type="button"  class="btn btn-warning btn-xs btn-rounded withdraw" name="disapproved" value="disapproved" title="Disapproved Request">Reject</button></a><center>{%else%}<center><span><i style="color:red;" class="fa fa-ban"></i></span></center>{%endif%}'
+                        }
+                    } else if (data == "approved") {
+                        return '{%if roleData[1] == "edit" or session.details.role == "admin"%}<center><p style="color:green;">Approved</p><center>{%else%}<center><span><i style="color:red;" class="fa fa-ban"></i></span></center>{%endif%}'
+                    } else if (data == "disapproved") {
+                        return '{%if roleData[1] == "edit" or session.details.role == "admin"%}<center><p style="color:red;">Rejected</p><center>{%else%}<center><span><i style="color:red;" class="fa fa-ban"></i></span></center>{%endif%}'
+                    } else {
+                        return '{%if roleData[1] == "edit" or session.details.role == "admin"%}<center><p style="color:orange;">Not Requested</p><center>{%else%}<center><span><i style="color:red;" class="fa fa-ban"></i></span></center>{%endif%}'
+                    }
+                }
+            }, 
+            // {
+            //     "data": "action",
+            //     render: function(data, row, type) {
+            //         console.log(row);
+            //         console.log("type", type);
+                   
+            //         return '<a href="#" class="playerActive" ><button type="button" id="' + type._id + '" class="btn btn-warning btn-xs btn-rounded block" name="block" value="block" title="Block Player"><i class="fa fa-ban" aria-hidden="true"></i> </button></a> <a href="/myPlayerEdit/' + type._id + '" class="" ><button type="button" class="btn btn-warning btn-xs btn-rounded" name="edit" title="Edit Player"><i class="fa fa-edit" aria-hidden="true"></i></button></a> <button type="button" title="Delete Player" name="delete" id="' + type._id + '" class="btn btn-danger btn-xs btn-rounded delete"><i class="fa fa-trash" aria-hidden="true"></i></button> <a href="/myPlayer/withdrawHistory/' + type._id + '" class="btn btn-info btn-xs btn-rounded" title="Cash History"><i class="fa fa-history" aria-hidden="true"></i></a> <a href="/myplayer/betHistory/' + type._id + '"  class="btn btn-default btn-xs addChips btn-rounded" title="Bet History"><i class="fa fa-gamepad" aria-hidden="true"></i></a>  <a href="#" data-toggle="modal" data-target="#responsive-modal" href="#"data-toggle="modal" data-target="#responsive-modal" href="#" ><button type="button" id="' + type._id + '" class="btn btn-success btn-xs btn-rounded add" name="add" title="Add/Deduct Chips"><i class="fa fa-usd" aria-hidden="true"></i> </button></a>'
+            //             //<a data-toggle="modal" data-target="#responsive-modal" class="btn btn-default btn-xs addChips btn-rounded" id="' + row.id + '" title="Add Chips"><i class="fa fa-dollar" aria-hidden="true"></i></a> <a href="player/chipsHistory/' + row.id + '" class="btn btn-info btn-xs btn-rounded" title="Cash History"><i class="fa fa-history" aria-hidden="true"></i></a>
+            //             //<a href="/playerEdit/' + row.id + '"><button type="button" class="btn btn-warning btn-xs btn-rounded" name="edit" title="Edit Player"><i class="fa fa-edit" aria-hidden="true"></i></button></a> <button type="button" title="Delete Player" name="delete" id="' + row.id + '" class="btn btn-danger btn-xs btn-rounded delete"><i class="fa fa-trash" aria-hidden="true"></i></button> <a data-toggle="modal" data-target="#responsive-modal" class="btn btn-default btn-xs addChips btn-rounded" id="' + row.id + '" title="Add Chips"><i class="fa fa-dollar" aria-hidden="true"></i></a> <a href="player/chipsHistory/' + row.id + '" class="btn btn-info btn-xs btn-rounded" title="Cash History"><i class="fa fa-history" aria-hidden="true"></i></a><button type="button" name="active" id="' + row.id + '" class="btn btn-success btn-xs playerActive btn-rounded">' + row.status + '</i></button>
+            //     }
+            // }
+        ]
+        });
+        $('#status').on('change', function() {
+            console.log("yess it chaneg ");
+            dataTable.draw();
+        });
+        // $('#guest').on('change', function() {
+        //     console.log("yess it chaneg ");
+        //     dataTable.draw();
+        // });
+        $(function() {
+            "use strict";
+
+            var SweetAlert = function() {};
+
+            SweetAlert.prototype.init = function() {
+
+                    //Parameter
+                    $('body').on('click', '.delete', function(e) {
+                        var id = $(this).attr('id');
+                        swal({
+                            title: "Are you sure?",
+                            text: "You will not be able to recover this Player!",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#e69a2a",
+                            confirmButtonText: "Yes, delete it!",
+                            cancelButtonText: "No, cancel plx!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }, function(isConfirm) {
+                            if (isConfirm) {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: host + "/player/getPlayerDelete",
+                                    data: {
+                                        id: id
+                                    },
+                                    success: function(resultData) {
+                                        // alert(resultData)
+                                        console.log(resultData);
+                                        if (resultData == 'success') {
+                                            // $(thisElement).parent().parent().hide(700);
+                                            swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                                            window.location.reload()
+                                        } else {
+                                            alert("Something went wrong")
+                                        }
+                                        // alert("Save Complete")
+                                    }
+                                });
+                                swal("Deleted!", "Player Deleted Succesfully.", "success");
+                            } else {
+                                swal("Cancelled", "Player Not Deleted)", "error");
+                            }
+                        });
+                        return false;
+                    });
+                    $('body').on('click', '.withdraw', function(e) {
+                        var id = $(this).attr('id');
+                        console.log("id", id);
+                        var value = $(this).attr('value')
+                        console.log(value);
+                        var thisElement = this;
+                        swal({
+                            title: "Are you sure?",
+                            // text: "You will not be able to recover this Player!",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#e69a2a",
+                            confirmButtonText: "Yes, update it!",
+                            cancelButtonText: "No, cancel please!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }, function(isConfirm) {
+                            if (isConfirm) {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: host + "/player/withdrawStatus",
+                                    data: {
+                                        id: id,
+                                        value: value
+                                    },
+                                    success: function(res) {
+                                        // alert(res)
+                                        console.log("1111", res);
+                                        if (res == 'success') {
+                                            swal("Updated!", "Your Request has been updated.", "success");
+                                            window.location.reload()
+
+                                        } else {
+                                            alert("Something went wrong")
+                                        }
+                                        // alert("Save Complete")
+                                    }
+                                });
+                                swal("Updated!", "Your Request has been updated", "success");
+                            } else {
+                                swal("Cancelled", "Request cancel)", "error");
+                            }
+                        });
+                        return false;
+                    });
+                    // Active & Deactive
+
+                    $('body').on('click', '.roleChange', function(e) {
+                        console.log("yesss");
+                        var id = $(this).attr('id');
+                        // var value = $(this).attr('value');
+                        // var status = $('#block').val()
+                        console.log(id);
+                        var thisElement = this;
+                        swal({
+                            title: "Are you sure?",
+                            text: "Do you want to change role?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#e69a2a",
+                            confirmButtonText: "Yes, Update it!",
+                            cancelButtonText: "No, cancel pls!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }, function(isConfirm) {
+                            if (isConfirm) {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: host + "/player/roleChange",
+                                    data: {
+                                        id: id,
+                                        // value: value
+                                    },
+                                    success: function(resultData, data) {
+                                        console.log(data);
+                                        if (resultData == 'success') {
+                                            window.location.reload();
+                                            // var changeText = 'active';
+                                            // if ($(thisElement).parent().parent().find('td  .playerActive').text() == 'active') {
+                                            //     changeText = 'inactive';
+                                            // }
+                                            // console.log($(thisElement).parent().parent().find('td .playerActive').text(changeText));
+                                            //$(thisElement).parent().parent().hide(700);
+                                            //swal("Update!", "Player Status Updated Successfully..", "success");
+                                        } else {
+                                            alert("Something went wrong")
+                                        }
+
+                                    }
+                                });
+                                swal("Success!", "Player role changed Succesfully.", "success");
+                            } else {
+                                swal("Cancelled", "Player role not Updated)", "error");
+                            }
+                        });
+                        return false;
+                    });
+                    $('body').on('click', '.playerActive', function(e) {
+                        console.log("yesss");
+                        var id = $(this).attr('id');
+                        // var value = $(this).attr('value');
+                        // var status = $('#block').val()
+                        console.log(id);
+                        var thisElement = this;
+                        swal({
+                            title: "Are you sure?",
+                            text: "Do you want to update the status?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#e69a2a",
+                            confirmButtonText: "Yes, Update it!",
+                            cancelButtonText: "No, cancel pls!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }, function(isConfirm) {
+                            if (isConfirm) {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: host + "/player/active",
+                                    data: {
+                                        id: id,
+                                        // value: value
+                                    },
+                                    success: function(resultData, data) {
+                                        console.log(data);
+                                        if (resultData == 'success') {
+                                            window.location.reload();
+                                            // var changeText = 'active';
+                                            // if ($(thisElement).parent().parent().find('td  .playerActive').text() == 'active') {
+                                            //     changeText = 'inactive';
+                                            // }
+                                            // console.log($(thisElement).parent().parent().find('td .playerActive').text(changeText));
+                                            //$(thisElement).parent().parent().hide(700);
+                                            //swal("Update!", "Player Status Updated Successfully..", "success");
+                                        } else {
+                                            alert("Something went wrong")
+                                        }
+
+                                    }
+                                });
+                                swal("Success!", "Player Status Updated Succesfully.", "success");
+                            } else {
+                                swal("Cancelled", "Player Status not Updated)", "error");
+                            }
+                        });
+                        return false;
+                    });
+                    $('body').on('click', '.block', function(e) {
+                        var id = $(this).attr('id');
+                        console.log(id);
+                        var status = $(this).attr('value');
+                        console.log(status);
+                        var thisElement = this;
+                        swal({
+                            title: "Are you sure?",
+                            text: "Do you want to update the status?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#e69a2a",
+                            confirmButtonText: "Yes, Update it!",
+                            cancelButtonText: "No, cancel pls!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }, function(isConfirm) {
+                            if (isConfirm) {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: host + "/player/active",
+                                    data: {
+                                        id: id,
+                                        status: status
+                                    },
+                                    success: function(resultData, data) {
+                                        console.log(data);
+                                        if (resultData == 'success') {
+                                            window.location.reload();
+                                            // var changeText = 'active';
+                                            // if ($(thisElement).parent().parent().find('td  .playerActive').text() == 'active') {
+                                            //     changeText = 'inactive';
+                                            // }
+                                            // console.log($(thisElement).parent().parent().find('td .playerActive').text(changeText));
+                                            //$(thisElement).parent().parent().hide(700);
+                                            //swal("Update!", "Player Status Updated Successfully..", "success");
+                                        } else {
+                                            alert("Something went wrong")
+                                        }
+
+                                    }
+                                });
+                                swal("Success!", "Player Status Updated Succesfully.", "success");
+                            } else {
+                                swal("Cancelled", "Player Status not Updated)", "error");
+                            }
+                        });
+                        return false;
+                    });
+                    $('body').on('click', '.playerActive', function(e) {
+                        var id = $(this).attr('id');
+                        // var status = $('#block').val()
+                        // console.log(status);
+                        var thisElement = this;
+                        swal({
+                            title: "Are you sure?",
+                            text: "Do you want to update the status?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#e69a2a",
+                            confirmButtonText: "Yes, Update it!",
+                            cancelButtonText: "No, cancel pls!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }, function(isConfirm) {
+                            if (isConfirm) {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: host + "/player/active",
+                                    data: {
+                                        id: id,
+                                        // status: status
+                                    },
+                                    success: function(resultData, data) {
+                                        console.log(data);
+                                        if (resultData == 'success') {
+                                            window.location.reload();
+                                            // var changeText = 'active';
+                                            // if ($(thisElement).parent().parent().find('td  .playerActive').text() == 'active') {
+                                            //     changeText = 'inactive';
+                                            // }
+                                            // console.log($(thisElement).parent().parent().find('td .playerActive').text(changeText));
+                                            //$(thisElement).parent().parent().hide(700);
+                                            //swal("Update!", "Player Status Updated Successfully..", "success");
+                                        } else {
+                                            alert("Something went wrong")
+                                        }
+
+                                    }
+                                });
+                                swal("Success!", "Player Status Updated Succesfully.", "success");
+                            } else {
+                                swal("Cancelled", "Player Status not Updated)", "error");
+                            }
+                        });
+                        return false;
+                    });
+                },
+                $.SweetAlert = new SweetAlert, $.SweetAlert.Constructor = SweetAlert;
+
+            $.SweetAlert.init();
+        });
+
+        $("body").on("click", ".add", function() {
+            var PlayerId = $(this).attr("id");
+            console.log("player id ----------->", PlayerId)
+            var html = '<input type="hidden" name="playerId" value="' + PlayerId + '" />';
+            $("#chipsAdd").html(html);
+        });
+    });
+</script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+{% endblock %}

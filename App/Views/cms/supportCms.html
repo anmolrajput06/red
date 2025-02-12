@@ -1,0 +1,155 @@
+{% extends "partition/layout.html" %} {% block body %}
+
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+            <h1>CMS Mangement</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="#"><span>CMS Management</span></a></li>
+            </ol>
+        </section>
+        <!-- /Title -->
+         
+        <!-- Row -->
+        <section class="content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default card-view">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">CMS Management</h6>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="table-wrap">
+                                    <div class="table-responsive">
+                                        <table id="myTable" class="table table-hover display  pb-30">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sr. no.</th>
+                                                    <th>First Name</th>
+                                                    <th>Last Name</th>
+                                                    <th>Email</th>
+                                                    <th>Phone No.</th>
+                                                    <th>Description</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<section class="content">
+    <!-- Row -->
+    <div class="row">
+        <!-- /.modal -->
+        <div id="responsive-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="POST" name="adduser" action="/replyQuery">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="hiddenId" name="hiddenId">
+                            <div id="view"> </div>
+                            <div class="form-group">
+                                <textarea name="message" class="form-control" id="message" readonly></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="reply" class="control-label mb-10">Send Reply:</label>
+                                <textarea name="reply" class="form-control" id="reply"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" name="chipsValue" class="btn btn-success">
+                            <button href="/supprotCmsPage" class="btn btn-danger">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Button trigger modal -->
+    </div>
+    <!-- /Row -->
+</section>
+{% endblock %} {% block Jscript %}
+<script>
+    $(document).ready(function() {
+        var host = window.location.origin;
+        var PlayerId = $(this).attr("id");
+        $('#myTable').DataTable({
+            // "oLanguage": {
+            //     "sSearch": "Search Cms"
+            // },
+            "processing": true,
+            "serverSide": true,
+            "paging": true,
+            "ordering": false,
+            "autoWidth": false,
+            "info": false,
+            // "pageLength": 10,
+            "ajax": {
+                url: host + "/getSupportCmsPage",
+                id: PlayerId
+            },
+            "columns": [{
+                "data": "id",
+                render: function(data, type, full, meta) {
+                    return meta.row + 1;
+                }
+            }, {
+                "data": "firstName",
+            }, {
+                "data": "lastName",
+            }, {
+                "data": "email",
+            }, {
+                "data": "phoneNumber",
+            }, {
+                "data": "message",
+            }, {
+                "data": "action",
+                render: function(data, type, row) {
+                    console.log(row);
+                    return '<a data-toggle="modal" data-target="#responsive-modal" class="btn btn-default btn-xs viewPage btn-rounded" id="' + row.id + '"  ><button type="button"  id="' + row.id + '"  class="btn btn-warning btn-xs btn-rounded" name="edit" title="Edit Player"><i class="fa fa-eye" aria-hidden="true"></i></button></a>'
+                        // return '<a href="/userEdit/'+row.id+'"><button type="button" class="btn btn-warning btn-xs" name="edit"><i class="fa fa-edit" aria-hidden="true"></i></button></a> <button type="button" name="delete" id="'+row.id+'" class="btn btn-danger btn-xs delete"><i class="fa fa-trash" aria-hidden="true"></i></button> '
+                        // <a href="/siteOwner/userEdit/' + row.id + '"><button type="button" class="btn btn-warning btn-xs btn-rounded" name="edit"><i class="fa fa-edit" aria-hidden="true"></i></button></a> <button type="button" name="delete" id="' + row.id + '" class="btn btn-danger btn-xs delete btn-rounded"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                }
+            }]
+        });
+        $("body").on("click", ".viewPage", function() {
+            var id = $(this).attr('id');
+            $.ajax({
+                type: "POST",
+                url: "/getSupportCmsData",
+                data: {
+                    id: id
+                },
+                success: function(msg) {
+                    console.log(msg);
+                    $("#message").html(msg.message);
+                    $('#hiddenId').val(msg.id)
+                    $("#responsive-modal").modal("show");
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

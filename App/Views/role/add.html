@@ -1,0 +1,431 @@
+{% extends "partition/layout.html" %} {% block body %}
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+            <ol class="breadcrumb">
+                <li><a href="/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                <li href="#">Role Management</li>
+
+            </ol>
+        </section>
+        <!-- /Title -->
+
+        <section class="content">
+            &nbsp;
+            <!-- Row -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default card-view">
+                        <!-- <div class="panel-heading">
+                            <div class="pull-left">
+                                {% if player %}
+                                <h6 class="panel-title txt-dark">Edit Player</h6>
+                                {% else %}
+                                <h6 class="panel-title txt-dark">Add Player</h6>
+                                {% endif %}
+                            </div>
+                            <div class="clearfix"></div>
+                        </div> -->
+                        <form id="addRoleForm" role="form" method="post" action="/role/saveRole" enctype="multipart/form-data">
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <!-- <label for="name" class="col-md-3 control-label">Sub Admin Name</label> -->
+                                        <div class="col-md-3 inputField">
+                                            <div>User Role</div>
+                                            <div>
+                                               
+                                                <select class="form-control" name="type" data-validation="requiredDrop" id="type">
+                                                    <option value="all">--Select Role--</option>
+                                                    <option value="site-owner">Site Owner</option>
+                                                    <option value="grand-master">Grand Master</option>
+                                                    <option value="master">Master</option>
+                                                    <option value="agent">Agent</option>
+                                                    <option value="sub-admin">Sub Admin</option>
+                                                    <!-- <option value="grand-master" {{ "selected" if user.role=='grand-master' else "" }} >Grand Master</option>
+                                                    <option value="master" {{ "selected" if user.role=='master' else "" }} >Master</option>
+                                                    <option value="agent" {{ "selected" if user.role=='agent' else "" }} >Agent</option> -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 inputField">
+                                            <div>User Name</div>
+                                            <div>
+                                               
+                                                <select class="form-control" name="role" data-validation="requiredDrop" id="role">
+                                                  
+                                                    <!-- <option value="grand-master" {{ "selected" if user.role=='grand-master' else "" }} >Grand Master</option>
+                                                    <option value="master" {{ "selected" if user.role=='master' else "" }} >Master</option>
+                                                    <option value="agent" {{ "selected" if user.role=='agent' else "" }} >Agent</option> -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <table class="table table-bordered table-fixed">
+                                            <thead>
+                                                <tr class="row">
+                                                    <th class="text-center col-xs-12" colspan="11">
+                                                        <h2>All User Role Permission Table</h2>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th></th>
+                                                    <th style="padding-left:30px;" class="custom-field">Module Name</th>
+                                                    <th class="text-center w-h-50">ADD</th>
+                                                    <th class="text-center w-h-50">EDIT</th>
+                                                    <th class="text-center w-h-50">DELETE</th>
+                                                    <th class="text-center w-h-50">VIEW</th>
+                                                    <th class="text-center w-h-50">Add Chips</th>
+                                                    <!-- <th class="text-center w-h-50">EXPORT</th> -->
+                                                </tr>
+                                            </thead>
+                                            <tbody id="body">
+                                                <!-- {% for module in modules %}
+                                            <tr></tr>
+                                            <tr class="row">
+                                                <td class="custom-field">
+                                                    <label class="checkbox-inline" style="padding-top: 0px;">
+                                                    {{module | capitalize }}</label>
+                                                </td>
+                                                {% for permission in permissions %}
+                                                <td class="text-center w-h-50 permission-{{module}}">
+                                                    {%if (module == 'Player Management')%} {% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission == 'view' ) %}
+                                                    <input class="permission moduleLine checkboxvalue" {{ "checked" if role.permission[module] and permission in role.permission[module] else "" }} permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1"
+                                                    /> {% endif %} {% elseif(module == 'User Management')%}{% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission ==
+                                                    'view' ) %}
+                                                    <input class="permission moduleLine checkboxvalue" {{ "checked" if role.permission[module] and permission in role.permission[module] else "" }} permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1"
+                                                    /> {% endif %} {% elseif(module == 'Slot Game Master')%}{% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission
+                                                    == 'view' ) %}
+                                                    <input class="permission moduleLine checkboxvalue" {{ "checked" if role.permission[module] and permission in role.permission[module] else "" }} permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1"
+                                                    /> {% endif %} {% elseif(module == 'Payout Master')%}{% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission ==
+                                                    'view' ) %}
+                                                    <input class="permission moduleLine checkboxvalue" {{ "checked" if role.permission[module] and permission in role.permission[module] else "" }} permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1"
+                                                    /> {% endif %} {% elseif(module == 'Level Master')%}{% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission == 'view'
+                                                    ) %}
+                                                    <input class="permission moduleLine checkboxvalue" {{ "checked" if role.permission[module] and permission in role.permission[module] else "" }} permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1"
+                                                    /> {% endif %} {% elseif(module == 'Reports')%}{% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission == 'view'
+                                                    ) %}
+                                                    <input class="permission moduleLine checkboxvalue" {{ "checked" if role.permission[module] and permission in role.permission[module] else "" }} permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1"
+                                                    /> {% endif %} {% elseif(module == 'CMS Management')%}{% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission ==
+                                                    'view' ) %}
+                                                    <input class="permission moduleLine checkboxvalue" {{ "checked" if role.permission[module] and permission in role.permission[module] else "" }} permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1"
+                                                    /> {% endif %} {% elseif(module == 'Settings')%}{% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission == 'view'
+                                                    ) %}
+                                                    <input class="permission moduleLine checkboxvalue" {{ "checked" if role.permission[module] and permission in role.permission[module] else "" }} permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1"
+                                                    /> {% endif %} {%endif%}
+                                                </td>
+                                                {% endfor %}
+                                            </tr>
+                                            {% endfor %} -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <label id="error"></label>
+                                </div>
+                                <!-- <div class="form-group">
+                                    <div class="row">
+                                        <table class="table table-bordered table-fixed">
+                                            <thead>
+                                                <tr class="row">
+                                                    <th class="text-center col-xs-12" colspan="11">
+                                                        <h2>Sub Admin Role Permission Table</h2>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th></th>
+                                                    <th style="padding-left:30px;" class="custom-field">Module Name</th>
+                                                    <th class="text-center w-h-50">ADD</th>
+                                                    <th class="text-center w-h-50">EDIT</th>
+                                                    <th class="text-center w-h-50">DELETE</th>
+                                                    <th class="text-center w-h-50">VIEW</th>
+                                                    <th class="text-center w-h-50">Add Chips</th>
+                                                    <th class="text-center w-h-50">EXPORT</th>
+                                                </tr>
+                                            </thead>
+                                            {% for module in modules %}
+                                            <tr></tr>
+                                            <tr class="row">
+                                                <td class="custom-field">
+                                                    {%if module == 'All User' or module == 'My Site Owner'%}
+                                                    <label class="checkbox-inline" style="padding-top: 0px; margin-left: 10px;">
+                                                         {{module | capitalize }}</label> {%else%}
+                                                    <label class="checkbox-inline" style="padding-top: 0px;">
+                                                    <b>{{module | capitalize }}</b></label> {%endif%}
+                                                </td>
+                                                {% for permission in permissions %}
+                                                <td class="text-center w-h-50 permission-{{module}}">
+                                                    {%if (module == 'Player Management')%} {% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission == 'view' or permission == 'chips' ) %}
+                                                    {%if permission == 'edit' or permission == 'delete' or permission == 'view' or permission == 'chips'%}
+                                                    <input class="permission moduleLine checkboxvalue" permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1" /> 
+                                                    {%endif%} 
+                                                    {% endif %}  
+                                                    {% elseif(module == 'Player Withdraw')%} {% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission == 'view' or permission == 'chips' ) %}
+                                                    {%if (permission == 'edit' or permission == 'view')%}
+                                                    <input class="permission moduleLine checkboxvalue" permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1" />
+                                                   {%endif%}
+                                                    {% endif %}{% elseif(module
+                                                    == 'User Management')%}{% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission == 'view' or permission == 'chips' ) %}
+                                                    {%if (permission == 'view')%}
+                                                    <input class="permission moduleLine checkboxvalue" permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1" /> 
+                                                    {%endif%}
+                                                    {% endif %} {% elseif(module
+                                                    == 'All User')%}{% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission == 'view' or permission == 'chips' ) %}
+                                                    {%if permission == 'edit' or permission == 'delete' or permission == 'view' or permission == 'chips'%}
+                                                    <input class="permission moduleLine checkboxvalue" permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1" /> 
+                                                    {%endif%}
+                                                    {% endif %}{% elseif(module ==
+                                                    'My Site Owner')%}{% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission == 'view' or permission == 'chips' ) %}
+                                                    <input class="permission moduleLine checkboxvalue" permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1" /> {% endif %} {% elseif(module ==
+                                                    'Theme Master')%}{% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission == 'view' or permission == 'chips' ) %}
+                                                    {%if permission == 'edit' or permission == 'view' or permission == 'delete'%}
+                                                    <input class="permission moduleLine checkboxvalue" permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1"/>
+                                                    {%endif%} 
+                                                    {% endif %}{% elseif(module ==
+                                                    'Line Master')%}{% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission == 'view' or permission == 'chips' ) %}
+                                                    {%if permission == 'edit' or permission == "delete" or permission == "add" or permission == "view" %}
+                                                    <input class="permission moduleLine checkboxvalue" permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1"/>
+                                                    {%endif%} 
+                                                     {% endif %}{% elseif(module ==
+                                                    'Symbol Reel Payout')%}{% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission == 'view' or permission == 'chips' ) %}
+                                                    {%if permission == 'edit' or permission == "view"%}
+                                                    <input class="permission moduleLine checkboxvalue" permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1"/>
+                                                    {%endif%}  {% endif %} {% elseif(module
+                                                    == 'Reports')%}{% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission == 'view' or permission == 'chips' ) %}
+                                                    {%if permission == 'view'%}
+                                                    <input class="permission moduleLine checkboxvalue" permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1"/>
+                                                    {%endif%}  {% endif %} {% elseif(module
+                                                    == 'CMS Management')%}{% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission == 'view' or permission == 'chips' ) %}
+                                                    {%if (permission == 'edit' or permission == 'view')%}
+                                                    <input class="permission moduleLine checkboxvalue" permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1" /> 
+                                                    {%endif%}
+                                                    {% endif %} {% elseif(module
+                                                    == 'Settings')%}{% if (permission == 'add' or permission == 'edit' or permission == 'delete' or permission == 'view' or permission == 'chips' ) %}
+                                                    {%if (permission == 'edit' or permission == 'view')%}
+                                                    <input class="permission moduleLine checkboxvalue" permission_name="{{permission}}" module_name="{{module}}" type="checkbox" name="{{module}}{{permission}}" value="1" /> 
+                                                    {%endif%} {% endif %} {%endif%}
+                                                </td>
+                                                {% endfor %}
+                                            </tr>
+                                            {% endfor %}
+                                        </table>
+                                    </div>
+                                    <label id="error"></label>
+                                </div> -->
+                            </div>
+                            <div class="box-footer">
+                                <button type="button" class="btn btn-warning role-add-btn hide">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <!-- /Row -->
+    </div>
+</div>
+
+{% endblock %} {% block Jscript %}
+<script>
+
+    $(document).ready(function() {
+        $('.checkboxvalue').each(function() {
+            var value = $(this).attr('module_name');
+            var perName = $(this).attr('permission_name');
+            value = value.replace(/\s/g, '');
+            $(this).attr('id', value + '' + perName);
+            $(this).attr('user_module', value);
+        });
+      
+    });
+    // $('.role-add-btn').hide()
+    let host = window.location.origin
+    $('#type').change(function(){
+        let typeOfRole = $('#type').val()
+        // $.get("/role", {typeOfRole: typeOfRole}, function(data){});
+        $.ajax({
+            type: 'GET',
+            url: host + "/roleTypeGet",
+            data: {
+                typeOfRole: typeOfRole
+            },
+            success: function (resultData) {
+                console.log(resultData);
+                let user = resultData.user
+                console.log(user);
+                let html 
+                let html1
+            
+                if(user.length > 0){
+                    $('.role-add-btn').removeClass('hide')
+                    for (i = 0; i < user.length; i++) {
+                        html += '<option value="' + user[i].name + '">' + user[i].name + '</option>'
+                    }
+                    console.log("user", user.length);
+                  
+                    for (let i = 0; i < resultData.modules.length; i++) {
+                        html1 += '<tr></tr>'
+                        html1 += '<tr class="row">'
+                        html1 += '<tr class="row">'
+                        html1 += '<td class="custom-field">'
+                        if (resultData.modules[i] == 'All User' || resultData.modules[i] == 'My Site Owner') {
+                            html1 += '<label class="checkbox-inline" style="padding-top: 0px; margin-left: 10px;"> '
+                            html1 += resultData.modules[i] + '</label>'
+                        } else {
+                            html1 += '<label class="checkbox-inline" style="padding-top: 0px;"><b>'
+                            html1 += resultData.modules[i] + '</b></label>'
+                        }
+                        html1 += "</td>"
+
+                        for (let j = 0; j < resultData.permissions.length; j++) {
+                            html1 += '<td class="text-center w-h-50 permission-"' + resultData.modules[i] + '>'
+                            if (resultData.modules[i] == 'Player Management') {
+                                if (resultData.permissions[j] == 'add' || resultData.permissions[j] == "edit" || resultData.permissions[j] == "delete" || resultData.permissions[j] == "view" || resultData.permissions[j] == "chips") {
+                                    html1 += '<input class="permission moduleLine checkboxvalue' + resultData.modules[i] + resultData.permissions[j] + '" permission_name="' + resultData.permissions[j] + '" module_name="' + i + '" type="checkbox" name="' + resultData.modules[i] + resultData.permissions[j] + '" id=' + i + resultData.permissions[j] + ' value="1" />'
+                                }
+                            }
+                            else if (resultData.modules[i] == 'Player Withdraw') {
+                                if (resultData.permissions[j] == "edit" || resultData.permissions[j] == "view") {
+                                    html1 += '<input class="permission moduleLine checkboxvalue' + resultData.modules[i] + resultData.permissions[j] + '" permission_name="' + resultData.permissions[j] + '" module_name="' + i + '" type="checkbox" name="' + resultData.modules[i] + resultData.permissions[j] + '"  id=' + i + resultData.permissions[j] + ' value="1" />'
+                                }
+                            }
+                            else if (resultData.modules[i] == 'Master Management') {
+                                if (resultData.permissions[j] == 'add' || resultData.permissions[j] == "edit" || resultData.permissions[j] == "delete" || resultData.permissions[j] == "view" || resultData.permissions[j] == "chips") {
+                                    html1 += '<input class="permission moduleLine checkboxvalue' + resultData.modules[i] + resultData.permissions[j] + '" permission_name="' + resultData.permissions[j] + '" module_name="' + i + '" type="checkbox" name="' + resultData.modules[i] + resultData.permissions[j] + '"  id=' + i + resultData.permissions[j] + ' value="1" />'
+                                }
+                            }
+                            else if (resultData.modules[i] == 'Grand Master Management') {
+                                if (resultData.permissions[j] == 'add' || resultData.permissions[j] == "edit" || resultData.permissions[j] == "delete" || resultData.permissions[j] == "view" || resultData.permissions[j] == "chips") {
+                                    html1 += '<input class="permission moduleLine checkboxvalue' + resultData.modules[i] + resultData.permissions[j] + '" permission_name="' + resultData.permissions[j] + '" module_name="' + i + '" type="checkbox" name="' + resultData.modules[i] + resultData.permissions[j] + '"  id=' + i + resultData.permissions[j] + ' value="1" />'
+                                }
+                            } else if (resultData.modules[i] == 'Agent Management') {
+                                if (resultData.permissions[j] == 'add' || resultData.permissions[j] == "edit" || resultData.permissions[j] == "delete" || resultData.permissions[j] == "view" || resultData.permissions[j] == "chips") {
+                                    html1 += '<input class="permission moduleLine checkboxvalue' + resultData.modules[i] + resultData.permissions[j] + '" permission_name="' + resultData.permissions[j] + '" module_name="' + i + '" type="checkbox" name="' + resultData.modules[i] + resultData.permissions[j] + '"  id=' + i + resultData.permissions[j] + ' value="1" />'
+                                }
+                            } else if (resultData.modules[i] == 'User Management') {
+                                if (resultData.permissions[j] == "view") {
+                                    html1 += '<input class="permission moduleLine checkboxvalue ' + resultData.modules[i] + resultData.permissions[j] + '" permission_name="' + resultData.permissions[j] + '" module_name="' + i + '" type="checkbox" name="' + resultData.modules[i] + resultData.permissions[j] + '"  id=' + i + resultData.permissions[j] + ' value="1" />'
+                                }
+                            }
+                            else if (resultData.modules[i] == 'All User') {
+                                if (resultData.permissions[j] == "edit" || resultData.permissions[j] == "delete" || resultData.permissions[j] == "view" || resultData.permissions[j] == "chips") {
+                                    html1 += '<input class="permission moduleLine checkboxvalue ' + resultData.modules[i] + resultData.permissions[j] + '" permission_name="' + resultData.permissions[j] + '" module_name="' + i + '" type="checkbox" name="' + resultData.modules[i] + resultData.permissions[j] + '"  id=' + i + resultData.permissions[j] + ' value="1" />'
+                                }
+                            }
+                            else if (resultData.modules[i] == 'My Site Owner') {
+                                if (resultData.permissions[j] == 'add' || resultData.permissions[j] == "edit" || resultData.permissions[j] == "delete" || resultData.permissions[j] == "view" || resultData.permissions[j] == "chips") {
+                                    html1 += '<input class="permission moduleLine checkboxvalue ' + resultData.modules[i] + resultData.permissions[j] + '" permission_name="' + resultData.permissions[j] + '" module_name="' + i + '" type="checkbox" name="' + resultData.modules[i] + resultData.permissions[j] + '"  id=' + i + resultData.permissions[j] + ' value="1" />'
+                                }
+                            }
+                            else if (resultData.modules[i] == 'Theme Master') {
+                                if (resultData.permissions[j] == "edit" || resultData.permissions[j] == "delete" || resultData.permissions[j] == "view") {
+                                    html1 += '<input class="permission moduleLine checkboxvalue ' + resultData.modules[i] + resultData.permissions[j] + '" permission_name="' + resultData.permissions[j] + '" module_name="' + i + '" type="checkbox" name="' + resultData.modules[i] + resultData.permissions[j] + '"  id=' + i + resultData.permissions[j] + ' value="1" />'
+                                }
+                            }
+                            else if (resultData.modules[i] == 'Line Master') {
+                                if (resultData.permissions[j] == "edit" || resultData.permissions[j] == "add" || resultData.permissions[j] == "delete" || resultData.permissions[j] == "view") {
+                                    html1 += '<input class="permission moduleLine checkboxvalue ' + resultData.modules[i] + resultData.permissions[j] + '" permission_name="' + resultData.permissions[j] + '" module_name="' + i + '" type="checkbox" name="' + resultData.modules[i] + resultData.permissions[j] + '" id=' + i + resultData.permissions[j] + ' value="1" />'
+                                }
+                            }
+                            else if (resultData.modules[i] == 'Symbol Reel Payout') {
+                                if (resultData.permissions[j] == "edit" || resultData.permissions[j] == "view") {
+                                    html1 += '<input class="permission moduleLine checkboxvalue ' + resultData.modules[i] + resultData.permissions[j] + '" permission_name="' + resultData.permissions[j] + '" module_name="' + i + '" type="checkbox" name="' + resultData.modules[i] + resultData.permissions[j] + '" id=' + i + resultData.permissions[j] + ' value="1" />'
+                                }
+                            }
+                            else if (resultData.modules[i] == 'Reports') {
+                                if (resultData.permissions[j] == "view") {
+                                    html1 += '<input class="permission moduleLine checkboxvalue ' + resultData.modules[i] + resultData.permissions[j] + '" permission_name="' + resultData.permissions[j] + '" module_name="' + i + '" type="checkbox" name="' + resultData.modules[i] + resultData.permissions[j] + '" id=' + i + resultData.permissions[j] + ' value="1" />'
+                                }
+                            }
+                            else if (resultData.modules[i] == 'CMS Management') {
+                                if (resultData.permissions[j] == "view" || resultData.permissions[j] == 'edit') {
+                                    html1 += '<input class="permission moduleLine checkboxvalue ' + resultData.modules[i] + resultData.permissions[j] + '" permission_name="' + resultData.permissions[j] + '" module_name="' + i + '" type="checkbox" name="' + resultData.modules[i] + resultData.permissions[j] + '" id=' + i + resultData.permissions[j] + ' value="1" />'
+                                }
+                            }
+                            else if (resultData.modules[i] == 'Settings') {
+                                if (resultData.permissions[j] == "view" || resultData.permissions[j] == 'edit') {
+                                    html1 += '<input class="permission moduleLine checkboxvalue ' + resultData.modules[i] + resultData.permissions[j] + '" permission_name="' + resultData.permissions[j] + '" module_name="' + i + '" type="checkbox" name="' + resultData.modules[i] + resultData.permissions[j] + '" id=' + i + resultData.permissions[j] + ' value="1" />'
+                                }
+                            }
+                        }
+                    }
+                   
+                
+               
+
+        }else{
+            $('.role-add-btn').addClass('hide')
+            html += '<option value="">No Data</option>'
+            html1 += '<tr></tr>'
+        }
+        $('#body').html(html1)
+        $('#role').html(html)
+            }
+        });
+    })
+    $('.role-add-btn').click(function() {
+        // if ($('#name').val() == "") {
+        //   alert('Please enter role name.');
+        //   return false;
+        // }
+        let type = $('#type').val()
+        if(type.length == 0){
+            alert('Please select option.');
+                    return false;
+        }
+    else if ($('.moduleLine:checkbox:checked').length == 0) {
+            alert('Please enter any one permission.');
+            return false;
+        }
+   
+        $('#addRoleForm').submit();
+    })
+    $.formUtils.addValidator({
+		name : 'requiredDrop',
+		validatorFunction :  function(value, $el, config, language, $form) {
+			 console.log(value.length == 0);	
+            // return value.length === 0	
+            return value.length != 0
+        },
+		errorMessage : 'Please select option.',
+		errorMessageKey: 'badRackCap'
+	});      
+  
+    $('body').on('change', '.moduleLine', function() {
+       
+        console.log("yessss");
+        var permissionName = $(this).attr('permission_name');
+        console.log(permissionName);
+        var moduleName = $(this).attr('module_name');
+        console.log(moduleName);
+
+        if ($(this).is(':checked')) {
+            console.log('#'+ moduleName +'view');
+            if ($('#'+ moduleName +'view').prop("checked") == false && permissionName != 'view') {
+                $('#'+ moduleName +'view').prop("checked", true);
+            }
+        } else {
+            if ($('#' + moduleName + 'view').prop("checked") == false && permissionName != 'view') {
+                $('#' + moduleName + 'view').prop("checked", false);
+            }
+        }
+
+        var permission = '{{role.permission}}';
+        var permissionArr = permission.split(',');
+        if (permissionArr.length > 0) {
+            $('input[type=checkbox]').each(function() {
+                if ($.inArray($(this).val(), permissionArr) >= 0) {
+                    $(this).attr('checked', 'checked');
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

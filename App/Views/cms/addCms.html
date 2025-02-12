@@ -1,0 +1,125 @@
+{% extends "partition/layout.html" %} {% block body %}
+
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+            {%if cms.identifier == "aboutUs"%}
+            <h1>About Us</h1>
+            {%elseif cms.identifier == "support"%}
+            <h1>Support</h1>
+            {%elseif cms.identifier == "privacyPolicy"%}
+            <h1>Privacy Policy</h1>
+            {%else%}
+            <h1>Terms Of Service</h1>
+
+            {%endif%}
+            <ol class="breadcrumb">
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/cmsPage"><span>CMS Pages</span></a></li>
+
+            </ol>
+        </section>
+        <!-- /Title -->
+        <!-- Row  -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default card-view">
+                        <!-- <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Edit Cms</h6>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div> -->
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-12 col-xs-12">
+                                        <div class="form-wrap">
+                                            <form method="POST" action="/postEditCms/{{cms.id}}" name="" class="form-horizontal">
+                                                <!-- <div class="form-group">
+                                                    <label for="exampleInputuname_3" class="col-sm-3 control-label">*</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="glyphicon glyphicon-user"></i></div>
+                                                            <input type="text" class="form-control" id="level" placeholder="Enter level" required name="level" value="{{level.level}}" data-validation="number">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputuname_3" class="col-sm-3 control-label">Bonus*</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="glyphicon glyphicon-user"></i></div>
+                                                            <input type="text" class="form-control" id="bonus" placeholder="Enter bonus" required name="bonus" value="{{level.bonus}}" data-validation="number">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputuname_3" class="col-sm-3 control-label">Minimum*</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="glyphicon glyphicon-user"></i></div>
+                                                            <input type="text" class="form-control" id="minimum" placeholder="Enter minimum" required name="minimum" value="{{level.minimum}}" data-validation="number">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputuname_3" class="col-sm-3 control-label">Maximum*</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="glyphicon glyphicon-user"></i></div>
+                                                            <input type="text" class="form-control" id="maximum" placeholder="Enter Maximum" required name="maximum" value="{{level.maximum}}" data-validation="number">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group mb-0">
+                                                    <div class="col-sm-offset-3 col-sm-9">
+                                                        <input type="submit" class="btn btn-success btn-flat" value="submit">
+                                                        <a href="/level" class="btn btn-danger btn-flat">Cancel</a>
+                                                    </div>
+                                                </div> -->
+                                                <div class="row">
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <div class="col-md-12 inputField">
+                                                                <label for="offer_percentage" class="control-label">Description</label>
+                                                                <textarea name="content" id="content" rows="15" cols="100" style="resize:none;" required>{{cms.content}}</textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="box-footer">
+                                                    <!-- <input type="hidden" name="lan_sort" id="lan_sort" value=""> -->
+                                                    <button type="submit" class="btn btn-warning">Update</button>
+                                                    <a href="/cmsPage" class="btn btn-danger">Cancel</a>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Row -->
+
+                <!-- /Row -->
+            </div>
+        </section>
+
+    </div>
+</div>
+
+{% endblock %} {% block Jscript %}
+<script>
+    $(document).ready(function() {
+        var host = window.location.origin;
+    });
+</script>
+{% endblock %}

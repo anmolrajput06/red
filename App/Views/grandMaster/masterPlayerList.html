@@ -1,0 +1,443 @@
+{% extends "partition/layout.html" %} {% block body %}
+
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+            <h1>{{name}}'s Masters and Players </h1>
+            <ol class="breadcrumb">
+                <!-- <li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li> -->
+                <li><a href="/grandMaster"><i class="fa fa-user"></i>Grand Master</a></li>
+                <li class="active">Master & Player</li>
+            </ol>
+        </section>
+        <!-- /Title -->
+         
+        <!-- Row -->
+        <section class="content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default card-view">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Master</h6>
+                            </div>
+                            <!-- <div class="pull-right">
+                                <a href="/addUser"><button type="button" class="btn btn-primary btn-md"><i class="fa fa-plus"></i> Add User</button></a>
+    </div> -->
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="table-wrap">
+                                    <div class="table-responsive">
+                                        <table id="myTable" class="table table-hover display  pb-30">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Total Chips</th>
+                                                    <th>Commission</th>
+                                                    <th>Total Commission</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default card-view">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Player</h6>
+                            </div>
+                            <!-- <div class="pull-right">
+                                <a href="/addUser"><button type="button" class="btn btn-primary btn-md"><i class="fa fa-plus"></i> Add User</button></a>
+                            </div> -->
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="table-wrap">
+                                    <div class="table-responsive">
+                                        <table id="myTablePlayer" class="table table-hover display  pb-30">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Total Chips</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <input type="hidden" name="hidden" id="hidden" value="{{id}}">
+</div>
+<section class="content">
+    <!-- Row -->
+    <div class="row">
+        <!-- /.modal -->
+        <div id="responsive-user-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="POST" name="addDeductChips" action="/addDeductChipsMasterOfGrandmaster/{{id}}">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h5 class="modal-title">Add/Deduct Coins</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div id="chipsAdd"> </div>
+                            <div class="form-group">
+                                <label for="chips" class="control-label mb-10">Chips:</label>
+                                <input type="text" name="chips" class="form-control" id="chips" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="chipsNote" class="control-label mb-10">Chips Note:</label>
+                                <input type="text" name="chipsNote" class="form-control" id="chipsNote" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" name="chipsValue" class="btn btn-success" value="Add">
+                            <input type="submit" class="btn btn-danger" name="chipsValue" value="Deduct">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Button trigger modal -->
+    </div>
+    <!-- /Row -->
+</section>
+<section class="content">
+    <!-- Row -->
+    <div class="row">
+        <!-- /.modal -->
+        <div id="responsive-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="POST" name="addDeductChips" action="/addDeductPlayerChipsOfGrandMaster/{{id}}">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h5 class="modal-title">Add/Deduct Chips</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div id="chipsPlayerAdd"> </div>
+                            <div class="form-group">
+                                <label for="chips" class="control-label mb-10">Chips:</label>
+                                <input type="text" name="chips" class="form-control" id="chips" required>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" name="chipsValue" class="btn btn-success" value="Add">
+                            <input type="submit" class="btn btn-danger" name="chipsValue" value="Deduct">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Button trigger modal -->
+    </div>
+    <!-- /Row -->
+</section>
+{% endblock %} {% block Jscript %}
+<script>
+    $(document).ready(function() {
+        let id = $('#hidden').val()
+        console.log("id", id);
+        var host = window.location.origin;
+        // console.log(window.location.url);
+        $('#myTable').DataTable({
+            "oLanguage": {
+                "sSearch": "Search Email"
+            },
+            // "scrollY": 100,
+            // "scrollX": true,
+            // "searching": false,
+            "processing": true,
+            "serverSide": true,
+            "ordering": false,
+            "autoWidth": false,
+            "pageLength": 0,
+            "bPaginate": false,
+            "bInfo": false,
+            "ajax": {
+                url: host + '/masterPlayerList',
+                method: "POST",
+                data: {
+                    id: id
+                }
+            },
+            "columns": [
+                // { "data": "_id" },
+                {
+                    "data": "name",
+                }, {
+                    "data": "email"
+                }, {
+                    "data": "chips",
+                    render:function(data){
+                        return parseFloat(data).toFixed(2)
+                    }
+                }, {
+                    "data": "totalCommission",
+                    render: function(data, type, row) {
+                        return data + ' %'
+                    }
+                },  {
+                    "data": "commission",
+                    render: function(data, type, row) {
+                        return data + ' %'
+                    }
+                }, {
+                    "data": "status"
+                }, {
+                    "data": "action",
+                    render: function(data, type, row) {
+                        console.log(type);
+                        console.log(row);
+                        console.log(data);
+                        let status;
+                        if (row.status == "active") {
+                            status = "Block"
+                        } else {
+                            status = "Active"
+                        }
+
+                        return '<a href="#" id="' + row.id + '"  class="btn btn-primary edit">' + status + '</a>  <a href="#" data-toggle="modal" data-target="#responsive-user-modal"><button type="button" id="' + row.id + '" class="btn btn-success btn-xs btn-rounded addCash" name="add" title="Add/Deduct Chips"><i class="fa fa-usd" aria-hidden="true"></i> </button></a>   <a href="/masterEdit/' + row.id + '"><button type="button" class="btn btn-warning btn-xs btn-rounded" name="edit"><i class="fa fa-edit" aria-hidden="true"></i></button></a>'
+                            // return '<a href="/userEdit/'+row.id+'"><button type="button" class="btn btn-warning btn-xs" name="edit"><i class="fa fa-edit" aria-hidden="true"></i></button></a> <button type="button" name="delete" id="'+row.id+'" class="btn btn-danger btn-xs delete"><i class="fa fa-trash" aria-hidden="true"></i></button> '
+                            // <a href="/userEdit/' + row.id + '"><button type="button" class="btn btn-warning btn-xs btn-rounded" name="edit"><i class="fa fa-edit" aria-hidden="true"></i></button></a> <button type="button" name="delete" id="' + row.id + '" class="btn btn-danger btn-xs delete btn-rounded"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            //<div class="dropdown-menu"><a class="dropdown-item" href="/userEdit/' + row.id + '">Edit User</a><br><a class="dropdown-item edit" href="#" id="' + row.id + '">' + row.status + '</a><br><a data-toggle="modal" data-target="#responsive-modal" href="#" class="addChips" id="' + row.id + '" title="Add Chips">Add/Deduct Chips</a><br><a class="dropdown-item delete" href="#" id="' + row.id + '" >Delete User</a><br>
+                    }
+                }
+            ]
+        });
+        $('#myTablePlayer').DataTable({
+            "oLanguage": {
+                "sSearch": "Search Email"
+            },
+            // "scrollY": 100,
+            // "scrollX": true,
+            // "searching": false,
+            "processing": true,
+            "serverSide": true,
+            "ordering": false,
+            "autoWidth": false,
+            "bPaginate": false,
+            "bInfo": false,
+            "pageLength": 0,
+            "bDestroy": true,
+            "ajax": {
+                url: host + '/masterPlayerListPost',
+                method: "POST",
+                data: {
+                    id: id
+                }
+            },
+            "columns": [
+                // { "data": "_id" },
+                {
+                    "data": "username",
+
+                }, {
+                    "data": "email"
+                }, {
+                    "data": "chips",
+                    render:function(data){
+                        return parseFloat(data).toFixed(2)
+                    }
+                }, {
+                    "data": "status"
+                }, {
+                    "data": "action",
+                    render: function(data, type, row) {
+                        let status;
+                        if (row.status == "active") {
+                            status = "Block"
+                        } else {
+                            status = "Active"
+                        }
+                        console.log(row);
+                        return '<a href="#" id="' + row._id + '" class="btn btn-primary editPlayer">' + status + '</a>  <a href="#" data-toggle="modal" data-target="#responsive-modal"><button type="button" id="' + row._id + '" class="btn btn-success btn-xs btn-rounded add" name="add" title="Add/Deduct Chips"><i class="fa fa-usd" aria-hidden="true"></i> </button></a>  <a href="/playerEditOfMaster/' + row._id + '"><button type="button" class="btn btn-warning btn-xs btn-rounded" name="edit"><i class="fa fa-edit" aria-hidden="true"></i></button></a>'
+                            // return '<a href="/userEdit/'+row.id+'"><button type="button" class="btn btn-warning btn-xs" name="edit"><i class="fa fa-edit" aria-hidden="true"></i></button></a> <button type="button" name="delete" id="'+row.id+'" class="btn btn-danger btn-xs delete"><i class="fa fa-trash" aria-hidden="true"></i></button> '
+                            // <a href="/userEdit/' + row.id + '"><button type="button" class="btn btn-warning btn-xs btn-rounded" name="edit"><i class="fa fa-edit" aria-hidden="true"></i></button></a> <button type="button" name="delete" id="' + row.id + '" class="btn btn-danger btn-xs delete btn-rounded"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            //<div class="dropdown-menu"><a class="dropdown-item" href="/userEdit/' + row.id + '">Edit User</a><br><a class="dropdown-item edit" href="#" id="' + row.id + '">' + row.status + '</a><br><a data-toggle="modal" data-target="#responsive-modal" href="#" class="addChips" id="' + row.id + '" title="Add Chips">Add/Deduct Chips</a><br><a class="dropdown-item delete" href="#" id="' + row.id + '" >Delete User</a><br>
+                    }
+                }
+            ]
+        })
+        $(function() {
+            "use strict";
+
+            var SweetAlert = function() {};
+
+            SweetAlert.prototype.init = function() {
+
+                    //Parameter
+                    // $('body').on('click', '.delete', function(e) {
+                    //     var id = $(this).attr('id');
+                    //     var thisElement = this;
+                    //     swal({
+                    //         title: "Are you sure?",
+                    //         text: "You will not be able to recover this User!",
+                    //         type: "warning",
+                    //         showCancelButton: true,
+                    //         confirmButtonColor: "#e69a2a",
+                    //         confirmButtonText: "Yes, delete it!",
+                    //         cancelButtonText: "No, cancel plx!",
+                    //         closeOnConfirm: false,
+                    //         closeOnCancel: false
+                    //     }, function(isConfirm) {
+                    //         if (isConfirm) {
+                    //             $.ajax({
+                    //                 type: 'POST',
+                    //                 url: host + "/user/getUserDelete",
+                    //                 data: {
+                    //                     id: id
+                    //                 },
+                    //                 success: function(resultData) {
+                    //                     // alert(resultData)
+                    //                     console.log(resultData);
+                    //                     if (resultData == 'success') {
+                    //                         // $(thisElement).parent().parent().hide(700);
+                    //                         swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                    //                         window.location.reload()
+                    //                     } else {
+                    //                         alert("Something went wrong")
+                    //                     }
+                    //                     // alert("Save Complete")
+                    //                 }
+                    //             });
+                    //             swal("Deleted!", "User Deleted Succesfully.", "success");
+                    //         } else {
+                    //             swal("Cancelled", "User Not Deleted)", "error");
+                    //         }
+                    //     });
+                    //     return false;
+                    // });
+                    $('body').on('click', '.edit', function(e) {
+                        var id = $(this).attr('id');
+                        var thisElement = this;
+                        swal({
+                            title: "Are you sure?",
+                            // text: "",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#e69a2a",
+                            confirmButtonText: "Yes, edit it!",
+                            cancelButtonText: "No, cancel pls!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }, function(isConfirm) {
+                            if (isConfirm) {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: host + "/grandMasterStatus",
+                                    data: {
+                                        id: id,
+                                    },
+                                    success: function(resultData) {
+                                        // alert(resultData)
+                                        console.log(resultData);
+                                        if (resultData == 'success') {
+                                            swal("Updated!", "Your Status Updated.", "success");
+                                            window.location.reload()
+                                        } else {
+                                            alert("Something went wrong")
+                                        }
+                                        // alert("Save Complete")
+                                    }
+                                });
+                                swal("Update!", "User Updated Successfully.", "success");
+                            } else {
+                                swal("Cancelled", "User Not Updated)", "error");
+                            }
+                        });
+                        return false;
+                    });
+                    $('body').on('click', '.editPlayer', function(e) {
+                        var id = $(this).attr('id');
+                        var thisElement = this;
+                        swal({
+                            title: "Are you sure?",
+                            // text: "",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#e69a2a",
+                            confirmButtonText: "Yes, edit it!",
+                            cancelButtonText: "No, cancel pls!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }, function(isConfirm) {
+                            if (isConfirm) {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: host + "/playerStatus",
+                                    data: {
+                                        id: id
+                                    },
+                                    success: function(resultData) {
+                                        // alert(resultData)
+                                        console.log(resultData);
+                                        if (resultData == 'success') {
+                                            swal("Updated!", "Your Status Updated.", "success");
+                                            window.location.reload()
+                                        } else {
+                                            alert("Something went wrong")
+                                        }
+                                        // alert("Save Complete")
+                                    }
+                                });
+                                swal("Update!", "User Updated Successfully.", "success");
+                            } else {
+                                swal("Cancelled", "User Not Updated)", "error");
+                            }
+                        });
+                        return false;
+                    });
+                },
+                $.SweetAlert = new SweetAlert, $.SweetAlert.Constructor = SweetAlert;
+
+            $.SweetAlert.init();
+        });
+        $("body").on("click", ".addCash", function() {
+            var userId = $(this).attr("id");
+            console.log("userId",userId)
+                // console.log("player id ----------->",PlayerId)
+            var html = '<input type="hidden" name="userId" value="' + userId + '" />';
+            $("#chipsAdd").html(html);
+        });
+        $("body").on("click", ".add", function() {
+            var PlayerId = $(this).attr("id");
+            console.log("player id ----------->", PlayerId)
+            var html = '<input type="hidden" name="playerId" value="' + PlayerId + '" />';
+            $("#chipsPlayerAdd").html(html);
+        });
+    });
+</script>
+{% endblock %}

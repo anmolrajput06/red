@@ -1,0 +1,487 @@
+{% extends "partition/layout.html" %} {% block body %}
+
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+
+            <ol class="breadcrumb">
+                <li><a href="/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                <li class="active"><span>Drawer Management</span></li>
+            </ol>
+        </section>
+        <!-- /Title -->
+        <!-- Row  -->
+        &nbsp;
+        
+
+    <section class="content">
+       
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default card-view">
+                    <div class="panel-heading">
+                        <div class="pull-right">
+                            <div class="col-sm-2 btnStyle" >
+                                <label> &nbsp;</label><br>
+                                <button type="button" class="btn btn-primary btn-md" id="addBtn" data-toggle="modal"
+                                data-target="#responsive-modal"><i class="fa fa-plus"></i> Add/Deduct
+                                Amount</button>
+                        </div>
+                    </div>
+                    <hr> <!-- Horizontal line added here -->
+                    <div class="panel-wrapper collapse in">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-12 col-xs-12">
+                                    <div class="form-wrap">
+                                        <div class="form-group">
+                                            <label for="exampleInputuname_3" class="col-sm-3 control-label"><span style="font-size: 20px;">Initial Amount : </span></label>
+                                            <label for="exampleInputuname_3" class="col-sm-3 control-label"><span style="font-size: 20px;" id="initialAmount">0</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #ccc">
+                                    <div class="form-wrap">
+                                        <div class="form-group">
+                                            <label for="exampleInputuname_3" class="col-sm-3 control-label"><span style="font-size: 20px;">Added Amount : </span></label>
+                                            <label for="exampleInputuname_3" class="col-sm-3 control-label"><span style="font-size: 20px;" id="addedAmount">0</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-xs-12">
+                                    <div class="form-wrap">
+                                        <div class="form-group">
+                                            <label for="exampleInputuname_3" class="col-sm-3 control-label"><span style="font-size: 20px;">Total Purchase : </span></label>
+                                            <label for="exampleInputuname_3" class="col-sm-3 control-label"><span style="font-size: 20px;" id="totalPurchase">0</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #ccc" >
+                                    <div class="form-wrap">
+                                        <div class="form-group">
+                                            <label for="exampleInputuname_3" class="col-sm-3 control-label"><span style="font-size: 20px;">Total Redeem : </span></label>
+                                            <label for="exampleInputuname_3" class="col-sm-3 control-label"><span style="font-size: 20px;" id="totalRedeem">0</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-xs-12">
+                                    <div class="form-wrap">
+                                        <div class="form-group">
+                                            <label for="exampleInputuname_3" class="col-sm-3 control-label"><span style="font-size: 20px;">Balance : </span></label>
+                                            <label for="exampleInputuname_3" class="col-sm-3 control-label"><span style="font-size: 20px;" id="balance">0</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="col-sm-12 col-xs-12">
+                                    <div class="form-wrap">
+                                        <div class="form-group">
+                                            <label for="exampleInputuname_3" class="col-sm-3 control-label"><span style="font-size: 20px;">Special Comp : </span></label>
+                                            <label for="exampleInputuname_3" class="col-sm-3 control-label"><span style="font-size: 20px;" id="comps">0</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="responsive-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" name="adduser" id="cashAddFrm"
+                action="/addAmount">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">×</button>
+                    <h5 class="modal-title">Add/Deduct Amount</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="requestCash"> </div>
+                    <div class="form-group">
+                        <label for="recipient-name"
+                            class="control-label mb-10">Amount:</label>
+                        <input type="text" name="chips" maxlength="7"
+                            class="form-control" id="action_chips" required>
+                        <span class="help-block form-error" id="displayError"
+                            style="display: none;">The input value was not a
+                            correct number</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- <input type="submit" name="requestType" class="btn btn-success playerChipsAction" value="Add">
+                                            <input type="submit" class="btn btn-danger playerChipsAction" name="requestType" value="Deduct"> -->
+                    <input type="hidden" name="requestType" id="requestType"
+                        value="">
+                    <input type="button" onclick="checkAmount('add')"
+                        name="requestType"
+                        class="btn btn-success playerChipsAction" value="Add">
+                    <input type="button" onclick="checkAmount('deduct')"
+                        class="btn btn-danger playerChipsAction"
+                        name="requestType" value="Deduct">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+
+{% endblock %} {% block Jscript %}
+<script>
+    $(document).ready(function () {
+        var host = window.location.origin;
+        var minimum = $('#min').val()
+        var maximum = $('#max').val()
+        console.log(minimum);
+        console.log(maximum);
+        var host = window.location.origin;
+        $("#addBtn").click(function(){
+            loadData()
+        })
+        loadData()
+        async function loadData(){
+        $.ajax({
+                    type: 'POST',
+                    url: host + "/getCashierBalanceData",
+                    success: function (resultData) {
+                        console.log(resultData);
+                        if (resultData.status == 'success') {
+                            $('#initialAmount').text(resultData.initialAmount)
+                            $('#addedAmount').text(resultData.addedAmount)
+                            $('#balance').text(resultData.balance)
+                        } else {
+                        }
+                    }
+                });
+            }
+        // if ($("#userType").val() == "" || $("#userType").val() == "subDistributor") {
+        //     $('#gameMode').show()
+        //     $('#gameRtp').show()
+
+        // }
+        // if($("#type").val() == "shop"){
+        //     $('#gameMode').hide()
+        //         $('#gameRtp').hide()
+        // }else if($("#type").val() == "subDistributor"){
+        //     $('#gameMode').show()
+        //         $('#gameRtp').show()
+        // }
+        // $("#userType").change(function () {
+        //     console.log("userType", $(this).val());
+        //     if ($(this).val() == "shop") {
+        //         $('#gameMode').hide()
+        //         $('#gameRtp').hide()
+        //         $('#cashOut').prop('checked', false);
+        //         $('#bounceBack').prop('checked', false);
+        //         $('#bounceBack').attr('value', 'false');
+        //         $('#bonceBackLimit').attr("disabled", "disabled")
+        //         $('#bounce1').attr("disabled", "disabled")
+        //         $('#bounce2').attr("disabled", "disabled")
+        //         $('#bounce3').attr("disabled", "disabled")
+        //         $('#bounce4').attr("disabled", "disabled")
+        //     }
+        //     else if ($(this).val() == "" || $(this).val() == "subDistributor") {
+        //         $('#gameMode').show()
+        //         $('#gameRtp').show()
+
+        //     }
+        // })
+        // if ($('#bounceBack').is(':checked')) {
+        //     console.log("checked", $('#bounceBack').is(':checked'));
+        //     $('#bounceBack').attr('value', 'true');
+        //     $('#bonceBackLimit').removeAttr("disabled")
+        //     $('#bounce1').removeAttr("disabled")
+        //     $('#bounce2').removeAttr("disabled")
+        //     $('#bounce3').removeAttr("disabled")
+        //     $('#bounce4').removeAttr("disabled")
+        // }
+        // if ($('#cashOut').is(':checked')) {
+        //     $('#cashOut').attr('value', 'true');
+        // }
+        // $("#bounceBack").change(function () {
+        //     if ($(this).is(':checked')) {
+        //         $(this).attr('value', 'true');
+        //         $('#bonceBackLimit').removeAttr("disabled")
+        //         $('#bounce1').removeAttr("disabled")
+        //         $('#bounce2').removeAttr("disabled")
+        //         $('#bounce3').removeAttr("disabled")
+        //         $('#bounce4').removeAttr("disabled")
+
+        //     } else {
+        //         $(this).attr('value', 'false');
+        //         $('#bonceBackLimit').attr("disabled", "disabled")
+        //         $('#bounce1').attr("disabled", "disabled")
+        //         $('#bounce2').attr("disabled", "disabled")
+        //         $('#bounce3').attr("disabled", "disabled")
+        //         $('#bounce4').attr("disabled", "disabled")
+        //     }
+        // })
+        // $("#cashOut").change(function () {
+        //     if ($(this).is(':checked')) {
+        //         $(this).attr('value', 'true');
+        //     } else {
+        //         $(this).attr('value', 'false');
+        //     }
+        // })
+        // $('#mode').change(function () {
+        //     console.log("change");
+        //     let mode = $('#mode').val()
+        //     if (mode == "classic") {
+        //         $('.gameMode').hide()
+        //         $('#bonceBackLimit').attr("formnovalidate", "formnovalidate")
+        //         $('#bounce1').attr("formnovalidate", "formnovalidate")
+        //         $('#bounce2').attr("formnovalidate", "formnovalidate")
+        //         $('#bounce3').attr("formnovalidate", "formnovalidate")
+        //         $('#bounce4').attr("formnovalidate", "formnovalidate")
+        //         $('#bounceBack').prop('checked', false);
+        //         $('#bounceBack').attr('value', 'false');
+        //         $('#bonceBackLimit').attr("disabled", "disabled")
+        //         $('#bounce1').attr("disabled", "disabled")
+        //         $('#bounce2').attr("disabled", "disabled")
+        //         $('#bounce3').attr("disabled", "disabled")
+        //         $('#bounce4').attr("disabled", "disabled")
+
+        //     } else {
+        //         $('.gameMode').show()
+        //         $('#bonceBackLimit').removeAttr("formnovalidate")
+        //         $('#bounce1').removeAttr("formnovalidate")
+        //         $('#bounce2').removeAttr("formnovalidate")
+        //         $('#bounce3').removeAttr("formnovalidate")
+        //         $('#bounce4').removeAttr("formnovalidate")
+        //     }
+        // })
+        let userId = $('#userId').val()
+        console.log("userId",userId);
+        $.formUtils.addValidator({
+            name: 'validatedEmail',
+            validatorFunction: function (value, $el, config, language, $form) {
+                let validateEmail
+                $.ajax({
+                    type: 'POST',
+                    url: host + "/validateEmail",
+                    data: {
+                        email: value,
+                        distributorId: userId
+                    },
+                    async: false,
+                    success: function (resultData) {
+                        console.log(resultData);
+                        if (resultData == 'success') {
+                            validateEmail = false
+                        } else {
+                            validateEmail = true
+                        }
+                    }
+                });
+                return validateEmail
+            },
+            errorMessage: 'This email has been already taken!',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'validatedUserName',
+            validatorFunction: function (value, $el, config, language, $form) {
+                console.log("validate");
+                let validateUserName
+                $.ajax({
+                    type: 'POST',
+                    url: host + "/validateUserName",
+                    data: { username: value , distributorId: userId},
+                    async: false,
+                    success: function (resultData) {
+                        console.log(resultData);
+                        if (resultData == 'success') {
+                            validateUserName = false
+                        } else {
+                            validateUserName = true
+                        }
+                    }
+                });
+                return validateUserName
+            },
+            errorMessage: 'This Username has been already taken!',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'selectValidator',
+            validatorFunction: function (value, $el, config, language, $form) {
+                // Custom validation logic
+                return value !== '';
+            },
+            errorMessage: 'Please select an option',
+            errorMessageKey: 'badSelectValue'
+        });
+        $.validate({
+            form: '#addUser',
+            modules: 'security',
+            language: 'en',
+            onModulesLoaded: function () {
+                // Enable custom validator for the dropdown
+                $('#dropdown').displayOptions();
+                $.validate.validators.selectValidator = {
+                    validator: function (value, $el, config, language, $form) {
+                        return $.formUtils.validators.validate_select($el, config, language, $form);
+                    },
+                    errorMessage: 'Please select an option',
+                    errorMessageKey: 'badSelectValue'
+                };
+            }
+        });
+        
+        $.formUtils.addValidator({
+            name: 'requiredUsername',
+            validatorFunction: function (value, $el, config, language, $form) {
+                console.log(value.length);
+                return value.length != 0
+            },
+            errorMessage: 'Please enter username',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'requiredName',
+            validatorFunction: function (value, $el, config, language, $form) {
+                console.log(value.length);
+                return value.length != 0
+            },
+            errorMessage: 'Please enter username',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'requiredCity',
+            validatorFunction: function (value, $el, config, language, $form) {
+                console.log(value.length);
+                return value.length != 0
+            },
+            errorMessage: 'Please enter city',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'requiredPassword',
+            validatorFunction: function (value, $el, config, language, $form) {
+                console.log(value.length);
+                return value.length != 0
+            },
+            errorMessage: 'Please enter password',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'requiredPercentage',
+            validatorFunction: function (value, $el, config, language, $form) {
+                console.log(value.length);
+                return value.length != 0
+            },
+            errorMessage: 'Please enter precentage',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'requiredEmail',
+            validatorFunction: function (value, $el, config, language, $form) {
+                return value.length != 0
+            },
+            errorMessage: 'Please enter email',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'requiredNumber',
+            validatorFunction: function (value, $el, config, language, $form) {
+                return value.length != 0
+            },
+            errorMessage: 'Please enter mobile number',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'vlidateMobileNumber',
+            validatorFunction: function (value, $el, config, language, $form) {
+                console.log(value.length);
+                return Number(value.length) == 10
+            },
+            errorMessage: 'Please enter valid mobile number',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'requiredPassword',
+            validatorFunction: function (value, $el, config, language, $form) {
+                console.log(value.length);
+                return Number(value.length) != 0
+            },
+            errorMessage: 'Please enter password',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'requiredImage',
+            validatorFunction: function (value, $el, config, language, $form) {
+                console.log(value.length);
+                return Number(value.length) != 0
+            },
+            errorMessage: 'Please select image',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'requiredMin',
+            validatorFunction: function (value, $el, config, language, $form) {
+
+                return Number(value) >= Number(minimum);
+            },
+            errorMessage: 'Minimum value more than or equale to<b> ' + minimum + ' </b>required',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'maximum',
+            validatorFunction: function (value, $el, config, language, $form) {
+                return Number(value) <= Number(maximum);
+            },
+            errorMessage: 'Maximum value less than or equale to<b> ' + maximum + ' </b>required.',
+            errorMessageKey: 'badRackCap'
+        });
+        checkAmount = function (type) {
+            var chips = $('#action_chips').val();
+            console.log("chips",chips,type);
+            $(".playerChipsAction").attr("disabled", true);
+            if(chips == ""){
+                $('#displayError').html('please enter positive amount.');
+                $('#displayError').css('color', 'red');
+                $('#displayError').show();
+                $(".playerChipsAction").attr("disabled", false);
+                return false;
+            }
+            if (parseFloat(chips) <= 0) {
+                $('#displayError').html('please enter positive amount.');
+                $('#displayError').css('color', 'red');
+                $('#displayError').show();
+                $(".playerChipsAction").attr("disabled", false);
+                return false;
+            }
+            if (chips < 0 || isNaN(chips) || (chips % 1 !== 0)) {
+                $('#displayError').html('please enter valid amount.');
+                $('#displayError').css('color', 'red');
+                $('#displayError').show();
+                $(".playerChipsAction").attr("disabled", false);
+                return false;
+            }
+            if (parseFloat(chips) > 1000000) {
+                $('#displayError').html('please enter chips maximum 1000000.');
+                $('#displayError').css('color', 'red');
+                $('#displayError').show();
+                $(".playerChipsAction").attr("disabled", false);
+                return false;
+            }
+            if (type == "add") {
+                $('#requestType').val('Add');
+            } else {
+                $('#requestType').val('Deduct');
+            }
+
+            $('#cashAddFrm').submit();
+        }
+    });
+</script>
+{% endblock %}

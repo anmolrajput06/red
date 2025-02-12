@@ -1,0 +1,547 @@
+<script type="text/javascript"></script>
+{% extends "partition/layout.html" %} {% block body %}
+
+<!-- Breadcrumb -->
+<!-- <section class="content-header">
+            
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Dashboard</li>
+            </ol>
+        </section> -->
+
+<!-- /Title -->
+<!-- Row -->
+
+<!-- /Main Content -->
+<section class="content">
+     
+    <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+
+            <div class="col-md-12">
+                <!-- USERS LIST -->
+                <div class="box box-danger">
+                    <!-- <div class="box-header with-border">
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div> -->
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label>Start Date</label>
+                                <div class="input-group date">
+                                    <div class="form-group">
+                                        <input required="required" class="form-control" placeholder="DD/MM/YYYY"
+                                            name="start" type="text" id="start" autocomplete="off"
+                                            data-date-format="YYYY-MM-DD HH:mm" value="{{start}}">
+    
+                                    </div>
+                                    <div class="input-group-addon">
+                                        <span class="glyphicon glyphicon-th"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label>End Date</label>
+                                <div class="input-group date">
+                                    <div class="form-group">
+                                        <input required="required" class="form-control" placeholder="DD/MM/YYYY" name="end"
+                                            type="text" id="end" autocomplete="off" data-date-format="YYYY-MM-DD HH:mm"
+                                            value="{{end}}">
+                                    </div>
+                                    <div class="input-group-addon">
+                                        <span class="glyphicon glyphicon-th"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label>&nbsp;</label><br>
+                                <button class="btn btn-primary" id="dateSearch"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- /.box-body -->
+
+                    <!-- /.box-footer -->
+                </div>
+
+
+                <!--/.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+
+        <!-- /.row -->
+</section>
+<section class="content">
+     
+    <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+
+            <div class="col-md-12">
+                <!-- USERS LIST -->
+                <!-- <div class="box box-danger"> -->
+                    <!-- <div class="box-header with-border">
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div> -->
+                    <!-- /.box-header -->
+                    <!-- <div class="box-body">
+                        <div class="box-body no-padding"> -->
+                            <div class="row">
+                                <!-- /.col -->
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-aqua"><i class="ion ion-ios-people"></i></span>
+                        
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Today Profit</span>
+                                            <span class="info-box-number">
+                                                {% if resultData.todayDashboardData %}
+                                                {{resultData.todayDashboardData.totalProfit}}
+                                                {% else %}
+                                                0
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                                <!-- /.col -->
+                                <!-- /.col -->
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-red"><i class="ion ion-ios-people-outline"></i></span>
+                        
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Profit Form: <span id="startDate"></span>,   To: <span id="endDate"></span></span>
+                                            <span class="info-box-number">{% if resultData.filterDashboardData %}
+                                                {{resultData.filterDashboardData.totalProfit}}
+                                                {% else %}
+                                                0
+                                                {% endif %}</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                        
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-green"><i class="fa-solid fa-shop"></i></span>
+                        
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Total Profit</span>
+                                            <span class="info-box-number">{% if resultData.totalDashboardData %}
+                                                {{resultData.totalDashboardData.totalProfit}}
+                                                {% else %}
+                                                0
+                                                {% endif %}</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                                <!-- <div class="col-md-3 col-sm-6 col-xs-12" style="width:20%">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-red"><i class="fa fa-users"></i></span>
+                        
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Inactive Palyer</span>
+                                            <span class="info-box-number">{{totalInactivePlayer}}</span>
+                                        </div> -->
+                                        <!-- /.info-box-content -->
+                                    <!-- </div> -->
+                                    <!-- /.info-box -->
+                                <!-- </div> -->
+                                <!-- /.col -->
+                                <!-- /.col -->
+                                <!-- /.col -->
+                                <!-- <div class="col-md-3 col-sm-6 col-xs-12" style="width:20%">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-green"><i class="fa fa-users"></i></span>
+                        
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Guest Player</span>
+                                            <span class="info-box-number">{{totalGuestPlayer}}</span>
+                                        </div> -->
+                                        <!-- /.info-box-content -->
+                                    <!-- </div> -->
+                                    <!-- /.info-box -->
+                                <!-- </div> -->
+                                <!-- /.col -->
+                                <!-- /.col -->
+                            </div>
+                            <!-- <ul class="users-list clearfix"> -->
+                                <!-- {% set avatar = player.avatar if player.avatar else '../dist/img/user.png' %} -->
+                                <!-- <li> -->
+                                    <!-- <table style="width:100%">
+                                        <tr>
+                                          <th></th>
+                                          <th>Today</th> 
+                                          <th>Form: <span id="startDate"></span><br>To: <span id="endDate"></span></th>
+                                          <th>Total</th>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left: 20px;"><b>Total Profit</b></td>
+                                            <td>100</td>
+                                            <td>100</td>
+                                            <td>100</td>
+                                        </tr>
+                                      </table> -->
+                                    <!-- <img src="/dist/img/user123.png" alt="Player Image" width="30px"
+                                        height="30px" style="height: 30px !important;">
+                                    <a class="users-list-name" href="#">{{player.username}}</a>
+                                    <span class="users-list-date">{{player.createdAtFormated}}</span> -->
+                                <!-- </li>  -->
+                                
+                                <!-- {# {%for player in latestPalyer %}
+                                <li>
+                                    <img src="dist/img/user123.png" alt="Player Image" width="30px" height="30px">
+                                    <a class="users-list-name" href="#">{{player.username}}</a>
+                                    <span class="users-list-date">{{player.createdAtFormated}}</span>
+                                </li>
+                                {%endfor%} #} -->
+                            <!-- </ul> -->
+                            <!-- /.users-list -->
+                        <!-- </div> -->
+                    <!-- </div> -->
+                    
+                    <!-- /.box-body -->
+
+                    <!-- /.box-footer -->
+                <!-- </div> -->
+
+
+                <!--/.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+
+        <!-- /.row -->
+</section>
+<!-- /.content -->
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</div>
+<!-- /.content-wrapper -->
+
+<!-- Footer -->
+<!-- <footer class="main-footer">
+    <div class="pull-right hidden-xs">
+        <b>Version</b> 1.0.0
+    </div>
+    <strong>Copyright &copy; 2020-2021 <a href="#">Casino Game</a>.</strong> All rights reserved.
+</footer> -->
+<!-- /Footer -->
+
+</div>
+{% endblock %} {% block Jscript %}
+<script>
+    $(document).ready(function () {
+        $('#start,#end').datepicker({
+            format: "dd/mm/yyyy",
+            timepicker: false
+        });
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        let mm = today.getMonth() + 1; // Months start at 0!
+        let dd = today.getDate();
+
+        if (dd < 10) dd = '0' + dd;
+        if (mm < 10) mm = '0' + mm;
+
+        const formattedToday = dd + '/' + mm + '/' + yyyy;
+        $("#dateSearch").click(function(){
+            $('#startDate').text($('#start').val())
+            $('#endDate').text($('#end').val())
+        })
+        if($('#start').val() == ""){
+
+            $('#startDate').text(formattedToday)
+        }
+        if($('#end').val() == ""){
+
+$('#endDate').text(formattedToday)
+}
+        var host = window.location.origin;
+
+        $('#myTable').DataTable({
+            // "scrollX": true,
+            "searching": false,
+            // "ajax": host + "/game/history",
+            "columns": [{
+                "data": "gameNumber"
+            }, {
+                "data": "smallBlind"
+            }, {
+                "data": "bigBlind"
+            }, {
+                "data": "status"
+            }, {
+                "data": "pot"
+            }]
+        });
+
+
+        // Game Play Chart
+        var theMonths = ["January", "February", "March", "April", "May",
+            "June", "July", "August", "September", "October", "November", "December"
+        ];
+        var labels = [];
+        for (var i = 0; i <= 11; i++) {
+            labels.push(theMonths[i]);
+        }
+        let chips = $('#chips').val()
+        var host = window.location.origin;
+        if ($('#monthlyPlayedGameChart').length > 0) {
+            // Get context with jQuery - using jQuery's .get() method.
+            var GameCanvas = $('#monthlyPlayedGameChart').get(0).getContext('2d');
+            // This will get the first returned node in the jQuery collection.
+
+            $.ajax({
+                type: 'GET',
+                url: host + "/dashboardChart/getMonthlyPlayedGameChart",
+                success: function (res) { },
+                complete: function (data) {
+
+                    var gameConfig = {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+
+                            datasets: [{
+                                label: 'Game Played By Player',
+                                backgroundColor: "#3b8bba",
+                                borderColor: "rgba(60,141,188,0.8)",
+                                data: data.responseJSON,
+                                fill: true,
+                            }],
+                        },
+                        options: {
+                            display: false,
+                            responsive: true,
+                            legend: {
+                                //position: 'top',
+                                display: false,
+                            },
+                        }
+                    };
+                    var chart = new Chart(GameCanvas, gameConfig)
+
+                }
+            })
+
+        }
+
+        // Platform Chart
+        window.onload = function () {
+            var customDates = document.getElementsByClassName('chips');
+            console.log("customDates", customDates);
+            for (var i = 0; i < customDates.length; i++) {
+                document.getElementsByClassName('chips')[i].innerHTML = parseFloat(customDates[i].innerHTML).toFixed(2)
+            }
+        }
+        if ($('#gameUsages').length > 0) {
+            $.ajax({
+                type: 'GET',
+                url: host + "/dashboardChart/getGameUsageChart",
+                success: function (res) { },
+                complete: function (data) {
+
+                    var pieChartCanvas = $('#gameUsages').get(0).getContext('2d');
+
+                    let webCount = 0;
+                    let androidCount = 0;
+                    let iosCount = 0;
+                    console.log(data.responseJSON);
+                    if (data.responseJSON && data.responseJSON.android.length > 0) {
+                        androidCount = data.responseJSON.android[0].count
+                    };
+                    if (data.responseJSON && data.responseJSON.ios.length > 0) {
+                        iosCount = data.responseJSON.ios[0].count
+                    };
+                    /* if ( ('android' in data.responseJSON)) {
+                        androidCount=data.responseJSON.android[0].percentage 
+                    }
+                     if ( ('ios' in data.responseJSON)) {
+                        iosCount=data.responseJSON.ios[0].percentage
+                    } */
+                    $('.chartAndroid').html(androidCount);
+                    $('.chartIos').html(iosCount);
+
+
+                    var config = {
+                        type: 'doughnut',
+                        data: {
+                            datasets: [{
+                                data: [
+                                    webCount,
+                                    androidCount,
+                                    iosCount,
+                                ],
+                                backgroundColor: [
+                                    "#f56954",
+                                    "#00a65a",
+                                    "#f39c12"
+                                ],
+                            }],
+                            labels: [
+                                'Web',
+                                'Android',
+                                'IOS',
+                            ]
+                        },
+                        options: {
+                            display: false,
+                            responsive: true,
+                            legend: {
+                                //position: 'top',
+                                display: false,
+                            },
+                            animation: {
+                                animateScale: false,
+                                animateRotate: true,
+                                animationSteps: 100,
+                                animationEasing: 'easeOutBounce',
+                            },
+                            segmentShowStroke: true,
+                            segmentStrokeColor: '#fff',
+                            segmentStrokeWidth: 1,
+                            percentageInnerCutout: 50, // This is 0 for Pie charts
+                            maintainAspectRatio: false,
+                            tooltipTemplate: '<%=value %> <%=label%> users'
+                        }
+                    };
+
+                    var myDoughnutChart = new Chart(pieChartCanvas, config);
+
+
+                }
+            })
+        }
+
+
+
+        /*
+                var theMonths = ["January", "February", "March", "April", "May",
+                  "June", "July", "August", "September", "October", "November", "December"];
+                var labels =[];
+                for (var i = 0; i <= 11; i++) {
+                  labels.push(theMonths[i]);
+                }
+
+                var host = window.location.origin;
+
+                if( $('#monthlyPlayedGameChart').length > 0 ){
+                  // Get context with jQuery - using jQuery's .get() method.
+                  var GameCanvas = $('#monthlyPlayedGameChart').get(0).getContext('2d');
+                  // This will get the first returned node in the jQuery collection.
+                  
+                    $.ajax({
+                        type: 'GET',
+                        url :host + "/dashboardChart/getMonthlyPlayedGameChart",
+                        success:function(res){
+                        },
+                        complete: function(data){
+                            	
+                            var gameConfig = {
+                                        type: 'line',
+                                        data: {
+                                            labels  : labels,
+                                        	
+                                            datasets: [{
+                                                label               : 'Game Played By Player',
+                                                backgroundColor: "#3b8bba",
+                                                borderColor: "rgba(60,141,188,0.8)",
+                                                data:  data.responseJSON,
+                                                fill: true,
+                                            }],
+                                        },
+                                        options: {
+                                            display: false,
+                                            responsive: true,
+                                            legend: {
+                                                //position: 'top',
+                                                display: false,
+                                            },
+                                        }
+                                  };
+                            var chart = new Chart(GameCanvas, gameConfig)
+                          
+                        }
+                    })
+
+                }
+
+        */
+        // Memory Usage Chart
+
+        //
+        let ctx = $('#memoryUsage').get(0).getContext('2d');
+
+        let data = {
+            labels: ['Start'],
+            datasets: [{
+                data: [0],
+                label: 'RSS',
+                backgroundColor: '#ff6600',
+                fill: false,
+            }, {
+                data: [0],
+                label: 'HEAP',
+                backgroundColor: '#4543b5',
+                fill: false
+            }]
+        }
+
+
+        let optionsAnimations = {
+            animation: false,
+        }
+        let chart = new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: optionsAnimations
+        })
+
+        const socket = io(host);
+
+        socket.emit('dashboardconnection', "Hi Server")
+        socket.on('live_memory', function (responce) {
+            var length = data.labels.length
+            if (length >= 60) {
+                data.datasets[0].data.shift();
+                data.datasets[1].data.shift();
+                data.labels.shift()
+            }
+
+            data.labels.push(moment().format('mm:ss'))
+            data.datasets[0].data.push(responce.rss);
+            data.datasets[1].data.push(responce.heap)
+            chart.update()
+        })
+    });
+</script>
+
+{% endblock %}

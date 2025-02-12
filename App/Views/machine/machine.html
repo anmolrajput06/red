@@ -1,0 +1,131 @@
+{% extends "partition/layout.html" %}
+
+
+{% block body %}
+<style>
+	.custom {
+		width: 6%;
+    border-radius: 18%;
+	cursor: not-allowed;
+	margin-right: 8px;
+    margin-bottom: 6px;
+	}
+	.colorCoustom{
+		border-radius: 0;
+	}
+	.input-color {
+    position: relative;
+	margin-bottom: 1%;
+}
+.input-color label {
+	margin-right: 10px; /* Adjusted for better spacing */
+    display: inline-block;
+}
+.input-color .color-box {
+            width: 10px;
+            height: 10px;
+            display: inline-block;
+            margin-right: 5px; /* Adjusted for better spacing */
+        }
+		.btnCoutom{
+			background-color: #6c757d;
+			color: white;
+			
+		}
+		
+</style>
+
+	<!-- Main Content -->
+	<div class="page-wrapper">
+		<div class="container-fluid">
+
+			<!-- Title -->
+			<!-- <section class="content-header">
+			    <h1>Level Master</h1>
+			    <ol class="breadcrumb">
+			        <li><a href="/">Dashboard</a></li>
+						<li><a href="#"><span>Level Master</span></a></li>
+			    </ol>
+			</section> -->
+			<!-- /Title -->
+			 
+			<!-- Row -->
+			<section class="content">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="panel panel-default card-view">
+							<div class="panel-heading">
+								<div class="pull-left">
+									<h6 class="panel-title txt-dark">Machines</h6>
+								</div>
+								<div class="clearfix"></div>
+							</div> 
+							<div class="panel-wrapper collapse in">
+								<div class="panel-body" id="view" style="white-space: normal;">
+									<p style="display: inline-block;"><b>Total Machines : </b>{{machinesLength}}</p>
+									<div class="input-color">
+										<div class="color-box" id="playing" style="background-color: #3C8DBC;"></div>
+										<label for="playing">Playing {{machinesLength}}</label>
+									
+										<div class="color-box" id="connected" style="background-color: #28A745;"></div>
+										<label for="connected">Connected {{machinesLength}}</label>
+
+										<div class="color-box" id="disconnect" style="background-color: #6C757D;"></div>
+										<label for="disconnect">Disconnected {{machinesLength}}</label>
+										<!-- Replace "#28A745" and "#DC3545" to change the colors -->
+									</div>
+									
+									{% for machine in machines %}
+										{% if machine.status == "disconnected" %}
+										<button type="button" class="btn-secondary btn-lg btnCoutom custom">{{machine.name}}</button>
+										{%else%}
+										<button type="button" class="btn-primary btn-lg custom">{{machine.name}}</button>
+										{%endif%}
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+		</div> 
+	</div>	
+
+{% endblock %}
+
+{% block Jscript %}
+<script>
+$(document).ready( function () {
+	var host = window.location.origin;
+	$('#myTable').DataTable({
+		"oLanguage": {
+			"sSearch": "Search Username"
+		},
+		// "scrollX": true,
+		// "searching": false,
+		"searching": false,
+		"ordering": false,
+		"autoWidth": false,
+		"pageLength": 25,
+		"ajax": host + "/getLevel",
+		"columns": [
+			// { "data": "_id" },
+			{ "data": "id" },
+			{ "data": "level" },
+			{ "data": "bonus" },
+			{ "data": "minimum" },
+			{ "data": "maximum" },
+			{
+				"data": "action",
+				render : function(data, type, row){
+					return '<div class="dropdown show"><a class="btn btn-warning btn-xs btn-rounded" href="/editLevel/'+row.id+'"><i class="fa fa-edit" aria-hidden="true"></i></a></div>'
+				}
+			}
+		]
+	});
+} );
+
+
+</script>
+{% endblock %}

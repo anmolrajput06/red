@@ -1,0 +1,102 @@
+{% extends "partition/layout.html" %}
+
+
+{% block body %}
+
+
+<!-- Main Content -->
+<div class="page-wrapper">
+	<div class="container-fluid">
+
+		<!-- Title -->
+		<section class="content-header">
+		    <h1>Bet table</h1>
+		    <ol class="breadcrumb">
+		       <li><a href="/">Dashboard</a></li>
+					<li><a href="/betMaster/{{gameId}}"><span>Bet Master</span></a></li>
+					{% if bet %}
+					<li class="active"><span>Edit Bet</span></li>
+					{% else %}
+					<li class="active"><span>Add Bet</span></li>
+					{% endif %}
+
+
+		    </ol>
+		</section>
+		<!-- /Title -->
+		<!-- Row  -->
+		<section class="content">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-default card-view">
+						<div class="panel-heading">
+							<div class="pull-left">
+							{% if bet %}
+							<h6 class="panel-title txt-dark">Edit Bet</h6>
+							{% else %}
+							<h6 class="panel-title txt-dark">Add Bet</h6>
+							{% endif %}
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="panel-wrapper collapse in">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-sm-12 col-xs-12">
+										<div class="form-wrap">
+									{% if bet %}
+									<form method="POST" action="/postEditBet/{{bet.id}}" name="" class="form-horizontal">
+										{% else %}
+										<form method="POST" action="/postAddBet" name="" class="form-horizontal">
+											{% endif %}
+													<div class="form-group">
+													<input type="hidden" name="gameId" value="{{gameId}}">
+														<label for="exampleInputuname_3" class="col-sm-3 control-label">Chips*</label>
+														<div class="col-sm-6">
+															<div class="input-group">
+																<div class="input-group-addon"><i class="glyphicon glyphicon-user"></i></div>
+																<input type="text" class="form-control" id="chips" placeholder="Enter chips" required name="chips" value="{{bet.chips}}" data-validation="number">
+															</div>
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label for="exampleInputuname_3" class="col-sm-3 control-label">Eligible for Jackpot*</label>
+														<div class="col-sm-6">
+															<!-- <div class="col-sm-8"> -->
+																<input type="checkbox" id="eligible" placeholder="Enter eligible" name="eligible" {{ "checked" if bet.jackpot_eligible=='true' else "" }}>
+															<!-- </div> -->
+														</div>
+													</div>
+													<div class="form-group mb-0">
+														<div class="col-sm-offset-3 col-sm-9">
+															<input type="submit" class="btn btn-success btn-flat" value="submit">
+															<!-- <a href="/user" class="btn btn-danger btn-flat">Cancel</a> -->
+														</div>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>	
+					</div>
+					<!-- Row -->
+					
+				<!-- /Row -->
+			</div>
+		</section>
+
+	</div>
+</div>		
+
+		{% endblock %}
+
+		{% block Jscript %}
+		<script>
+			$(document).ready( function () {
+				var host = window.location.origin;
+			} );
+		</script>
+		{% endblock %}

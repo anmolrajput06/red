@@ -1,0 +1,171 @@
+{% extends "partition/layout.html" %} {% block body %}
+<style type="text/css">
+    .action {
+        text-align: center;
+    }
+</style>
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+            <h1>Line Master</h1>
+            <ol class="breadcrumb">
+                <li><a href="/"><i class="fa fa-dashboard"></i>Dashboard</a></li>
+                <!-- <li><a href="/gameMaster"><span>Game Master</span></a></li> -->
+                <li><a href="#"><span>Line Master</span></a></li>
+            </ol>
+        </section>
+        <!-- /Title -->
+         
+        <!-- Row -->
+        <section class="content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default card-view">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Line Master</h6>
+                            </div>
+                            {%if lines.length  < 9%}
+                            {%if roleData[0] == "add" or role == "admin"%}
+                            <div class="pull-right">
+
+                                <a href="/lineMaster/createLine/{{gameId}}"><button type="button" class="btn btn-primary btn-md"><i class="fa fa-plus"></i> Add Line</button></a>
+                            </div>
+                            {%endif%}
+                            {%endif%}
+                            <div class="pull-right">
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="table-wrap">
+                                    <input type="hidden" name="gameId" value="{{gameId}}" id="gameId">
+                                    <div class="table-responsive">
+                                        <table id="myTable" class="table table-hover display  pb-30">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Line Name</th>
+                                                    <!-- <th>Graph</th> -->
+                                                    <th>Matrix</th>
+                                                    <th class="action">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for line in lines %}
+                                                <tr>
+
+                                                    <td>{{loop.index}}</td>
+                                                    <td>{{line.name}}</td>
+                                                    <!-- <td>{{line.matrix}}</td> -->
+                                                    <td style="width: 40%;">
+                                                        <table class="table table-responsive table-bordered text-center">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    {% for reel in reels %}
+                                                                    <th>Reel {{reel.name}}</th>
+                                                                    {% endfor %}
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for row in rows %}
+                                                                <tr>
+                                                                    <th>Row {{row.name}}</th>
+                                                                    {% for reel in reels %}
+                                                                    <td>
+                                                                        <i class="fa {{ 'fa-check' if line.matrix[row.id][reel.id] == true }}" value="line.matrix[row.id][reel.id]"></i></td>
+                                                                    {% endfor %}
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    <td class="action">
+                                                        <div class="dropdown show">{%if (roleData[1] == "edit") or (role == "admin")%}<a class="btn btn-warning btn-xs btn-rounded" href="/lineMaster/editLine/{{line.id}}/{{line.game}}"><i class="fa fa-edit" aria-hidden="true"></i></a>{%endif%}
+                                                            {%if (roleData[2] == "delete") or (role == "admin")%} <button type="button" title="Delete Player" name="delete" id="{{line.id}}" class="btn btn-danger btn-xs btn-rounded delete"><i class="fa fa-trash" aria-hidden="true"></i></button>{%endif%}</div>
+                                    </div>
+                                    </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </section>
+</div>
+</div>
+
+{% endblock %} {% block Jscript %}
+<script>
+    $(document).ready(function() {
+        var host = window.location.origin;
+        $(function() {
+            "use strict";
+
+            var SweetAlert = function() {};
+
+            SweetAlert.prototype.init = function() {
+
+                    //Parameter
+
+                    $('body').on('click', '.delete', function(e) {
+                        var id = $(this).attr('id');
+                        var thisElement = this;
+                        swal({
+                            title: "Are you sure?",
+                            text: "You will not be able to recover this Player!",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#e69a2a",
+                            confirmButtonText: "Yes, delete it!",
+                            cancelButtonText: "No, cancel plx!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }, function(isConfirm) {
+                            if (isConfirm) {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: host + "/lineDelete",
+                                    data: {
+                                        id: id
+                                    },
+                                    success: function(resultData) {
+                                        // alert(resultData)
+                                        console.log(resultData);
+                                        if (resultData == 'success') {
+                                            // $(thisElement).parent().parent().parent().hide(700);
+                                            swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                                            window.location.reload()
+                                        } else {
+                                            alert("Something went wrong")
+                                        }
+                                        // alert("Save Complete")
+                                    }
+                                });
+                                swal("Deleted!", "Line Deleted Succesfully.", "success");
+                            } else {
+                                swal("Cancelled", "Line Not Deleted)", "error");
+                            }
+                        });
+                        return false;
+                    });
+                },
+                $.SweetAlert = new SweetAlert, $.SweetAlert.Constructor = SweetAlert;
+
+            $.SweetAlert.init();
+        });
+    });
+</script>
+{% endblock %}

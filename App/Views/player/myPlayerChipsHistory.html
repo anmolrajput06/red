@@ -1,0 +1,145 @@
+{% extends "partition/layout.html" %} {% block body %}
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+            <h1>Withdraw Table </h1>
+            <ol class="breadcrumb">
+                {%if session.details.role == "admin" or session.details.role=="sub-admin"%}
+                <li><a href="/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                {%endif%}
+                <li><a href="/myPlayer"><i class="fa fa-user"></i>Player</a></li>
+                <li class="active">Withdarw History</li>
+            </ol>
+        </section>
+        <!-- /Title -->
+         
+        <section class="content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row panel panel-default card-view">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <input required="required" class="form-control" placeholder="Date And Time" name="start" type="text" id="start" autocomplete="off" data-date-format="YYYY-MM-DD HH:mm" value="{{start}}">
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <input required="required" class="form-control" placeholder="Date And Time" name="end" type="text" id="end" autocomplete="off" data-date-format="YYYY-MM-DD HH:mm" value="{{end}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <label> &nbsp;</label><br>
+                            <button class="btn btn-primary" onclick="loadSlotOverAllCommission()"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Row -->
+                <div class="col-sm-12">
+                    <!-- <div class="panel panel-default card-view"> -->
+                    <!-- <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Player Table</h6>
+                            </div>
+                            <div class="pull-right">
+                            </div>
+                            <div class="clearfix"></div>
+                        </div> -->
+                    <input type="hidden" id="playerId" value="{{playerId}}">
+                    <div class="row panel panel-default card-view">
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="table-wrap">
+                                    <div class="table-responsive">
+
+                                        <table id="myTable" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Transaction ID</th>
+                                                    <th>Date & time</th>
+                                                    <th>Chips</th>
+                                                    <th>Withdraw Amount</th>
+                                                    <th>After Balance</th>
+                                                    <!-- <th>Reason</th> -->
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+
+{% endblock %} {% block Jscript %}
+<script>
+    $('#start, #end').datetimepicker();
+
+    function loadSlotOverAllCommission() {
+        $('#myTable').dataTable().fnDestroy();
+        LoadData();
+    }
+
+    function LoadData() {
+        var host = window.location.origin;
+        var playerId = $('#playerId').val();
+        var startdate = $("#start").val();
+        var enddate = $("#end").val();
+        $('#myTable').DataTable({
+            // "scrollX": true,
+            "oLanguage": {
+                "sSearch": "Search"
+            },
+            "processing": true,
+            "serverSide": true,
+            "searching": false,
+            "ordering": false,
+            "autoWidth": false,
+            "pageLength": 25,
+            "ajax": {
+                url: host + "/myPlayer/getWithdrawHistory/" + playerId,
+                // type: "POST",
+                data: function(data) {
+                    data.startdate = startdate;
+                    data.enddate = enddate;
+                }
+            },
+            "columns": [{
+                "data": "transactionId"
+            }, {
+                "data": "createdAt",
+                render: function(data, type, row) {
+                    return moment(row.createdAt).format('YYYY-MM-DD HH:mm:ss');
+                }
+            }, {
+                "data": "chips",
+                render:function(data){
+                    return parseFloat(data).toFixed(2)
+                }
+            }, {
+                "data": "withdrawAmount"
+            }, {
+                "data": "afterBalance",
+                render:function(data){
+                    return parseFloat(data).toFixed(2)
+                }
+              
+            }]
+        });
+    }
+</script>
+{% endblock %}

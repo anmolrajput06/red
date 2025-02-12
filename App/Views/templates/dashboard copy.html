@@ -1,0 +1,48 @@
+{% extends "partition/layout.html" %}
+
+{% block body %}
+	<!-- Breadcrumb -->
+	<section class="content-header">
+	  <h1>
+	    {{App.name}}
+	    <small>Version 1.0</small>
+	  </h1>
+	  <ol class="breadcrumb">
+	    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+	    <li class="active">Dashboard</li>
+	  </ol>
+	</section>
+	<!-- /Breadcrumb -->
+
+	 
+	
+	<!-- Main Content -->
+	<section class="content">
+		<div class="row">
+			<!-- Info Box -->
+			<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+				<div class="info-box">
+					<span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+					<div class="info-box-content">
+						<span class="info-box-text">Total Players</span>
+						<span class="info-box-number">{{totalPlayer}}</span>
+					</div>
+				</div>
+			</div>
+			<!-- /Info Box -->
+		</div>
+		<!-- /Row -->
+	</section>
+	<!-- /.content -->
+
+	<!-- Footer -->
+	<!-- <footer class="main-footer">
+		<div class="pull-right hidden-xs">
+			<b>Version</b> 1.0.0
+		</div>
+		<strong>Copyright &copy; 2020-2021 <a href="#">Vegas Cowboys</a>.</strong> All rights reserved.
+	</footer> -->
+	<!-- /Footer -->
+</div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+{% endblock %}

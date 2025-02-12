@@ -1,0 +1,186 @@
+{% extends "partition/layout.html" %}
+
+
+{% block body %}
+
+
+	<!-- Main Content -->
+	<div class="page-wrapper">
+		<div class="container-fluid">
+
+			<!-- Title -->
+			<section class="content-header">
+			    <h1>Chips History Master</h1>
+			    <ol class="breadcrumb">
+			        <li><a href="/"><i class="fa fa-dashboard"></i>Dashboard</a></li>
+						<li><a href="#"><span>Chips Transaction History</span></a></li>
+			    </ol>
+			</section>
+			<!-- /Title -->
+			 
+			<!-- Row -->
+			<section class="content">
+				<div class="row">
+					<div class="col-sm-12">
+					  <div class="row panel panel-default card-view">
+					  <div class="panel-heading">
+								<div class="pull-left">
+									<h6 class="panel-title txt-dark">Chips Transaction History</h6>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+							<label>Start Date</label>
+							<input required="required" class="form-control" placeholder="Date And Time"   name="start" type="text" id="start" autocomplete="off"
+								data-date-format="YYYY-MM-DD HH:mm" value="{{start}}">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                            <label>End Date</label>
+							<input required="required" class="form-control" placeholder="Date And Time"   name="end" type="text" id="end" autocomplete="off"
+							data-date-format="YYYY-MM-DD HH:mm" value="{{end}}">                            </div>
+                        </div>
+                        <!-- <div class="col-md-2">
+                            <div class="form-group">
+                            <label>Slot Type</label>
+                                <input class="form-control" ng-model="search.slotType" type="text">
+                                <select class="form-control name="gameType" id="gameType">
+                                 <option {{ "selected" if gameType == 'all' }} value="all">All</option>
+									<option {{ "selected" if gameType == '5*3' }} value="5*3">5*3</option>
+									<option {{ "selected" if gameType == '5*4' }} value="5*4">5*4</option>
+									<option {{ "selected" if gameType == '4*3' }} value="4*3">4*3</option>
+									<option {{ "selected" if gameType == '3*3' }} value="3*3">3*3</option>
+                                </select>
+                            </div>
+                        </div> -->
+						<input type="hidden" name="gameType" id="gameType" value="all">
+                        <div class="col-sm-2">
+                            <label> &nbsp;</label><br>
+                            <button class="btn btn-primary" onclick="loadSlotOverAllCommission()"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+					
+					</div>
+					<div class="col-sm-12">
+						<div class="row panel panel-default card-view">
+						<div class="panel-wrapper collapse in">
+								<div class="panel-body">
+									<div class="table-wrap">
+										<div class="table-responsive">
+											<table id="myTable" class="table table-hover display  pb-30" >
+												<thead>
+													<tr>
+														<th style="width: 145px;">Transaction ID</th>
+														<th>Date</th>
+														<th>Sender</th>
+														<th>Receiver</th>
+														<th>Chips</th>
+														<th>Reason</th>
+														<th>Type</th>
+														<!-- <th>Action</th> -->
+													</tr>
+												</thead>
+												<tbody>
+												{% for chips in data %}
+													<tr>
+														<th></th>
+														<th></th>
+														<th></th>
+														<th></th>
+														<th></th>
+														<th></th>
+														<th></th>
+													</tr>
+												{% endfor %}
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>	
+
+{% endblock %}
+
+{% block Jscript %}
+<script>
+    // $(".form_datetime").datetimepicker({format: 'YYYY-MM-DD'});
+$('#start, #end').datetimepicker();
+
+// $(document).ready( function () {
+// 		$('#myTable').dataTable( {
+// 		"searching": false,
+// 		"ordering": false,
+// 		"autoWidth": false,
+// 		"oLanguage": {
+// 			"sEmptyTable":  "No data available"
+// 		}
+// 	} );
+// } );
+ function loadSlotOverAllCommission(){
+	$('#myTable').dataTable().fnClearTable();
+    $('#myTable').dataTable().fnDestroy();
+ 	LoadData();
+}
+function LoadData() {
+	var host = window.location.origin;
+        var startdate = $("#start").val();
+        var enddate = $("#end").val();
+        $('#myTable').DataTable({
+            "oLanguage": {
+                "sSearch": "Search"
+            },
+            "processing": true,
+            "serverSide": true,
+            "searching": true,
+            "ordering": true,
+            "autoWidth": false,
+            "pageLength": 25,
+            /*"ajax": host + "/report/getChipsHistory/"+start+'/'+end,*/
+            ajax: {
+                url: "/reports/getChipsTransactionHistory/",
+                type: "GET",
+                data: function(data) {
+                    data.startdate = startdate;
+                    data.enddate = enddate;
+                }
+            },
+            "columns": [{
+                "data": "transactionId"
+            }, {
+                "data": "createdAt",
+                render: function(data, type, row) {
+                    return moment(row.createdAt).format('YYYY-MM-DD HH:mm:ss');
+                }
+            }, {
+                "data": "from",
+            }, {
+                "data": "to"
+            }, {
+                "data": "chips"
+            }, {
+                "data": "reason",
+            }, {
+                "data": "status",
+                render: function(data, type, row) {
+					if(data == "credit"){
+                    return '<p style="color:red;">'+data+'</p>'
+					}
+					else{
+						return '<p style="color:green;">'+data+'</p>'
+					}
+                }
+            }]
+        });
+}
+
+ 
+</script>
+{% endblock %}

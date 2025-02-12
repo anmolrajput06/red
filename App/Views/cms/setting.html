@@ -1,0 +1,111 @@
+{% extends "partition/layout.html" %} {% block body %}
+
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+            <h1>Setting</h1>
+            <ol class="breadcrumb">
+                <li><a href="/"><i class="fa fa-dashboard"></i>Dashboard</a></li>
+                <li><a href="/setting"><span>Setting</span></a></li>
+
+            </ol>
+        </section>
+        <!-- /Title -->
+        <!-- Row  -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default card-view">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Add Setting</h6>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-12 col-xs-12">
+                                        <div class="form-wrap">
+                                            <form method="POST" action="/postAddSettings" name="" class="form-horizontal">
+                                                <!-- <div class="form-group">
+                                                    <label for="exampleInputuname_3" class="col-sm-3 control-label">Total free chips for Guest Player*</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></div>
+                                                            <input type="text" class="form-control" id="freeChips" placeholder="Enter Chips" required name="freeChips" value="{{settingData.defaultChips}}" data-validation="number">
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                <div class="form-group">
+                                                    <label for="exampleInputuname_3" class="col-sm-3 control-label">1 Peso = total number of chips*</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></div>
+                                                            <input type="text" class="form-control" id="chips" placeholder="Enter Amount" required name="chips" value="{{settingData.totalChips}}" data-validation="number">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="form-group">
+                                                    <label for="exampleInputuname_3" class="col-sm-3 control-label">Maximum Bet*</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></div>
+                                                            <input type="text" class="form-control" id="minimum" placeholder="Enter Minimum Bet" required name="minimum" value="{{settingData.minimum}}" data-validation="number">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputuname_3" class="col-sm-3 control-label">Minimum Bet*</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></div>
+                                                            <input type="text" class="form-control" id="maximum" placeholder="Enter Maximum Bet" required name="maximum" value="{{settingData.maximum}}" data-validation="number">
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                <!-- <div class="form-group">
+                                                    <label for="maxCommission" class="col-sm-3 control-label">Commission Maximum Limit*</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></div>
+                                                            <input type="text" class="form-control" id="maxCommission" placeholder="Enter Max Commission Limit" required name="maxCommission" value="{{settingData.maxCommission}}" data-validation="number">
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                {%if roleData[1] == "edit" or role == "admin"%}
+                                                <div class="form-group mb-0">
+                                                    <div class="col-sm-offset-3 col-sm-9">
+                                                        <input type="submit" class="btn btn-success btn-flat" value="submit">
+                                                        <a href="/setting" class="btn btn-danger btn-flat">Cancel</a>
+                                                    </div>
+                                                </div>
+                                                {%endif%}
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Row -->
+
+                <!-- /Row -->
+            </div>
+        </section>
+
+    </div>
+</div>
+
+{% endblock %} {% block Jscript %}
+<script>
+    $(document).ready(function() {
+        var host = window.location.origin;
+    });
+</script>
+{% endblock %}

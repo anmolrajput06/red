@@ -1,0 +1,787 @@
+{% extends "partition/layout.html" %} {% block body %}
+
+<style>
+    .justify-content-center {
+       justify-content: center!important;
+   }
+   .justify-content-between {
+    justify-content: space-between!important;
+}
+   .card-body {
+	flex: 1 1 auto;
+	padding: 15px 15px;
+	color: black;
+	background-color: #e8e8e8;
+}
+
+.d-flex {
+   display: flex!important;
+}
+.m-0 {
+    margin: 0!important;
+}
+.card-header {
+	padding: 5px 5px;
+	margin-bottom: 0;
+	color: white;
+	background-color: #222d32;
+	border-bottom: solid black 1px;
+}
+
+</style>
+<!-- Breadcrumb -->
+        <!-- <section class="content-header">
+            
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Dashboard</li>
+            </ol>
+        </section> -->
+
+<!-- /Title -->
+<br>
+<!-- Row -->
+
+<!-- /Main Content -->
+<section class="content">
+    
+
+
+
+    <main>
+        <div class="container-fluid">
+          <div class="row" style="place-content: center start; align-items: center;">
+            <div class="col-4">
+              <div class="d-flex justify-content-between align-items-center"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col"></div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="row mt-5">
+                
+                <div class="col-xs-12 col-md-3 mb-3">
+                  <div class="card">
+                    <div class="card-header row m-0">
+                      <div class="col">Todays</div>
+                    </div>
+                    <div class="card-body">
+                      <div class="row ">
+                        <div class="col d-flex justify-content-center">
+                          <ul class="d-flex p-0 m-0">
+                            <li class="d-flex align-items-center">
+                              <svg
+                                class="feather"
+                                color="grey"
+                                width="24"
+                                height="24"
+                                stroke-width="1"
+                              >
+                             
+                              </svg>
+                              <div class="text-success">
+                                <i class="fa-solid fa-arrow-up"></i>
+                                {% if resultData.todayDashboardData.totalProfit[0].totalBet %}
+                                {{resultData.todayDashboardData.totalProfit[0].totalBet}}
+                                {% else %}
+                                0
+                                {% endif %}
+                              </div>
+                            </li>
+                            <li class="list-unstyled line m-2"></li>
+                            <li class="list-unstyled d-flex align-items-center">
+                              <svg
+                                class="feather"
+                                color="grey"
+                                width="24"
+                                height="24"
+                                stroke-width="1"
+                              >
+                                
+                              </svg>
+                              <div class="text-danger">
+                                <i class="fa-solid fa-arrow-down"></i>
+                                {% if resultData.todayDashboardData.totalProfit[0].totalWin %}
+                                {{resultData.todayDashboardData.totalProfit[0].totalWin}}
+                                {% else %}
+                                0
+                                {% endif %}</div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="row mt-3">
+                        <div class="col">
+                          <ul class="list-group">
+                            {% if role == "admin" %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Distributors
+                              <div>
+                                <span class="text-success pull-right">{{resultData.todayDashboardData.totalDistributors}}</span>
+                              </div>
+                            </li>
+                            {% endif %}
+                            {% if ( role == "admin" ) or ( role == "distributor" ) %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Sub Distributors
+                              <div>
+                                <span class="text-success pull-right">{{resultData.todayDashboardData.totalSubDistributors}}</span>
+                              </div>
+                            </li>
+                            {% endif%}
+                            {% if ( role == "admin" ) or ( role == "distributor" ) or  ( role == "subDistributor" ) %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Shops
+                              <div>
+                                <span class="text-success pull-right">{{resultData.todayDashboardData.totalShops}}</span>
+                              </div>
+                            </li>
+                            {% endif%}
+                            {% if ( role == "admin" ) or ( role == "distributor" ) or  ( role == "subDistributor" )   or  ( role == "shop" ) %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Cashiers
+                              <div>
+                                <span class="text-success pull-right">{{resultData.todayDashboardData.totalCashiers}}</span>
+                              </div>
+                            </li>
+                            {% endif%}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Customers
+                              <div>
+                                <span class="text-success pull-right">{{resultData.todayDashboardData.totalCustomers}}</span>
+                              </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                              Profit
+                              <div>
+                                <span class="text-success pull-right">{% if resultData.todayDashboardData.totalProfit[0].totalProfit %}
+                                  {{resultData.todayDashboardData.totalProfit[0].totalProfit}}
+                                  {% else %}
+                                  0
+                                  {% endif %}</span>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-md-3 mb-3">
+                  <div class="card">
+                    <div class="card-header row m-0">
+                      <div class="col">Weekly</div>
+                    </div>
+                    <div class="card-body">
+                      <div class="row ">
+                        <div class="col d-flex justify-content-center">
+                          <ul class="d-flex p-0 m-0">
+                            <li class="d-flex align-items-center">
+                              <svg
+                                class="feather"
+                                color="grey"
+                                width="24"
+                                height="24"
+                                stroke-width="1"
+                              >
+                                <use href="/assets/images/feather-sprite.svg#arrow-up"></use>
+                              </svg>
+                              <div class="text-success">
+                                <i class="fa-solid fa-arrow-up"></i>
+                                {% if resultData.weekleyDashboardData.totalProfit[0].totalBet %}
+                                {{resultData.weekleyDashboardData.totalProfit[0].totalBet}}
+                                {% else %}
+                                0
+                                {% endif %}
+                              </div>
+                            </li>
+                            <li class="list-unstyled line m-2"></li>
+                            <li class="list-unstyled d-flex align-items-center">
+                              <svg
+                                class="feather"
+                                color="grey"
+                                width="24"
+                                height="24"
+                                stroke-width="1"
+                              >
+                                <use href="/assets/images/feather-sprite.svg#arrow-down"></use>
+                              </svg>
+                              <div class="text-danger">
+                                <i class="fa-solid fa-arrow-down"></i>
+                                {% if resultData.weekleyDashboardData.totalProfit[0].totalWin %}
+                                {{resultData.weekleyDashboardData.totalProfit[0].totalWin}}
+                                {% else %}
+                                0
+                                {% endif %}</div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="row mt-3">
+                        <div class="col">
+                          <ul class="list-group">
+                            {% if ( role == "admin")   %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Distributors
+                              <div>
+                                <span class="text-success pull-right">{{resultData.weekleyDashboardData.totalDistributors}}</span>
+                              </div>
+                            </li>
+                            {% endif %}
+                            {% if ( role == "admin" ) or ( role == "distributor" )  %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Sub Distributors
+                              <div>
+                                <span class="text-success pull-right">{{resultData.weekleyDashboardData.totalSubDistributors}}</span>
+                              </div>
+                            </li>
+                            {% endif %}
+                            {% if ( role == "admin" ) or ( role == "distributor" ) or  ( role == "subDistributor" )  %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Shops
+                              <div>
+                                <span class="text-success pull-right">{{resultData.weekleyDashboardData.totalShops}}</span>
+                              </div>
+                            </li>
+                            {% endif %}
+                            {% if ( role == "admin" ) or ( role == "distributor" ) or  ( role == "subDistributor" )    or  ( role == "shop" ) %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Cashiers
+                              <div>
+                                <span class="text-success pull-right">{{resultData.weekleyDashboardData.totalCashiers}}</span>
+                              </div>
+                            </li>
+                            {% endif %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Customers
+                              <div>
+                                <span class="text-success pull-right">{{resultData.weekleyDashboardData.totalCustomers}}</span>
+                              </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                              Profit
+                              <div>
+                                <span class="text-success pull-right">{% if resultData.weekleyDashboardData.totalProfit[0].totalProfit %}
+                                  {{resultData.weekleyDashboardData.totalProfit[0].totalProfit}}
+                                  {% else %}
+                                  0
+                                  {% endif %}</span>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-md-3 mb-3">
+                  <div class="card">
+                    <div class="card-header row m-0">
+                      <div class="col">Monthly</div>
+                    </div>
+                    <div class="card-body">
+                      <div class="row ">
+                        <div class="col d-flex justify-content-center">
+                          <ul class="d-flex p-0 m-0">
+                            <li class="d-flex align-items-center">
+                              <svg
+                                class="feather"
+                                color="grey"
+                                width="24"
+                                height="24"
+                                stroke-width="1"
+                              >
+                                <use href="/assets/images/feather-sprite.svg#arrow-up"></use>
+                              </svg>
+                              <div class="text-success">
+                                <i class="fa-solid fa-arrow-up"></i>
+                                {% if resultData.monthleyDashboardData.totalProfit[0].totalBet %}
+                                {{resultData.monthleyDashboardData.totalProfit[0].totalBet}}
+                                {% else %}
+                                0
+                                {% endif %}
+                              </div>
+                            </li>
+                            <li class="list-unstyled line m-2"></li>
+                            <li class="list-unstyled d-flex align-items-center">
+                              <svg
+                                class="feather"
+                                color="grey"
+                                width="24"
+                                height="24"
+                                stroke-width="1"
+                              >
+                                <use href="/assets/images/feather-sprite.svg#arrow-down"></use>
+                              </svg>
+                              <div class="text-danger"> 
+                                <i class="fa-solid fa-arrow-down"></i>
+                                {% if resultData.monthleyDashboardData.totalProfit[0].totalWin %}
+                                {{resultData.monthleyDashboardData.totalProfit[0].totalWin}}
+                                {% else %}
+                                0
+                                {% endif %}</div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="row mt-3">
+                        <div class="col">
+                          <ul class="list-group">
+                            {% if (role=="admin")  %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Distributors
+                              <div>
+                                <span class="text-success pull-right">{{resultData.monthleyDashboardData.totalDistributors}}</span>
+                              </div>
+                            </li>
+                            {% endif %}
+                            {% if (role=="admin") or (role=="distributor")  %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Sub Distributors
+                              <div>
+                                <span class="text-success pull-right">{{resultData.monthleyDashboardData.totalSubDistributors}}</span>
+                              </div>
+                            </li>
+                            {% endif %}
+                            {% if (role=="admin") or (role=="distributor") or  (role=="subDistributor")     %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Shops
+                              <div>
+                                <span class="text-success pull-right">{{resultData.monthleyDashboardData.totalShops}}</span>
+                              </div>
+                            </li>
+                            {% endif %}
+                            {% if (role=="admin") or (role=="distributor") or  (role=="subDistributor")    or  (role=="shop") %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Cashiers
+                              <div>
+                                <span class="text-success pull-right">{{resultData.monthleyDashboardData.totalCashiers}}</span>
+                              </div>
+                            </li>
+                            {% endif %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Customers
+                              <div>
+                                <span class="text-success pull-right">{{resultData.monthleyDashboardData.totalCustomers}}</span>
+                              </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                              Profit
+                              <div>
+                                <span class="text-success pull-right">{% if resultData.monthleyDashboardData.totalProfit[0].totalProfit %}
+                                  {{resultData.monthleyDashboardData.totalProfit[0].totalProfit}}
+                                  {% else %}
+                                  0
+                                  {% endif %}</span>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-md-3 mb-3">
+                  <div class="card">
+                    <div class="card-header row m-0">
+                      <div class="col">Total</div>
+                    </div>
+                    <div class="card-body">
+                      <div class="row ">
+                        <div class="col d-flex justify-content-center">
+                          <ul class="d-flex p-0 m-0">
+                            <li class="d-flex align-items-center">
+                              <svg
+                                class="feather"
+                                color="grey"
+                                width="24"
+                                height="24"
+                                stroke-width="1"
+                              >
+                             
+                              </svg>
+                              <div class="text-success">
+                                <i class="fa-solid fa-arrow-up"></i>
+                                {% if resultData.dashboardData.totalProfit[0].totalBet %}
+                                {{resultData.dashboardData.totalProfit[0].totalBet}}
+                                {% else %}
+                                0
+                                {% endif %}
+                              </div>
+                            </li>
+                            <li class="list-unstyled line m-2"></li>
+                            <li class="list-unstyled d-flex align-items-center">
+                              <svg
+                                class="feather"
+                                color="grey"
+                                width="24"
+                                height="24"
+                                stroke-width="1"
+                              >
+                                
+                              </svg>
+                              <div class="text-danger">
+                                <i class="fa-solid fa-arrow-down"></i>
+                                {% if resultData.dashboardData.totalProfit[0].totalWin %}
+                                {{resultData.dashboardData.totalProfit[0].totalWin}}
+                                {% else %}
+                                0
+                                {% endif %}</div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="row mt-3">
+                        <div class="col">
+                          <ul class="list-group">
+                            {% if role == "admin" %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Distributors
+                              <div>
+                                <span class="text-success pull-right">{{resultData.dashboardData.totalDistributors}}</span>
+                              </div>
+                            </li>
+                            {% endif %}
+                            {% if ( role == "admin" ) or ( role == "distributor" ) %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Sub Distributors
+                              <div>
+                                <span class="text-success pull-right">{{resultData.dashboardData.totalSubDistributors}}</span>
+                              </div>
+                            </li>
+                            {% endif%}
+                            {% if ( role == "admin" ) or ( role == "distributor" ) or  ( role == "subDistributor" ) %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Shops
+                              <div>
+                                <span class="text-success pull-right">{{resultData.dashboardData.totalShops}}</span>
+                              </div>
+                            </li>
+                            {% endif%}
+                            {% if ( role == "admin" ) or ( role == "distributor" ) or  ( role == "subDistributor" )   or  ( role == "shop" ) %}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Cashiers
+                              <div>
+                                <span class="text-success pull-right">{{resultData.dashboardData.totalCashiers}}</span>
+                              </div>
+                            </li>
+                            {% endif%}
+                            <li class="list-group-item d-flex justify-content-between">
+                              Customers
+                              <div>
+                                <span class="text-success pull-right">{{resultData.dashboardData.totalCustomers}}</span>
+                              </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                              Profit
+                              <div>
+                                <span class="text-success pull-right">{% if resultData.dashboardData.totalProfit[0].totalProfit %}
+                                  {{resultData.dashboardData.totalProfit[0].totalProfit}}
+                                  {% else %}
+                                  0
+                                  {% endif %}</span>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      
+
+   
+</section>
+<!-- /.content -->
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</div>
+<!-- /.content-wrapper -->
+
+<!-- Footer -->
+<!-- <footer class="main-footer">
+    <div class="pull-right hidden-xs">
+        <b>Version</b> 1.0.0
+    </div>
+    <strong>Copyright &copy; 2020-2021 <a href="#">Casino Game</a>.</strong> All rights reserved.
+</footer> -->
+<!-- /Footer -->
+
+</div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+{% endblock %} {% block Jscript %}
+<script>
+    $(document).ready(function () {
+
+        var host = window.location.origin;
+
+        $('#myTable').DataTable({
+            // "scrollX": true,
+            "searching": false,
+            // "ajax": host + "/game/history",
+            "columns": [{
+                "data": "gameNumber"
+            }, {
+                "data": "smallBlind"
+            }, {
+                "data": "bigBlind"
+            }, {
+                "data": "status"
+            }, {
+                "data": "pot"
+            }]
+        });
+
+
+        // Game Play Chart
+        var theMonths = ["January", "February", "March", "April", "May",
+            "June", "July", "August", "September", "October", "November", "December"
+        ];
+        var labels = [];
+        for (var i = 0; i <= 11; i++) {
+            labels.push(theMonths[i]);
+        }
+        let chips = $('#chips').val()
+        var host = window.location.origin;
+        if ($('#monthlyPlayedGameChart').length > 0) {
+            // Get context with jQuery - using jQuery's .get() method.
+            var GameCanvas = $('#monthlyPlayedGameChart').get(0).getContext('2d');
+            // This will get the first returned node in the jQuery collection.
+
+            $.ajax({
+                type: 'GET',
+                url: host + "/dashboardChart/getMonthlyPlayedGameChart",
+                success: function (res) { },
+                complete: function (data) {
+
+                    var gameConfig = {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+
+                            datasets: [{
+                                label: 'Game Played By Player',
+                                backgroundColor: "#3b8bba",
+                                borderColor: "rgba(60,141,188,0.8)",
+                                data: data.responseJSON,
+                                fill: true,
+                            }],
+                        },
+                        options: {
+                            display: false,
+                            responsive: true,
+                            legend: {
+                                //position: 'top',
+                                display: false,
+                            },
+                        }
+                    };
+                    var chart = new Chart(GameCanvas, gameConfig)
+
+                }
+            })
+
+        }
+
+        // Platform Chart
+        window.onload = function () {
+            var customDates = document.getElementsByClassName('chips');
+            console.log("customDates", customDates);
+            for (var i = 0; i < customDates.length; i++) {
+                document.getElementsByClassName('chips')[i].innerHTML = parseFloat(customDates[i].innerHTML).toFixed(2)
+            }
+        }
+        if ($('#gameUsages').length > 0) {
+            $.ajax({
+                type: 'GET',
+                url: host + "/dashboardChart/getGameUsageChart",
+                success: function (res) { },
+                complete: function (data) {
+
+                    var pieChartCanvas = $('#gameUsages').get(0).getContext('2d');
+
+                    let webCount = 0;
+                    let androidCount = 0;
+                    let iosCount = 0;
+                    console.log(data.responseJSON);
+                    if (data.responseJSON && data.responseJSON.android.length > 0) {
+                        androidCount = data.responseJSON.android[0].count
+                    };
+                    if (data.responseJSON && data.responseJSON.ios.length > 0) {
+                        iosCount = data.responseJSON.ios[0].count
+                    };
+                    /* if ( ('android' in data.responseJSON)) {
+                        androidCount=data.responseJSON.android[0].percentage 
+                    }
+                     if ( ('ios' in data.responseJSON)) {
+                        iosCount=data.responseJSON.ios[0].percentage
+                    } */
+                    $('.chartAndroid').html(androidCount);
+                    $('.chartIos').html(iosCount);
+
+
+                    var config = {
+                        type: 'doughnut',
+                        data: {
+                            datasets: [{
+                                data: [
+                                    webCount,
+                                    androidCount,
+                                    iosCount,
+                                ],
+                                backgroundColor: [
+                                    "#f56954",
+                                    "#00a65a",
+                                    "#f39c12"
+                                ],
+                            }],
+                            labels: [
+                                'Web',
+                                'Android',
+                                'IOS',
+                            ]
+                        },
+                        options: {
+                            display: false,
+                            responsive: true,
+                            legend: {
+                                //position: 'top',
+                                display: false,
+                            },
+                            animation: {
+                                animateScale: false,
+                                animateRotate: true,
+                                animationSteps: 100,
+                                animationEasing: 'easeOutBounce',
+                            },
+                            segmentShowStroke: true,
+                            segmentStrokeColor: '#fff',
+                            segmentStrokeWidth: 1,
+                            percentageInnerCutout: 50, // This is 0 for Pie charts
+                            maintainAspectRatio: false,
+                            tooltipTemplate: '<%=value %> <%=label%> users'
+                        }
+                    };
+
+                    var myDoughnutChart = new Chart(pieChartCanvas, config);
+
+
+                }
+            })
+        }
+
+
+
+        /*
+                var theMonths = ["January", "February", "March", "April", "May",
+                  "June", "July", "August", "September", "October", "November", "December"];
+                var labels =[];
+                for (var i = 0; i <= 11; i++) {
+                  labels.push(theMonths[i]);
+                }
+
+                var host = window.location.origin;
+
+                if( $('#monthlyPlayedGameChart').length > 0 ){
+                  // Get context with jQuery - using jQuery's .get() method.
+                  var GameCanvas = $('#monthlyPlayedGameChart').get(0).getContext('2d');
+                  // This will get the first returned node in the jQuery collection.
+                  
+                    $.ajax({
+                        type: 'GET',
+                        url :host + "/dashboardChart/getMonthlyPlayedGameChart",
+                        success:function(res){
+                        },
+                        complete: function(data){
+                            	
+                            var gameConfig = {
+                                        type: 'line',
+                                        data: {
+                                            labels  : labels,
+                                        	
+                                            datasets: [{
+                                                label               : 'Game Played By Player',
+                                                backgroundColor: "#3b8bba",
+                                                borderColor: "rgba(60,141,188,0.8)",
+                                                data:  data.responseJSON,
+                                                fill: true,
+                                            }],
+                                        },
+                                        options: {
+                                            display: false,
+                                            responsive: true,
+                                            legend: {
+                                                //position: 'top',
+                                                display: false,
+                                            },
+                                        }
+                                  };
+                            var chart = new Chart(GameCanvas, gameConfig)
+                          
+                        }
+                    })
+
+                }
+
+        */
+        // Memory Usage Chart
+
+        //
+        let ctx = $('#memoryUsage').get(0).getContext('2d');
+
+        let data = {
+            labels: ['Start'],
+            datasets: [{
+                data: [0],
+                label: 'RSS',
+                backgroundColor: '#ff6600',
+                fill: false,
+            }, {
+                data: [0],
+                label: 'HEAP',
+                backgroundColor: '#4543b5',
+                fill: false
+            }]
+        }
+
+
+        let optionsAnimations = {
+            animation: false,
+        }
+        let chart = new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: optionsAnimations
+        })
+
+        const socket = io(host);
+
+        socket.emit('dashboardconnection', "Hi Server")
+        socket.on('live_memory', function (responce) {
+            var length = data.labels.length
+            if (length >= 60) {
+                data.datasets[0].data.shift();
+                data.datasets[1].data.shift();
+                data.labels.shift()
+            }
+
+            data.labels.push(moment().format('mm:ss'))
+            data.datasets[0].data.push(responce.rss);
+            data.datasets[1].data.push(responce.heap)
+            chart.update()
+        })
+    });
+</script>
+
+{% endblock %}

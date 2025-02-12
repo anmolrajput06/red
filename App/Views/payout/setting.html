@@ -1,0 +1,388 @@
+{% extends "partition/layout.html" %} {% block body %}
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Breadcrumb -->
+        <section class="content-header">
+            <h1>Payout Master</h1>
+            <ol class="breadcrumb">
+                <li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                <li class="active">Payout Master</li>
+            </ol>
+        </section>
+        <!-- /Breadcrumb -->
+
+        <!-- /Title -->
+         
+        <!-- Row -->
+        <section class="content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default card-view">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Set Payout</h6>
+                            </div>
+                            <!-- <button class="btn btn-primary pull-right clickpayoutrecord">Payout record</button> -->
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="table-wrap">
+                                    <div class="table-responsive">
+                                        <form method="POST" action="/payout/add" class="form-horizontal">
+                                            <table border="0" class="table display pb-30">
+                                                <div class="col-sm-12">
+                                                    <div class="panel-wrapper collapse in">
+                                                        <div class="panel-body">
+                                                            <input type="hidden" name="id" value="{{setting.id}}">
+                                                            <div class="form-group">
+                                                                <label class="control-label mb-10 col-sm-2" for="payoutRatio">Global Payout Ratio:</label>
+                                                                <div class="col-sm-4">
+                                                                    <input type="number" class="form-control" id="payoutRatio" placeholder="Enter Payout Ratio" required data-validation="number" name="payoutRatio" value="{{setting.payoutRatio}}">
+                                                                </div>
+                                                                <!-- <div class="col-sm-6">
+                                                                    <span><b>Total Chips Inwarded : </b>{{setting.totalInward}} <b>|| Total Chips Outwarded : </b>{{setting.totalOutward}}</span>
+                                                                </div> -->
+                                                            </div>
+                                                            <!-- <div class="form-group">
+                                                                <label class="control-label mb-10 col-sm-2" for="jackpotPlan">Jackpot Plan Ratio:</label>
+                                                                <div class="col-sm-4">
+                                                                    <input type="number" class="form-control" id="jackpotPlan" placeholder="Enter Jackpot Plan" required data-validation="number" name="jackpotPlan" value="{{setting.jackpotPlan}}">
+                                                                </div> -->
+                                                                <!-- <div class="col-sm-6">
+                                                                    {% set comm = 100 - (setting.payoutRatio + setting.jackpotPlan) %}
+                                                                    <span><b>Total Chips Income : </b>{{setting.totalIncome}} <b>|| Desired Chips Income </b>{{setting.desiredIncome}} (as per {{comm}}%)</span>
+                                                                </div> -->
+                                                            <!-- </div> -->
+                                                            <!-- <div class="form-group">
+                                                                <label class="control-label mb-10 col-sm-2" for="jackpotWinningAt">Jackpot Winning At:</label>
+                                                                <div class="col-sm-4">
+                                                                    <input type="number" class="form-control" id="jackpotWinningAt" placeholder="Enter jackpot Winning" required data-validation="number" name="jackpotWinningAt" value="{{setting.jackpotWinningAt}}">
+                                                                </div>
+                                                                <div class="col-sm-6">
+                                                                    <span><b>Total Jackpot Amount : </b>{{setting.jackpotPlanIncome}}</span>
+                                                                </div>
+                                                            </div> -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <input type="submit" class="btn btn-success btn-flat" value="Submit">
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default card-view">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Commission Range</h6>
+                            </div>
+                            <!-- <button class="btn btn-primary pull-right clickpayoutrecord">Payout record</button> -->
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="table-wrap">
+                                    <div class="table-responsive">
+                                        <form method="POST" id="formId" action="/payout/commissionRange" class="form-horizontal">
+                                            <table border="0" class="table display pb-30">
+                                                <div class="col-sm-12">
+                                                    <div class="col-sm-3">
+                                                        <div class="input-group" >
+                                                            <div class="input-group-addon"><i class="glyphicon glyphicon-user"></i><span></span></div>
+                                                            <select class="form-control" name="role"  id="role" data-validation="requiredDrop">
+                                                                <option value="" >-- Select One --</option>
+                                                                    <option value="agent">Agent</option>
+                                                                    <option value="master" >Master</option>
+                                                                    <option value="grand-master" >Grand Master</option>
+                                                                    <option value="site-owner" >Site Owner</option>
+                                                                </select>
+                                                        </div>
+                                                    </div>
+                                                    &nbsp;
+                                                    &nbsp;
+                                                   
+                                                    <div class="panel-wrapper collapse in" style="margin-top: 10px;">
+                                                        &nbsp;
+                                                    &nbsp;
+                                                   
+                                                        <div class="panel-body">
+                                                           
+                                                           
+                                                            <div class="form-group">
+                                                                <label class="control-label mb-10 col-sm-2" for="min">Minimum Commission:</label>
+                                                                <div class="col-sm-4">
+                                                                    <input type="number" class="form-control" id="min" placeholder="Enter Minimum Commission"  data-validation="number requiredMin minimum" name="min" >
+                                                                </div>
+                                                                <!-- <div class="col-sm-6">
+                                                                    {% set comm = 100 - (setting.payoutRatio + setting.jackpotPlan) %}
+                                                                    <span><b>Total Chips Income : </b>{{setting.totalIncome}} <b>|| Desired Chips Income </b>{{setting.desiredIncome}} (as per {{comm}}%)</span>
+                                                                </div> -->
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label mb-10 col-sm-2" for="max">Maximum Commission:</label>
+                                                                <div class="col-sm-4">
+                                                                    <input type="number" class="form-control" id="max" placeholder="Enter Maximum Commission"  data-validation="number maximum" name="max">
+                                                                </div>
+                                                                <!-- <div class="col-sm-6">
+                                                                    <span><b>Total Chips Inwarded : </b>{{setting.totalInward}} <b>|| Total Chips Outwarded : </b>{{setting.totalOutward}}</span>
+                                                                </div> -->
+                                                            </div>
+                                                            <!-- <div class="form-group">
+                                                                <label class="control-label mb-10 col-sm-2" for="jackpotWinningAt">Jackpot Winning At:</label>
+                                                                <div class="col-sm-4">
+                                                                    <input type="number" class="form-control" id="jackpotWinningAt" placeholder="Enter jackpot Winning" required data-validation="number" name="jackpotWinningAt" value="{{setting.jackpotWinningAt}}">
+                                                                </div>
+                                                                <div class="col-sm-6">
+                                                                    <span><b>Total Jackpot Amount : </b>{{setting.jackpotPlanIncome}}</span>
+                                                                </div>
+                                                            </div> -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <input type="submit" class="btn btn-success btn-flat" id="submit" value="Submit">
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /Row -->
+    </div>
+</div>
+<!-- Payout record list -->
+<section class="content">
+    <div id="payout-history-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" data-keyboard="false" onclick="popUpClose()" aria-hidden="true">×</button>
+                    <h5 class="modal-title">Payout Record Table</h5>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Payout Record</h6>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <input required="required" class="form-control" placeholder="Date And Time" name="start" id="start_date" type="text" id="startDate" autocomplete="off" data-date-format="YYYY-MM-DD HH:mm" value="{{start}}">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <input required="required" class="form-control" placeholder="Date And Time" name="end" id="end_date" type="text" id="endDate" autocomplete="off" data-date-format="YYYY-MM-DD HH:mm" value="{{end}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <label> &nbsp;</label><br>
+                            <button class="btn btn-primary" onclick="loadPayoutByDate()"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="table-wrap">
+                                    <div class="table-responsive">
+                                        <table id="myPayoutRecordTable" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>payout Ratio</th>
+                                                    <th>jackpot Plan</th>
+                                                    <th>Desired Income Ratio</th>
+                                                    <th>Total Inward</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--/ Payout record list -->
+
+{% endblock %} {% block Jscript %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+<script>
+
+    $('#start_date, #end_date').datetimepicker();
+    $(function() {
+        $('body').on('click', '.clickpayoutrecord', function(e) {
+            $('#myPayoutRecordTable').dataTable({
+                "searching": true,
+                "ordering": false,
+                "bPaginate": true,
+                "autoWidth": false,
+                "oLanguage": {
+                    "sSearch": "Search",
+                    "sEmptyTable": "No data available"
+                }
+            });
+            $('#payout-history-modal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+        });
+    });
+    $.formUtils.addValidator({
+		name : 'requiredMin',
+		validatorFunction :  function(value, $el, config, language, $form) {
+			return value >= 1;
+		},
+		errorMessage : 'Minimum value more than or equale to 1 required.',
+		errorMessageKey: 'badRackCap'
+	});
+    $.formUtils.addValidator({
+	    name : 'maximum',
+		validatorFunction :  function(value, $el, config, language, $form) {
+			return value <= 100;
+		},
+		errorMessage : 'Maximum value less than or equale to 100 required.',
+		errorMessageKey: 'badRackCap'
+	});
+    $.formUtils.addValidator({
+		name : 'requiredDrop',
+		validatorFunction :  function(value, $el, config, language, $form) {
+            console.log(typeof value.length);
+			 console.log(value.length == 0);	
+            // return value.length === 0	
+            return value.length != 0
+        },
+		errorMessage : 'Please select option.',
+		errorMessageKey: 'badRackCap'
+	});        
+    // $.formUtils.addValidator();
+     
+       
+        // let min = $('#min').val()
+        
+        // console.log(max);
+        $.formUtils.addValidator({
+			name : 'minimum',
+			validatorFunction :  function(value, $el, config, language, $form) {
+                let max = $('#max').val();
+                console.log("value", typeof value, value);
+                console.log("max", typeof max, max);
+				console.log(value <= max);
+                return Number(value) < Number(max);
+                return false
+			},
+			errorMessage : 'Minimum value less than to maximum required.',
+			errorMessageKey: 'badMinCap'
+		});
+    
+       
+    
+    function loadPayoutByDate() {
+        $('#myPayoutRecordTable').dataTable().fnDestroy();
+        var startdate = $("#start_date").val();
+        var end = $("#end_date").val();
+        loadPayoutDate(startdate, end);
+    }
+
+    function loadPayoutDate(startdate, end) {
+        let myPayoutRecordTable = $('#myPayoutRecordTable').DataTable({
+            "oLanguage": {
+                "sSearch": "Search"
+            },
+            "processing": true,
+            "serverSide": true,
+            "searching": true,
+            "ordering": false,
+            "autoWidth": false,
+            "pageLength": 10,
+            "ajax": {
+                url: '/payout/getPayoutData',
+                type: "GET",
+                data: function(data) {
+                    data.startdate = startdate;
+                    data.end = end;
+                }
+            },
+            "columns": [{
+                "data": "createdAt",
+                render: function(data) {
+                    return moment(data).format("YYYY-MM-DD HH:mm:ss");
+                }
+            }, {
+                "data": "payoutRatio"
+            }, {
+                "data": "jackpotPlan"
+            }, {
+                "data": "desiredIncomeRatio"
+            }, {
+                "data": "totalInward"
+            }]
+        });
+
+        $('#payout-history-modal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    }
+    
+    $('#role').click(function(){
+        let host = window.location.origin
+        let role = $('#role').val()
+        console.log(role);
+        $.ajax({
+            type: 'post',
+            url: host + "/commissionRange",
+            data: {
+                role: role
+            },
+            success: function(resultData) {
+                if(resultData.range != null){
+                    console.log(resultData);
+                    $('#min').val(resultData.range.minimum)
+                    $('#max').val(resultData.range.maximum)
+                }
+                else{
+                    $('#min').val('')
+                    $('#max').val('')
+                }
+            }
+        });
+    })
+    function popUpClose() {
+        $('#myPayoutRecordTable').DataTable().clear().destroy();
+    }
+</script>
+{% endblock %}

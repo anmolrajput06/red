@@ -1,0 +1,268 @@
+{% extends "partition/layout.html" %} {% block body %}
+
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+            &nbsp;
+            <ol class="breadcrumb">
+                <li><a href="/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                <li><a href="/mySiteOwner">Site-Owner</a></li>
+                {% if user %}
+                <li class="active"><span>Edit Grand Master</span></li>
+                {% else %}
+                <li class="active"><span>Add Grand Master</span></li>
+                {% endif %}
+            </ol>
+        </section>
+        <!-- /Title -->
+        <!-- Row  -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default card-view">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Edit Grand Master</h6>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-12 col-xs-12">
+                                        <div class="form-wrap">
+                                            <form method="POST" action="/grandMasterEdit/{{player._id}}" name="adduser" class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label for="exampleInputuname_3" class="col-sm-3 control-label">Username*</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="glyphicon glyphicon-user"></i></div>
+                                                            <input type="text" class="form-control" data-validation="requiredUsername" name="username" id="username" value="{{player.name}}" placeholder="Enter Name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail_3" class="col-sm-3 control-label">Email*</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></div>
+                                                            <input type="email" class="form-control" {{ "readonly disabled" if user else "" }} required name="email" id="email" placeholder="Enter Email" value="{{player.email}}" data-validation="email">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail_3" class="col-sm-3 control-label">Mobile*</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></div>
+                                                            <input type="text" class="form-control" data-validation="requiredNumber vlidateMobileNumber" name="mobile" id="mobile" placeholder="Enter Mobile" value="{{player.mobile}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- {% if user %} {% else %} -->
+                                                <!-- <div class="form-group">
+                                                    <label for="exampleInputpwd_32" class="col-sm-3 control-label">Password*</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></div>
+                                                            <input type="password" class="form-control" name="password" placeholder="Enter Password" id="password" data-minlength="6" data-validation="length" data-validation-length="min6">
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                <!-- {% endif %} -->
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail_3" class="col-sm-3 control-label">Commission*</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="fa fa-percent"></i></div>
+                                                            <input type="text" class="form-control" data-validation="min requiredMin requiredMax commissionData" name="commission" id="commission" placeholder="Enter Commission" value="{{player.totalCommission}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail_3" class="col-sm-3 control-label">Referral Code*</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="glyphicon glyphicon-pushpin"></i></div>
+                                                            <input type="text" class="form-control" name="referralCode" id="referralCode" placeholder="Enter Referral Code" value="{{player.referralCode}}" readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputpwd_4" class="col-sm-3 control-label">Status*</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+                                                            <select class="form-control" name="status" id="status">
+																	<option value="active" {{ "selected" if user.status=='active' else "" }} >Active</option>
+																	<option value="inactive" {{ "selected" if user.status=='inactive' else "" }} >Inactive</option>
+																</select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- {% if role == 'admin' %}
+                                                    <div class="form-group">
+                                                        <label for="exampleInputpwd_4" class="col-sm-3 control-label">Role*</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></div>
+                                                                <select class="form-control" name="role" id="role">
+																	<option value="admin" {{ "selected" if user.role=='admin' else "" }} >Admin</option>
+																	<option value="site-owner" {{ "selected" if user.role=='site-owner' else "" }} >Site Owner</option>
+																	<option value="grand-master" {{ "selected" if user.role=='grand-master' else "" }} >Grand Master</option>
+																	<option value="master" {{ "selected" if user.role=='master' else "" }} >Master</option>
+																	<option value="agent" {{ "selected" if user.role=='agent' else "" }} >Agent</option>
+																	<option value="user" {{ "selected" if user.role=='user' else "" }} >User</option>
+																</select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {% else %}
+                                                    <div class="form-group">
+                                                        <label for="exampleInputpwd_4" class="col-sm-3 control-label">Role*</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></div>
+                                                                <select class="form-control" name="role" id="role">
+																	<option value="agent" {{ "selected" if user.role=='agent' else "" }} >Agent</option>
+																</select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {% endif %} -->
+                                                <div class="form-group mb-0">
+                                                    <div class="col-sm-offset-3 col-sm-9">
+                                                        <input type="submit" class="btn btn-success btn-flat" value="submit">
+                                                        <a href="/grandMasterPlayerList/{{player.userId}}" class="btn btn-danger btn-flat">Cancel</a>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Row -->
+                <input type="hidden" id="min" value="{{commissionRange.minimum}}">
+                <input type="hidden" id="max" value="{{commissionRange.maximum}}">
+                {%if session.details.role == 'admin' or  session.details.role == 'sub-admin'%}
+                <input type="hidden" id="userData" value="100">
+                {%else%}
+                <input type="hidden" id="userData" value="{{userData}}">
+                {%endif%}
+                <!-- /Row -->
+            </div>
+        </section>
+
+    </div>
+</div>
+
+{% endblock %} {% block Jscript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js" integrity="sha512-37T7leoNS06R80c8Ulq7cdCDU5MNQBwlYoy1TX/WUsLFC2eYNqtKlV0QjH7r8JpG/S0GUMZwebnVFLPd6SU5yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var host = window.location.origin;
+        var minimum = $('#min').val()
+        var maximum = $('#max').val()
+        let commission = $('#userData').val()
+        console.log("commission",commission);
+        console.log(minimum.length);
+        console.log(maximum);
+        var host = window.location.origin;
+        // $('#submit').click(function(){
+        //     // return false;
+      
+            $.formUtils.addValidator({
+                name: 'min',
+                validatorFunction: function (value, $el, config, language, $form) {
+                    console.log(minimum.length);
+                    return minimum.length != 0;
+                },
+                errorMessage: 'Please select commission range from payout managemnet for siteowner',
+                errorMessageKey: 'badRackCap'
+            });
+        $.formUtils.addValidator({
+            name: 'requiredMin',
+            validatorFunction: function (value, $el, config, language, $form) {
+
+                return Number(value) >= Number(minimum);
+            },
+            errorMessage: 'Minimum value more than or equale to<b>'+' '+ minimum +' '+ '</b>required',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'requiredMax',
+            validatorFunction: function (value, $el, config, language, $form) {
+                return Number(value) <= Number(maximum);
+            },
+            errorMessage: 'Maximum value less than or equale to<b>'+' '+ maximum +' '+ '</b>required.',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'requiredUsername',
+            validatorFunction: function (value, $el, config, language, $form) {
+                return value.length != 0
+            },
+            errorMessage: 'Please enter username',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'requiredEmail',
+            validatorFunction: function (value, $el, config, language, $form) {
+                return value.length != 0
+            },
+            errorMessage: 'Please enter email',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'requiredNumber',
+            validatorFunction: function (value, $el, config, language, $form) {
+                return value.length != 0
+            },
+            errorMessage: 'Please enter mobile number',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'vlidateMobileNumber',
+            validatorFunction: function (value, $el, config, language, $form) {
+                console.log(value.length);
+                return Number(value.length) == 10
+            },
+            errorMessage: 'Please enter valid mobile number',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'requiredPassword',
+            validatorFunction: function (value, $el, config, language, $form) {
+                console.log(value.length);
+                return Number(value.length) != 0
+            },
+            errorMessage: 'Please enter password',
+            errorMessageKey: 'badRackCap'
+        });
+        $.formUtils.addValidator({
+            name: 'commissionData',
+            validatorFunction: function (value, $el, config, language, $form) {
+                console.log("commss", typeof(commission));
+                console.log("val",typeof(value));
+                console.log(Number(value) > Number(commission));
+                console.log(Number(value) < Number(commission));
+                if(Number(value) <= Number(commission)){
+                    return true
+                }
+                else{
+                    return false
+                }
+            },
+            errorMessage: 'Please enter comission less than or equale to '+ commission,
+            errorMessageKey: 'badRackCap'
+        });
+    });
+</script>
+{% endblock %}

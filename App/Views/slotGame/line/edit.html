@@ -1,0 +1,116 @@
+{% extends "partition/layout.html" %} {% block body %}
+
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+            <h1>Line Master</h1>
+            <ol class="breadcrumb">
+                <li><a href="/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                <!-- <li><a href="/gameMaster">Slot Game Master</a></li> -->
+                <li><a href="/lineMaster/{{rows[0].game}}">Line Master</a></li>
+                <li class="active"><span>Edit Line Master</span></li>
+            </ol>
+        </section>
+        <!-- /Title -->
+        <!-- Row  -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default card-view">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+
+                                <h6 class="panel-title txt-dark">Edit Line Master</h6>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <form method="POST" action="/lineMaster/postEditLine" class="form-horizontal" enctype="multipart/form-data">
+                                    <div class="row">
+                                        <div class="form-wrap">
+                                            <!-- <div class="container"> -->
+                                            <div class="col-sm-12 col-xs-12">
+                                                <div class="col-sm-2">
+                                                    <label>Name</label>
+                                                </div>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="name" placeholder="Name" value="{{line.name}}" class="form-control" data-validation="length alphanumeric" data-validation-length="" data-validation-error-msg="Username is required" data-validation-allowing=" ">
+                                                    <input type="hidden" name="gameId" value="{{rows[0].game}}">
+                                                    <input type="hidden" name="lineId" value="{{line.id}}">
+                                                </div>
+                                            </div>
+                                            <!-- </div> -->
+                                        </div>
+                                    </div>
+                                    <br><br>
+                                    <div class="row">
+                                        <!-- <div class="col-sm-12 col-xs-12">
+                                            <div class="form-wrap">
+                                                <div class="container"> -->
+                                        <div class="panel-wrapper collapse in">
+                                            <div class="panel-body">
+                                                <div class="table-wrap">
+                                                    <table class="table table-responsive  table-bordered text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <th></th>
+                                                                {% for reel in reels %}
+                                                                <th>Reel {{reel.name}}</th>
+                                                                {% endfor %}
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for row in rows %}
+                                                            <tr>
+                                                                <th>Row {{row.name}}</th>
+                                                                {% for reel in reels %}
+                                                                <td>
+                                                                    {% set isChecked = '' %} {% for lines in matrix[row.id] %} {% if lines == reel.id %} {% set isChecked = lines %} {% endif %} {% endfor %}
+                                                                    <input type="checkbox" {{ "checked" if reel.id==isChecked }} name="{{[row.id]}},{{[reel.id]}}" id="{{[reel.id]}}">
+                                                                </td>
+                                                                {% endfor %}
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                    <td colspan="2">
+                                                        <div class="pull-right">
+                                                            <input type="submit" class="btn btn-success btn-flat" value="submit">
+                                                        </div>
+                                                    </td>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<!-- Row -->
+<!-- /Row -->
+<!-- </div>
+</section>
+
+</div>
+</div> -->
+
+{% endblock %} {% block Jscript %}
+<script>
+    $(document).ready(function() {
+        var host = window.location.origin;
+        $('input[type="checkbox"]').on('change', function() {
+            $('input[id="' + this.id + '"]').not(this).prop('checked', false);
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,210 @@
+{% extends "partition/layout.html" %} {% block body %}
+
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+            <h1>Reports Master</h1>
+            <ol class="breadcrumb">
+                <li><a href="/drawer"><i class="fa fa-dashboard"></i>Drawer</a></li>
+                <li><a href="#"><span>Cash History</span></a></li>
+            </ol>
+        </section>
+        <!-- /Title -->
+         
+        <!-- Row -->
+        <section class="content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row panel panel-default card-view">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Cash History</h6>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <input required="required" class="form-control" placeholder="DD/MM/YYYY"
+                                    name="start" type="text" id="start" autocomplete="off"
+                                    data-date-format="YYYY-MM-DD HH:mm" value="{{start}}">
+
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <input required="required" class="form-control" placeholder="DD/MM/YYYY" name="end"
+                                    type="text" id="end" autocomplete="off" data-date-format="YYYY-MM-DD HH:mm"
+                                    value="{{end}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <label> &nbsp;</label><br>
+                            <button class="btn btn-primary" id="dateSearch"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="row panel panel-default card-view">
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="table-wrap">
+                                    <div class="table-responsive">
+                                        <table id="myTable" class="table table-hover display  pb-30">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Date Time</th>
+                                                    <th>Player Id</th>
+                                                    <th>Player Name</th>
+                                                    <th>Amount</th>
+                                                    <th>Type</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+{% endblock %} {% block Jscript %}
+
+<script type="text/javascript">
+      $('#start, #end').datepicker({
+            format: "dd/mm/yyyy",
+            timepicker: false
+        });
+
+
+    /*$(document).ready(function() {
+    	var host = window.location.origin;
+    	var startdate = $("#start").val();
+    	var enddate = $("#end").val();
+    	$('#myTable').DataTable({
+    		"oLanguage": {
+    			"sSearch": "Search Username"
+    		},
+    		"processing": true,
+    		"serverSide": true,
+    		"searching": false,
+    		"ordering": false,
+    		"autoWidth": false,
+    		"pageLength": 25,
+    		/*"ajax": host + "/report/getChipsHistory/"+start+'/'+end, */
+    /*ajax: {
+				url: "/report/getChipsHistory",
+				type: "GET",
+				data: function(data) {
+				data.startdate = startdate;
+				data.enddate = enddate;
+				}
+			},
+			"columns": [
+				{ "data": "id" },
+				{ "data": "createdAt" ,
+					render: function(data, type, row) {
+            		return moment(row.createdAt).format('YYYY-MM-DD HH:mm:ss');
+          			}
+				},
+				{ "data": "player",
+					render: function(data, type, row){
+						if(data){
+							return data.username;
+						}
+						return '---';
+					}
+				},
+				{ "data": "gamePlayer" },
+				{ "data": "type" },
+				{ "data": "quantity",
+					render: function(data, type, row){
+						return parseFloat(data).toFixed(2);
+					}
+				},
+				{ "data": "remaining",
+					render: function(data, type, row){
+						return parseFloat(data).toFixed(2);
+					}
+				}
+			]
+		});
+	}); */
+
+    $("#dateSearch").click( function () {
+        console.log("click");
+        $('#myTable').dataTable().fnDestroy();
+        LoadData();
+    })
+
+    function LoadData() {
+        var host = window.location.origin;
+        var startdate = $("#start").val();
+        var enddate = $("#end").val();
+        $('#myTable').DataTable({
+            "oLanguage": {
+                "sSearch": "Search User Id"
+            },
+            "processing": true,
+            "serverSide": true,
+            "searching": true,
+            "ordering": false,
+            "autoWidth": false,
+            "pageLength": 25,
+            /*"ajax": host + "/report/getChipsHistory/"+start+'/'+end,*/
+            ajax: {
+                url: "/report/getCashHistory",
+                type: "GET",
+                data: function(data) {
+                    data.startdate = startdate;
+                    data.enddate = enddate;
+                }
+            },
+            "columns": [{
+                "data": "transactionId"
+            }, {
+                "data": "createdAt",
+                render: function(data, type, row) {
+                    return moment(row.createdAt).format('YYYY-MM-DD HH:mm:ss');
+                }
+            }, {
+                "data": "to"
+            }, {
+                "data":"customerName"
+            },{
+                "data": "amount",
+                render: function(data, type, row) {
+                    if(row.type == 'deposit'){
+                        return '<a style="color:green;">'+data+'</a>'
+                    }else if(row.type == 'withdraw'){
+                        return '<a style="color:red;">'+data+'</a>'
+                    }
+                }
+            }, {
+                "data": "type",
+                render: function(data){
+                    if(data == 'deposit'){
+                        return '<a style="color:green;">'+data+'</a>'
+                    }
+                    else if(data == 'withdraw'){
+                        return '<a style="color:red;">'+data+'</a>'
+                    }
+                }
+            }]
+        });
+    }
+</script>
+
+{% endblock %}

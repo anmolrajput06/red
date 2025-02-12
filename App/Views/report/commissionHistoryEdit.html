@@ -1,0 +1,121 @@
+{% extends "partition/layout.html" %}
+
+
+{% block body %}
+
+
+	<!-- Main Content -->
+	<div class="page-wrapper">
+		<div class="container-fluid">
+
+			<!-- Title -->
+			<section class="content-header">
+			    <h1>Reports Master</h1>
+			    <ol class="breadcrumb">
+			        <li><a href="/">Dashboard</a></li>
+						<li><a href="#"><span>Edit slot commission</span></a></li>
+			    </ol>
+			</section>
+			<!-- /Title -->
+			 
+			<!-- Row -->
+			<section class="content">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="panel panel-default card-view">
+							<div class="panel-heading">
+								<div class="pull-left">
+									<h6 class="panel-title txt-dark">Slot Commission History Line Wise</h6>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-12">
+						<div class="panel panel-default card-view">
+						<div class="panel-wrapper collapse in">
+								<div class="panel-body">
+								<input type="hidden" id="getDate" name="date" value="{{date}}">
+ 								<input type="hidden" id="slotType" name="slotType" value="{{slotType}}">
+									<div class="table-wrap">
+										<div class="table-responsive">
+											<table id="myTable" class="table table-hover display  pb-30" >
+												<thead>
+													<tr>
+														<th>Line</th>
+														<th>Players</th>
+														<th>Games</th>
+														<th>Total Bet</th>
+														<th>Payout</th>
+													</tr>
+												</thead>
+												<tbody>
+												{% for chips in data %}
+													<tr>
+														<th></th>
+														<th></th>
+														<th></th>
+														<th></th>
+														<th></th>
+														<th></th>
+														<th></th>
+													</tr>
+												{% endfor %}
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>	
+
+{% endblock %}
+
+{% block Jscript %}
+<script>
+    $(".form_datetime").datetimepicker({format: 'YYYY-MM-DD'});
+
+$(document).ready( function () {
+	var host = window.location.origin;
+	var date = $("#getDate").val();
+	// var gameType = $("#slotType").val();
+	 	var gameType ='5*3'
+
+   let offset =0;
+   let limit =25
+	console.log(window.location.href,'yo')
+	$('#myTable').DataTable({
+		"oLanguage": {
+			"sSearch": "Search Username"
+		},
+		// "scrollX": true,
+		// "searching": false,
+		"searching": false,
+		"ordering": false,
+		"autoWidth": false,
+		"pageLength": 25,
+		"ajax": host + "/report/commissionHistory/"+date+'/'+gameType+'?offset='+offset+'&limit='+limit,
+		"columns": [
+			{ "data": "line" },
+			{ "data": "players" },
+			{ "data": "games" },
+			{ "data": "total_bet" },
+			{ "data": "total_win" },
+			// { "data": "remaining" },
+			
+			
+		]
+	});
+
+	});
+
+	$(function () {
+		$('#datetimepicker1').datetimepicker();
+	});
+</script>
+{% endblock %}

@@ -1,0 +1,216 @@
+{% extends "partition/layout.html" %} {% block body %}
+
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+            &nbsp;
+            <ol class="breadcrumb">
+                <li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                <!-- <li><a href="/gameMaster">Slot Game Master</a></li>-->
+                <li><a href="/games">Game Management</a></li> 
+                {% if game %}
+                <li class="active"><span>Edit Game</span></li>
+                {% else %}
+                <li class="active"><span>Add Game</span></li>
+                {% endif %}
+            </ol>
+        </section>
+        <!-- /Title -->
+        <!-- Row  -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default card-view">
+                        <!-- <div class="panel-heading"> -->
+                            <!-- <div class="pull-left">
+                                {% if theme %}
+                                <h6 class="panel-title txt-dark">Edit Theme</h6>
+                                {% else %}
+                                <h6 class="panel-title txt-dark">Add Theme</h6>
+                                {% endif %}
+                            </div> -->
+                        <!-- </div> -->
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-12 col-xs-12">
+                                        <div class="form-wrap">
+                                            {% if game %}
+                                            <form method="POST" action="/games/gameEdit/{{game._id}}" name="adduser" class="form-horizontal" enctype="multipart/form-data">
+                                                {% else %}
+                                                <form method="POST" action="/games/addGame" name="adduser" class="form-horizontal" enctype="multipart/form-data">
+                                                    {% endif %}
+                                                    <div class="form-group">
+                                                        <label for="exampleInputEmail_3" class="col-sm-3 control-label">Game Name*</label>
+
+                                                        <div class='col-sm-5'>
+                                                            <!-- {{ "5" if theme else "6" }} -->
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon"><i class="glyphicon glyphicon-star"></i></div>
+                                                                <input type="text" class="form-control" required name="name" id="name" value="{{game.name}}" data-validation="length alphanumeric" data-validation-length="" data-validation-allowing=" ">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- <div class="form-group">
+                                                        <label for="exampleInputpwd_4" class="col-sm-3 control-label">Game Background*</label>
+                                                        <div class='col-sm-5'>
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon"><i class="fa fa-file"></i></div>
+                                                                {% if game %}
+                                                                <input type="file" class="form-control" name="gameBackground" id="gameBackground" onchange="displayImage('gameBackground','gameBackgroundPreview')">
+                                                                 {% else %}
+                                                                <input type="file" class="form-control" name="gameBackground" id="gameBackground" requirallowing="jpg, png" data-validation-max-size="" data-validation-error-msg-required="No image selected" onchange="displayImage('gameBackground','gameBackgroundPreview')">                                                                
+                                                                {% endif %}
+                                                            </div>
+                                                        </div> -->
+                                                        <!-- {% if game %} -->
+                                                        <!-- <div class="col-sm-1">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                <img class="brand-img mr-10" src="/uploads/{{game.theme_bg}}" height="40px" id="gameBackgroundPreview" />
+                                                            </div>
+                                                        </div> -->
+                                                        <!-- {%else%}
+                                                        <div class="col-sm-1">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                <img class="brand-img mr-10" src="" height="40px" id="gameBackgroundPreview" />
+                                                            </div>
+                                                        </div>
+                                                        {% endif %} -->
+                                                    <!-- </div> -->
+                                                    <div class="form-group">
+                                                        <label for="exampleInputpwd_4" class="col-sm-3 control-label">Game Icon*</label>
+                                                        <div class='col-sm-5'>
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon"><i class="fa fa-file"></i></div>
+                                                                {% if game %}
+                                                                <input type="file" class="form-control"  name="game_icon" id="game_icon" onchange="displayImage('game_icon','gameIconPreview')"> 
+                                                                {% else %}
+                                                                <input type="file" class="form-control" required name="game_icon" id="game_icon" data-validation="mime size required" data-validation-allowing="jpg, png" data-validation-max-size="" data-validation-error-msg-required="No image selected" onchange="displayImage('game_icon','gameIconPreview')">                                                                
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                        <!-- {% if game %} -->
+                                                        <div class="col-sm-1">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                <img class="brand-img mr-10" src="/uploads/{{game.theme_icon}}" height="40px" id="gameIconPreview" />
+                                                            </div>
+                                                        </div>
+                                                        <!-- {%else%}
+                                                        <div class="col-sm-1">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                <img class="brand-img mr-10" src="" height="40px" id="gameIconPreview" />
+                                                            </div>
+                                                        </div>
+                                                        {% endif %} -->
+                                                    </div>
+
+                                                    <!-- <div class="form-group">
+                                                        <label for="exampleInputpwd_4" class="col-sm-3 control-label">Reel Background*</label>
+                                                        <div class='col-sm-5'>
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon"><i class="fa fa-file"></i></div>
+                                                                {% if game %}
+                                                                <input type="file" class="form-control"  name="reel_bg" id="reel_bg" onchange="displayImage('reel_bg','reelBackgroundPreview')"> 
+                                                                {% else %}
+                                                                <input type="file" class="form-control" required name="reel_bg" id="reel_bg" data-validation="mime size required" data-validation-allowing="jpg, png" data-validation-max-size="" data-validation-error-msg-required="No image selected" onchange="displayImage('reel_bg','reelBackgroundPreview')">                                                                
+                                                                {% endif %}
+                                                            </div>
+                                                        </div> -->
+                                                        <!-- {% if game %} -->
+                                                        <!-- <div class="col-sm-1">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                <img class="brand-img mr-10" src="/uploads/{{game.reel_bg}}" height="40px" id="reelBackgroundPreview" />
+                                                            </div>
+                                                        </div> -->
+                                                        <!-- {%else%}
+                                                        <div class="col-sm-1">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                <img class="brand-img mr-10" src="" height="40px" id="reelBackgroundPreview" />
+                                                            </div>
+                                                        </div>
+                                                        {% endif %} -->
+                                                    <!-- </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleInputpwd_4" class="col-sm-3 control-label">Reel Frame*</label>
+                                                        <div class='col-sm-5'>
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon"><i class="fa fa-file"></i></div>
+                                                                {% if game %}
+                                                                <input type="file" class="form-control"  name="reel_frame" id="reel_frame" onchange="displayImage('reel_frame','reelFramePriview')"> 
+                                                                {% else %}
+                                                                <input type="file" class="form-control" required name="reel_frame" id="reel_frame" data-validation="mime size required" data-validation-allowing="jpg, png" data-validation-max-size="" data-validation-error-msg-required="No image selected" onchange="displayImage('reel_frame','reelFramePriview')">                                                                
+                                                                {% endif %}
+                                                            </div>
+                                                        </div> -->
+                                                        <!-- {% if game %} -->
+                                                        <!-- <div class="col-sm-1">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                <img class="brand-img mr-10" src="/uploads/{{game.reel_frame}}" height="40px" id="reelFramePriview" />
+                                                            </div>
+                                                        </div> -->
+                                                        <!-- {%else%}
+                                                        <div class="col-sm-1">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-6">
+                                                                <img class="brand-img mr-10" src="" height="40px" id="reelFramePriview" />
+                                                            </div>
+                                                        </div>
+                                                        {% endif %} -->
+                                                    <!-- </div> -->
+                                                    <div class="form-group mb-0">
+                                                        <div class="col-sm-offset-3 col-sm-9">
+                                                            <input type="submit" class="btn btn-success btn-flat" value="submit">
+                                                            <a href="/games" class="btn btn-danger btn-flat">Cancel</a>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Row -->
+
+                <!-- /Row -->
+            </div>
+        </section>
+
+    </div>
+</div>
+
+{% endblock %} {% block Jscript %}
+<script>
+      function displayImage(inputId, previewId) {
+        console.log("displayImaoge",inputId,previewId);
+        var input = document.getElementById(inputId);
+        var preview = document.getElementById(previewId);
+        console.log("input",input,preview);
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                console.log("e",e);
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.src = "";
+        }
+    }
+    $(document).ready(function() {
+        var host = window.location.origin;
+    });
+</script>
+{% endblock %}

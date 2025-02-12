@@ -1,0 +1,130 @@
+{% extends "partition/layout.html" %}
+
+
+{% block body %}
+
+
+<!-- Main Content -->
+<div class="page-wrapper">
+	<div class="container-fluid">
+
+		<!-- Title -->
+		<section class="content-header">
+		    <h1>User Table</h1>
+		    <ol class="breadcrumb">
+		        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+		        <li><a href="/user">Game table</a></li>
+		        {% if user %}
+		        <li class="active"><span>Edit Game</span></li>
+		        {% else %}
+		        <li class="active"><span>Add Game</span></li>
+		        {% endif %}
+		    </ol>
+		</section>
+		<!-- /Title -->
+		<!-- Row  -->
+		<section class="content">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-default card-view">
+						<div class="panel-heading">
+							<div class="pull-left">
+								{% if game %}
+								<h6 class="panel-title txt-dark">Edit Game</h6>
+								{% else %}
+								<h6 class="panel-title txt-dark">Add Game</h6>
+								{% endif %}
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="panel-wrapper collapse in">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-sm-12 col-xs-12">
+										<div class="form-wrap">
+											{% if game %}
+									<form method="POST" action="/playerEdit/{{game._id}}" name="" class="form-horizontal">
+										{% else %}
+										<form method="POST" action="/postAddGame" name="" class="form-horizontal">
+											{% endif %}
+													<div class="form-group">
+														<label for="exampleInputuname_3" class="col-sm-3 control-label">Name*</label>
+														<div class="col-sm-6">
+															<div class="input-group">
+																<div class="input-group-addon"><i class="glyphicon glyphicon-user"></i></div>
+																<input type="text" class="form-control" id="name" placeholder="Enter name" required name="name" value="{{game.name}}" data-validation="length alphanumeric" data-validation-allowing="-_/*\ "
+																	data-validation-length="" 
+																	data-validation-error-msg="Name is required">
+															</div>
+														</div>
+													</div>
+													<div class="form-group">
+														<label  for="exampleInputEmail_3" class="col-sm-3 control-label">Description*</label>
+														<div class="col-sm-6">
+															<div class="input-group">
+																<div class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></div>
+																<input type="text" class="form-control" id="description" placeholder="Enter description" required name="description" value="{{game.description}}" data-validation="length alphanumeric" data-validation-allowing="-_/'\ "
+																	data-validation-length="" 
+																	data-validation-error-msg="Description is required">
+															</div>
+														</div>
+													</div>
+													<div class="form-group">
+														<label for="exampleInputpwd_32" class="col-sm-3 control-label">No Of Columns*</label>
+														<div class="col-sm-6">
+															<div class="input-group">
+																<div class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></div>
+																<input type="text" class="form-control" id="column" placeholder="Enter column" required name="column" value="{{game.column}}" data-validation="number">
+															</div>
+														</div>
+													</div>
+													<div class="form-group">
+														<label for="exampleInputpwd_32" class="col-sm-3 control-label">No Of Row*</label>
+														<div class="col-sm-6">
+															<div class="input-group">
+																<div class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></div>
+																<input type="text" class="form-control" id="row" placeholder="Enter row" required="" name="row" value="{{game.row}}" data-validation="number">
+															</div>
+														</div>
+													</div>
+													<div class="form-group">
+														<label for="exampleInputpwd_32" class="col-sm-3 control-label">No Of Symbol*</label>
+														<div class="col-sm-6">
+															<div class="input-group">
+																<div class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></div>
+																<input type="text" class="form-control" {{ "readonly disabled" if player else "" }}  required name="symbol" id="symbol" value="{{game.symbol}}" data-validation="number">
+															</div>
+														</div>
+													</div>
+													<div class="form-group mb-0">
+														<div class="col-sm-offset-3 col-sm-9">
+															<input type="submit" class="btn btn-success btn-flat" value="submit">
+															<a href="/gameMaster" class="btn btn-danger btn-flat">Cancel</a>
+														</div>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>	
+					</div>
+					<!-- Row -->
+					
+				<!-- /Row -->
+			</div>
+		</section>
+
+	</div>
+</div>		
+
+		{% endblock %}
+
+		{% block Jscript %}
+		<script>
+			$(document).ready( function () {
+				var host = window.location.origin;
+			} );
+		</script>
+		{% endblock %}

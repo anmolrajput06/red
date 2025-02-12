@@ -1,0 +1,151 @@
+{% extends "partition/layout.html" %} {% block body %}
+
+
+<!-- Main Content -->
+<div class="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Title -->
+        <section class="content-header">
+            <h1>Symbol Reels Master</h1>
+            <ol class="breadcrumb">
+                <li><a href="/"><i class="fa fa-dashboard"></i>Dashboard</a></li>
+                <!-- <li><a href="/gameMaster"><span>Game Master</span></a></li> -->
+                <li><a href="#"><span>Symbol Reels Master</span></a></li>
+            </ol>
+        </section>
+        <!-- /Title -->
+         
+        <!-- Row -->
+        <section class="content">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="panel panel-default card-view">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Symbol Reels Master</h6>
+                            </div>
+                            <div class="pull-right">
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <form action="/postSymbolReelData/{{gameId}}" method="post">
+                                    <div class="table-wrap">
+                                        <div class="table-responsive">
+                                            <table id="myTable" class="table table-hover display  pb-30">
+                                                <thead>
+                                                    <tr>
+                                                        <th>S/R</th>
+                                                        {% for reel in reels %}
+                                                        <th class="textCenter">{{reel.name}}</th>
+                                                        {% endfor %}
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for symbol in symbols %}
+                                                    <tr>
+                                                        <td class="textCenter">{{symbol.symbol}}<br>({{symbol.symbol_type}})</td>
+                                                        {% for reel in reels %}
+                                                        <td>
+                                                            <input type="text" class="form-control" required name="[{{symbol.id}}][{{reel.id}}]" value="{{symbol_reels[symbol.id][reel.id]}}" />
+                                                        </td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                            {%if roleData[1] == "edit" or role == "admin"%}
+                                            <div style="text-align: right;">
+                                                <button type="submit" class="btn btn-success">Save</button>
+                                            </div>
+                                            {%endif%}
+                                        </div>
+                                    </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="panel panel-default card-view">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h6 class="panel-title txt-dark">Payout Master</h6>
+                            </div>
+                            <div class="pull-right">
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <form action="/postPayoutData/{{gameId}}" method="post">
+                                    <div class="table-wrap">
+                                        <div class="table-responsive">
+                                            <table id="myTable" class="table table-hover display  pb-30">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="textCenter">Symbol</th>
+                                                        <th class="textCenter">2X</th>
+                                                        <th class="textCenter">3X</th>
+                                                        {% if gameName != '3*3' %}
+                                                        <th class="textCenter">4X</th>
+                                                        {% endif %} {% if gameName != '3*3' %} {% if gameName != '4*3' %}
+                                                        <th class="textCenter">5X</th>
+                                                        {% endif %} {% endif %}
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for symbol in symbols %}
+                                                    <tr>
+                                                        <td class="textCenter">
+                                                            {% if symbol.symbol_type != 'wild' %} {{symbol.symbol}}
+                                                            <br>({{symbol.symbol_type}})</td>
+                                                        {% endif %}
+                                                        <!-- <td><input type="text" required="required" class="form-control" value="{{payouts[symbol.id].one_time}}" /></td> -->
+                                                        <td>
+                                                            {% if symbol.symbol_type != 'wild' %}
+                                                            <input type="text" class="form-control" required name="payouts[{{symbol.id}}].two_timegg" value="{{payouts[symbol.id].two_time}}" /> {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            {% if symbol.symbol_type != 'wild' %}
+                                                            <input type="text" class="form-control" required name="payouts[{{symbol.id}}].three_time" value="{{payouts[symbol.id].three_time}}" /> {% endif %}
+                                                        </td>
+                                                        {% if gameName != '3*3' %}
+                                                        <td>
+                                                            {% if symbol.symbol_type != 'wild' %}
+                                                            <input type="text" class="form-control" required name="payouts[{{symbol.id}}].four_time" value="{{payouts[symbol.id].four_time}}" /> {% endif %}
+                                                        </td>
+                                                        {% endif %} {% if gameName != '3*3' %} {% if gameName != '4*3' %}
+                                                        <td>
+                                                            {% if symbol.symbol_type != 'wild' %}
+                                                            <input type="text" class="form-control" required name="payouts[{{symbol.id}}].five_time" value="{{payouts[symbol.id].five_time}}" /> {% endif %}
+                                                        </td>
+                                                        {% endif %} {% endif %}
+                                                    </tr>
+                                                    {% endfor %}
+                                                    <tr>
+
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            {%if roleData[1]=="edit" or role == "admin"%}
+                                            <div style="text-align: right;">
+                                                <button type="submit" class="btn btn-success">Save</button>
+                                            </div>
+                                            {%endif%}
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+{% endblock %}
